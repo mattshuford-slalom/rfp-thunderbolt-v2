@@ -774,8 +774,7 @@ function vBook() {
       <div class="sbar">
         <input class="sinput" id="book-s" placeholder="Search clients…" value="${esc(S.bsearch)}"/>
         <span class="fpill ${S.bfilter==='all'?'on':''}" onclick="setBF('all')">All</span>
-        <span class="fpill ${S.bfilter==='risk'?'on':''}" onclick="setBF('risk')">At risk</span>
-        <span class="fpill ${S.bfilter==='nocon'?'on':''}" onclick="setBF('nocon')">No contact</span>
+        <span class="fpill ${S.bfilter==='nocon'?'on':''}" onclick="setBF('nocon')">Needs contact</span>
         <span class="fpill ${S.bfilter==='orec'?'on':''}" onclick="setBF('orec')">Open rec</span>
       </div>
       <div class="col-hd">
@@ -794,7 +793,7 @@ function bookRows() {
   let cs = D.clients;
   if (S.bsearch) { const q=S.bsearch.toLowerCase(); cs=cs.filter(c=>c.name.toLowerCase().includes(q)||c.co.toLowerCase().includes(q)); }
   if (S.bfilter==='risk') cs=cs.filter(c=>c.health==='r'||c.health==='a');
-  else if (S.bfilter==='nocon') cs=cs.filter(c=>c.lcd>=14);
+  else if (S.bfilter==='nocon') cs=cs.filter(c=>c.lcd>=28);
   else if (S.bfilter==='orec') cs=cs.filter(c=>c.rec);
   if (!cs.length) return `<div class="empty"><div class="empty-ic">🔍</div><div class="empty-txt">No clients match your search</div></div>`;
   const hmap={r:'h-r',a:'h-a',g:'h-g',x:'h-x'};
