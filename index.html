@@ -339,7 +339,7 @@ function renderTopbar() {
   const isC = S.view === 'client';
   document.getElementById('topbar').innerHTML = `
     <a class="tb-logo" href="#/dashboard"><img src="images.jpg" alt="Truist" style="height:40px;width:auto;object-fit:contain;flex-shrink:0"/><div class="tb-logo-text"><span class="tb-brand">THUNDERBOLT</span><span class="tb-sub">Small Business RM Portal</span></div></a>
-    ${isC ? `<a class="tb-back" href="#/dashboard">‹ Today's list</a>` : ''}
+    
     <div class="tb-spacer"></div>
     <span class="tb-date">${D.day}</span>
     <button class="tb-cop ${S.copOpen?'on':''}" onclick="toggleCop()"><span style="font-size:13px">✦</span>Copilot</button>
