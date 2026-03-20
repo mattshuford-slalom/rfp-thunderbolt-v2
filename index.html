@@ -113,6 +113,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .ocard.h-r::before{background:linear-gradient(90deg,var(--red-s),#C0392B)}
 .ocard.h-a{background:#fff}
 .ocard.h-a::before{background:linear-gradient(90deg,var(--amb-s),var(--amb))}
+.ocard.rec-nudge::before{background:var(--red)}
+.ocard.rec-prop::before{background:var(--amb)}
+.ocard.rec-rules::before{background:var(--grn)}
+.ocard.rec-rt::before{background:var(--p600)}
 .ocard:hover{box-shadow:0 4px 16px rgba(75,40,109,.13);border-color:var(--p300)}
 .ocard-top{display:flex;align-items:center}
 .ocard-names{flex:1;min-width:0}
@@ -537,10 +541,11 @@ function rowHTML(c) {
 
 function cardHTML(c) {
   const hcls = c.health==='r'?' h-r':c.health==='a'?' h-a':'';
+  const recCls = c.rec ? ` rec-${c.rec==='propensity'?'prop':c.rec}` : '';
   const why = WHY[c.id] || genWhy(c);
   const opener = OPENER[c.id] || genOpener(c);
   const tps = TPS[c.id] || genTPs(c);
-  return `<div class="ocard${hcls}" onclick="go('/client/${c.id}')">
+  return `<div class="ocard${hcls}${recCls}" onclick="go('/client/${c.id}')">
     <div class="ocard-co">${esc(c.co)}</div>
     <div class="ocard-pill-row">${badge(c.rec)}<span class="ocard-time">${esc(c.rt||'')}</span></div>
     <div class="sblock"><div class="sbtitle">Why now</div><div class="sbbody">${why}</div></div>
