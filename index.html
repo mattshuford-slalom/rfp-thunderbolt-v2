@@ -614,7 +614,6 @@ function vBook() {
         <div class="col-l">Last contact</div>
         <div class="col-l">Open rec</div>
         <div class="col-l">Products</div>
-        <div class="col-l">Tier</div>
       </div>
       <div id="book-rows">${bookRows()}</div>
     </div>
@@ -636,7 +635,6 @@ function bookRows() {
       <div class="bgmeta">${esc(c.lc)}</div>
       <div>${c.rec?badge(c.rec):'<span class="bgmeta">—</span>'}</div>
       <div class="bgmeta">${c.prods.join(', ')}</div>
-      <div class="bgmeta">${c.tier}</div>
     </div>`).join('');
 }
 
