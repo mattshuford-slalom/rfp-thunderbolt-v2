@@ -345,7 +345,7 @@ function renderTopbar() {
     
     <div class="tb-spacer"></div>
     <span class="tb-date">${D.day}</span>
-    <button class="tb-cop ${S.copOpen?'on':''}" onclick="toggleCop()"><span style="font-size:13px">✦</span>Copilot</button>
+    <button class="tb-cop ${S.copOpen?'on':''}" onclick="toggleCop()"><img src="microsoft_copilot-logo_brandlogos.net_zaqzr.png" style="width:16px;height:16px;vertical-align:middle;margin-right:2px">Copilot</button>
     <div style="display:flex;align-items:center;gap:10px">
       <div class="tb-av-info"><span class="tb-av-name">${D.rm.name}</span><span class="tb-av-role">Relationship Manager</span></div>
       <div class="tb-av">${D.rm.initials}</div>
@@ -799,7 +799,7 @@ function renderCopilot() {
   const suggs = getSuggestions();
   el.innerHTML = `
     <div class="cp-hd">
-      <div class="cp-hd-l"><div class="cp-ic">✦</div><span class="cp-ttl">Copilot</span></div>
+      <div class="cp-hd-l"><img src="microsoft_copilot-logo_brandlogos.net_zaqzr.png" style="width:22px;height:22px"><span class="cp-ttl">Copilot</span></div>
       <button class="cp-x" onclick="toggleCop()">✕</button>
     </div>
     <div class="cp-ctx">${ctx}</div>
