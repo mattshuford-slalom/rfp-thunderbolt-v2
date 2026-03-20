@@ -640,7 +640,14 @@ function bookRows() {
     </div>`).join('');
 }
 
-function setBF(f) { S.bfilter=f; S.bsearch=''; re('book-rows',bookRows()); rebind(); }
+function setBF(f) {
+  S.bfilter=f; S.bsearch='';
+  document.querySelectorAll('.fpill').forEach(el => {
+    const pf = el.getAttribute('onclick').match(/setBF\('(\w+)'\)/)?.[1];
+    el.classList.toggle('on', pf === f);
+  });
+  re('book-rows',bookRows()); rebind();
+}
 function refreshBook() { re('book-rows', bookRows()); }
 
 /* ============================================================
