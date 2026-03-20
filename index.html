@@ -136,11 +136,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .chsub{font-size:13px;font-weight:500;color:var(--tx3);margin-top:2px}
 .chbadges{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
 
-/* ── TAB BAR ─────────────────────────────────────────────── */
-.tabs{display:flex;border-bottom:1px solid var(--bdr-l);padding:0 14px;background:#fff;flex-shrink:0;gap:2px}
-.tab{padding:8px 13px;font-size:14px;font-weight:500;color:var(--tx3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .15s;user-select:none}
-.tab:hover{color:var(--p700)}
-.tab.on{color:var(--p800);border-bottom-color:var(--p800);font-weight:700}
+/* ── TAB BAR (hidden — state kept for Copilot context) ────── */
+.tabs{display:none}
+.tab{display:none}
+
+/* ── SECTION DIVIDERS ───────────────────────────────────── */
+.sec-div{display:flex;align-items:center;gap:10px;padding:20px 0 8px}
+.sec-div-lbl{font-size:11px;font-weight:700;color:var(--p600);letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;flex-shrink:0}
+.sec-div-line{flex:1;height:1px;background:linear-gradient(90deg,var(--bdr),transparent)}
 
 /* ── TAB CONTENT ─────────────────────────────────────────── */
 .tcont{padding:14px;display:flex;flex-direction:column;gap:10px}
@@ -428,7 +431,7 @@ function badge(t) {
    ============================================================ */
 function vClient() {
   const c = D.clients.find(x => x.id === S.cid) || D.clients[0];
-  const tabs = [{k:'rec',l:'Recommendation'},{k:'ctx',l:'Client context'},{k:'port',l:'Portfolio position'},{k:'log',l:'Log outcome'}];
+  const sd = lbl => `<div class="sec-div"><span class="sec-div-lbl">${lbl}</span><span class="sec-div-line"></span></div>`;
   return `
     <div class="ch">
       <div class="chav">${c.ini}</div>
@@ -438,15 +441,15 @@ function vClient() {
         <div class="chbadges">${c.rec?badge(c.rec):''}${c.prop>=55?`<span class="badge b-prop">${c.prop}% propensity</span>`:''}</div>
       </div>
     </div>
-    <div class="tabs">
-      ${tabs.map(t=>`<div class="tab ${S.tab===t.k?'on':''}" onclick="switchTab('${t.k}')">${t.l}</div>`).join('')}
-    </div>
-    <div class="tcont" id="tcont">${tabContent(c)}</div>`;
-}
+    <div class="tcont">
+      ${sd('Recommendation')}${tRec(c)}
+      ${sd('Log Outcome')}${tLog(c)}
+      ${sd('Portfolio Position')}${tPort(c)}
+      ${sd('Client Context')}${tCtx(c)}
+    </div>`;}
 
 function switchTab(t) {
   S.tab = t;
-  S.logOut = null;
   document.querySelectorAll('.tab').forEach(el => el.classList.toggle('on', el.getAttribute('onclick').includes("'"+t+"'")));
   const c = D.clients.find(x => x.id === S.cid);
   document.getElementById('tcont').innerHTML = tabContent(c);
@@ -500,7 +503,6 @@ function tRec(c) {
     <div class="act-row">
       <button class="btn pri" onclick="openModal('call',${c.id})">Call now</button>
       <button class="btn" onclick="openModal('email',${c.id})">Draft email</button>
-      <button class="btn" onclick="switchTab('log')">Log outcome</button>
     </div>`;
 }
 
