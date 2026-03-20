@@ -235,11 +235,28 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .opill{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
 .o-c{background:var(--grn-l);color:var(--grn);border:1.5px solid rgba(39,174,96,.25)}
 .o-p{background:var(--amb-l);color:var(--amb);border:1.5px solid rgba(212,130,0,.25)}
-.o-d{background:var(--p100);color:var(--tx3);border:1.5px solid var(--bdr)}
+.o-d{background:var(--red-l);color:var(--red);border:1.5px solid rgba(217,48,37,.3)}
 .abody{flex:1}
 .aclient{font-size:15px;font-weight:600;color:var(--tx);margin-bottom:2px;letter-spacing:-.01em}
 .adesc{font-size:13px;color:var(--tx2);line-height:1.55}
 .atime{font-size:12px;font-weight:600;color:var(--tx3);flex-shrink:0;padding-top:3px}
+/* ── TIMELINE ─────────────────────────────────────────────── */
+.tl-wrap{padding:8px 24px 24px 24px;display:flex;flex-direction:column}
+.tl-item{display:grid;grid-template-columns:80px 24px 1fr;gap:0 16px;position:relative;min-height:80px}
+.tl-item:not(:last-child) .tl-spine{background:var(--bdr-l)}
+.tl-date{font-size:12px;font-weight:600;color:var(--tx3);text-align:right;padding-top:3px;line-height:1.3}
+.tl-spine{display:flex;flex-direction:column;align-items:center;gap:0}
+.tl-dot{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;z-index:1}
+.tl-line{flex:1;width:2px;background:var(--bdr-l);margin:2px 0}
+.tl-card{background:#fff;border:1px solid var(--bdr-l);border-radius:var(--rmd);padding:12px 14px;margin-bottom:14px;box-shadow:var(--ssm)}
+.tl-client{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px}
+.tl-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.tl-method{font-size:12px;color:var(--tx3);font-weight:500}
+.tl-outcome{font-size:12px;font-weight:700;padding:2px 9px;border-radius:var(--rfull)}
+.tl-out-c{background:var(--grn-l);color:var(--grn)}
+.tl-out-p{background:var(--amb-l);color:var(--amb)}
+.tl-out-d{background:var(--red-l);color:var(--red)}
+.tl-notes{font-size:13px;color:var(--tx2);line-height:1.55}
 
 /* ── MODAL ───────────────────────────────────────────────── */
 .overlay{position:fixed;inset:0;background:rgba(21,4,40,.55);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
@@ -367,13 +384,13 @@ const D = {
     ...genClients(),
   ],
   activity: [
-    { id:1, cn:'Brightwell Foods', desc:'Treasury mgmt opened · propensity confirmed · model updated', out:'c', time:'Mon' },
-    { id:2, cn:'Apex Plumbing', desc:'BLOC accepted · nudge timing logged as effective (36h)', out:'c', time:'Fri' },
-    { id:3, cn:'Maria Chen', desc:'Cash mgmt meeting scheduled · outcome pending', out:'p', time:'Active' },
-    { id:4, cn:'Ridgeline HVAC', desc:'Follow-up call scheduled · proposal still active', out:'p', time:'Active' },
-    { id:5, cn:'Meza Landscaping', desc:'Not interested · recommendation dismissed · feedback logged', out:'d', time:'Wed' },
-    { id:6, cn:'Summit Roofing Co.', desc:'Treasury referral accepted · Premier intro scheduled', out:'c', time:'Tue' },
-    { id:7, cn:'Harmon & Diaz LLC', desc:'CD renewal confirmed · rate conversation completed', out:'c', time:'Last wk' },
+    { id:1, cn:'Brightwell Foods', desc:'Treasury mgmt opened · propensity confirmed · model updated', out:'c', time:'Mon', rec:'propensity', method:'Phone call' },
+    { id:2, cn:'Apex Plumbing', desc:'BLOC accepted · nudge timing logged as effective (36h)', out:'c', time:'Fri', rec:'nudge', method:'Phone call' },
+    { id:3, cn:'Maria Chen', desc:'Cash mgmt meeting scheduled · outcome pending', out:'p', time:'Active', rec:'nudge', method:'Phone call' },
+    { id:4, cn:'Ridgeline HVAC', desc:'Follow-up call scheduled · proposal still active', out:'p', time:'Active', rec:'nudge', method:'Email' },
+    { id:5, cn:'Meza Landscaping', desc:'Not interested · recommendation dismissed · feedback logged', out:'d', time:'Wed', rec:'rules', method:'Phone call' },
+    { id:6, cn:'Summit Roofing Co.', desc:'Treasury referral accepted · Premier intro scheduled', out:'c', time:'Tue', rec:'propensity', method:'In-person meeting' },
+    { id:7, cn:'Harmon & Diaz LLC', desc:'CD renewal confirmed · rate conversation completed', out:'c', time:'Last wk', rec:'rules', method:'Phone call' },
   ],
 };
 
@@ -439,9 +456,9 @@ function renderTopbar() {
 function renderSidebar() {
   const av = S.view;
   document.getElementById('sidebar').innerHTML = `
-    <a class="sb-ic ${av==='dashboard'?'on':''}" href="#/dashboard" title="Dashboard">
+    <a class="sb-ic ${av==='dashboard'?'on':''}" href="#/dashboard" title="Tasks">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
-      Dashboard
+      Tasks
     </a>
     <a class="sb-ic ${av==='book'?'on':''}" href="#/book" title="Clients">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="7" rx="1"/><rect x="9" y="11" width="5" height="3" rx="1"/></svg>
@@ -831,14 +848,31 @@ function actRows() {
   if (S.asearch) { const q=S.asearch.toLowerCase(); acts=acts.filter(a=>a.cn.toLowerCase().includes(q)||a.desc.toLowerCase().includes(q)); }
   if (S.afilter!=='all') acts=acts.filter(a=>a.out===S.afilter);
   if (!acts.length) return `<div class="empty"><div class="empty-ic">🔍</div><div class="empty-txt">No results match your filter</div></div>`;
-  const ic={c:'✓',p:'~',d:'—'};
-  const ocls={c:'o-c',p:'o-p',d:'o-d'};
-  return acts.map(a=>`
-    <div class="arow">
-      <div class="opill ${ocls[a.out]}">${ic[a.out]}</div>
-      <div class="abody"><div class="aclient">${esc(a.cn)}</div><div class="adesc">${esc(a.desc)}</div></div>
-      <div class="atime">${a.time}</div>
-    </div>`).join('');
+  const outLbl={c:'Converted',p:'Pending',d:'Dismissed'};
+  const outCls={c:'tl-out-c',p:'tl-out-p',d:'tl-out-d'};
+  const dotCls={c:'o-c',p:'o-p',d:'o-d'};
+  const dotIc={c:'✓',p:'~',d:'—'};
+  const methodIc={'Phone call':'📞','Email':'✉️','In-person meeting':'🤝','Video call':'💻'};
+  return `<div class="tl-wrap">${acts.map((a,i)=>{
+    const mi = methodIc[a.method]||'📋';
+    const recBadge = a.rec ? badge(a.rec) : '';
+    return `<div class="tl-item">
+      <div class="tl-date">${esc(a.time)}</div>
+      <div class="tl-spine">
+        <div class="tl-dot ${dotCls[a.out]}">${dotIc[a.out]}</div>
+        ${i < acts.length-1 ? '<div class="tl-line"></div>' : ''}
+      </div>
+      <div class="tl-card">
+        <div class="tl-client">${esc(a.cn)}</div>
+        <div class="tl-meta">
+          ${recBadge}
+          <span class="tl-outcome ${outCls[a.out]}">${outLbl[a.out]}</span>
+          <span class="tl-method">${mi} ${esc(a.method||'')}</span>
+        </div>
+        <div class="tl-notes">${esc(a.desc)}</div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
 }
 
 function setAF(f) {
@@ -1122,8 +1156,9 @@ function submitLogModal(cid) {
   if (!window.logOutM) { showToast('⚠ Please select an outcome'); return; }
   const c = D.clients.find(x=>x.id===cid)||D.clients[0];
   const notes = document.getElementById('mlog-notes')?.value?.trim() || '';
+  const method = document.getElementById('mlog-method')?.value || 'Phone call';
   const lbls = {c:'Converted',p:'Pending',d:'Dismissed'};
-  D.activity.unshift({ id: Date.now(), cn: c.name, desc: `Outcome logged: ${lbls[window.logOutM]} · ${notes||'No additional notes'}`, out: window.logOutM, time: 'Just now' });
+  D.activity.unshift({ id: Date.now(), cn: c.name, desc: notes||'No additional notes', out: window.logOutM, time: 'Just now', rec: c.rec||null, method });
   window.logOutM = null;
   closeModal();
   showToast('✓ Outcome logged successfully');
