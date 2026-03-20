@@ -843,9 +843,13 @@ function vActivity() {
 }
 
 function actRows() {
-  let acts = D.activity;
+  let acts = [...D.activity];
   if (S.asearch) { const q=S.asearch.toLowerCase(); acts=acts.filter(a=>a.cn.toLowerCase().includes(q)||a.desc.toLowerCase().includes(q)); }
   if (S.afilter!=='all') acts=acts.filter(a=>a.out===S.afilter);
+  acts.sort((a,b)=>{
+    const p = t => { const [m,d,y]=t.split('/'); return y&&m&&d ? new Date(`20${y}`,m-1,d) : new Date(0); };
+    return p(b.time) - p(a.time);
+  });
   if (!acts.length) return `<div class="empty"><div class="empty-ic">🔍</div><div class="empty-txt">No results match your filter</div></div>`;
   const outLbl={c:'Converted',p:'Pending',d:'Dismissed'};
   const outCls={c:'tl-out-c',p:'tl-out-p',d:'tl-out-d'};
