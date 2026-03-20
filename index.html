@@ -215,13 +215,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .fpill.on{background:linear-gradient(135deg,var(--p700),var(--p900));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(75,40,109,.28)}
 
 /* ── BOOK GRID ───────────────────────────────────────────── */
-.col-hd{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:6px 13px;border-bottom:1px solid var(--bdr-l);background:var(--p50)}
+.col-hd{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:7px 13px;border-bottom:1px solid var(--bdr-l);background:var(--p50)}
 .col-l{font-size:12px;font-weight:700;color:var(--tx3);letter-spacing:.07em;text-transform:uppercase}
-.bgrow{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:9px 13px;border-bottom:1px solid var(--bdr-l);cursor:pointer;transition:background .12s}
+.bgrow{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--bdr-l);cursor:pointer;transition:background .12s}
 .bgrow:last-child{border-bottom:none}
 .bgrow:hover{background:var(--p50)}
-.bgname{font-size:15px;font-weight:600;color:var(--tx);letter-spacing:-.01em}
-.bgmeta{font-size:13px;font-weight:500;color:var(--tx3);margin-top:2px}
+.bgname{font-size:15px;font-weight:600;color:var(--tx);letter-spacing:-.01em;line-height:1.35}
+.bgmeta{font-size:13px;font-weight:500;color:var(--tx3);margin-top:2px;line-height:1.35}
 .hdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .h-g{background:var(--grn-d)}
 .h-a{background:var(--amb-s)}
@@ -711,7 +711,14 @@ function actRows() {
     </div>`).join('');
 }
 
-function setAF(f) { S.afilter=f; S.asearch=''; re('act-rows',actRows()); rebind(); }
+function setAF(f) {
+  S.afilter=f; S.asearch='';
+  document.querySelectorAll('.fpill').forEach(el => {
+    const pf = el.getAttribute('onclick').match(/setAF\('(\w+)'\)/)?.[1];
+    if (pf !== undefined) el.classList.toggle('on', pf === f);
+  });
+  re('act-rows',actRows()); rebind();
+}
 function refreshActivity() { re('act-rows', actRows()); }
 
 /* ============================================================
