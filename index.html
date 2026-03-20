@@ -912,7 +912,7 @@ function openModal(type, cid) {
       </div>
       <div class="mfooter">
         <button class="btn" onclick="closeModal()">Close</button>
-        <button class="btn pri" onclick="closeModal();showToast('📞 Call logged for ${esc(c.name)}')">Mark as called</button>
+        <button class="btn pri" onclick="showLogModal(${c.id})">Mark as called</button>
       </div>`;
   } else if (type==='email') {
     const subj = {1:'Quick check-in — account activity and next steps',2:'Following up on equipment financing proposal',3:'Supporting your business growth — let\'s talk',4:'Your CD is maturing soon — options to consider',5:'Reaching out about your financing needs'};
@@ -932,6 +932,64 @@ function openModal(type, cid) {
   }
 }
 function closeModal() { document.getElementById('overlay').classList.add('off'); }
+
+function showLogModal(cid) {
+  const c = D.clients.find(x=>x.id===cid)||D.clients[0];
+  const modal = document.getElementById('modal');
+  let logOut = null;
+  const render = () => {
+    modal.innerHTML = `
+      <div class="mhd"><span class="mttl">📋 Log outcome — ${esc(c.name)}</span><button class="mx" onclick="closeModal()">✕</button></div>
+      <div class="mbody">
+        <div class="msec">
+          <div class="mlbl">Outcome</div>
+          <div class="radio-grp" style="margin-top:6px">
+            <div class="rchip${logOut==='c'?' s-conv':''}" onclick="(function(){logOutM='c';document.querySelectorAll('#log-modal-chips .rchip').forEach(function(el){el.className='rchip'+(el.dataset.v==='c'?' s-conv':el.dataset.v==='p'?' s-pend':el.dataset.v==='d'?' s-dism':'')});})()">✓ Converted</div>
+            <div class="rchip${logOut==='p'?' s-pend':''}" onclick="(function(){logOutM='p';document.querySelectorAll('#log-modal-chips .rchip').forEach(function(el){el.className='rchip'+(el.dataset.v==='c'?' s-conv':el.dataset.v==='p'?' s-pend':el.dataset.v==='d'?' s-dism':'')});})()">~ Still pending</div>
+            <div class="rchip${logOut==='d'?' s-dism':''}" onclick="(function(){logOutM='d';document.querySelectorAll('#log-modal-chips .rchip').forEach(function(el){el.className='rchip'+(el.dataset.v==='c'?' s-conv':el.dataset.v==='p'?' s-pend':el.dataset.v==='d'?' s-dism':'')});})()">— Dismissed</div>
+          </div>
+        </div>
+        <div class="msec">
+          <div class="mlbl">Contact method</div>
+          <select class="fselect" id="mlog-method" style="margin-top:6px"><option>Phone call</option><option>Email</option><option>In-person meeting</option><option>Video call</option></select>
+        </div>
+        <div class="msec">
+          <div class="mlbl">Notes</div>
+          <textarea class="ftextarea" id="mlog-notes" rows="4" placeholder="What happened? Any follow-up needed?" style="margin-top:6px"></textarea>
+        </div>
+      </div>
+      <div class="mfooter">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn pri" onclick="submitLogModal(${c.id})">Save outcome</button>
+      </div>`;
+    // Wire up chip clicks properly after render
+    const chips = modal.querySelectorAll('.radio-grp .rchip');
+    const vals = ['c','p','d'];
+    chips.forEach((el, i) => {
+      el.dataset.v = vals[i];
+      el.onclick = () => {
+        logOutM = vals[i];
+        chips.forEach((ch, j) => {
+          ch.className = 'rchip' + (j===i ? (vals[i]==='c'?' s-conv':vals[i]==='p'?' s-pend':' s-dism') : '');
+        });
+      };
+    });
+  };
+  render();
+}
+
+window.logOutM = null;
+
+function submitLogModal(cid) {
+  if (!window.logOutM) { showToast('⚠ Please select an outcome'); return; }
+  const c = D.clients.find(x=>x.id===cid)||D.clients[0];
+  const notes = document.getElementById('mlog-notes')?.value?.trim() || '';
+  const lbls = {c:'Converted',p:'Pending',d:'Dismissed'};
+  D.activity.unshift({ id: Date.now(), cn: c.name, desc: `Outcome logged: ${lbls[window.logOutM]} · ${notes||'No additional notes'}`, out: window.logOutM, time: 'Just now' });
+  window.logOutM = null;
+  closeModal();
+  showToast('✓ Outcome logged successfully');
+}
 
 /* ============================================================
    TOAST
