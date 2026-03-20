@@ -215,9 +215,9 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .fpill.on{background:linear-gradient(135deg,var(--p700),var(--p900));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(75,40,109,.28)}
 
 /* ── BOOK GRID ───────────────────────────────────────────── */
-.col-hd{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:7px 13px;border-bottom:1px solid var(--bdr-l);background:var(--p50)}
+.col-hd{display:grid;grid-template-columns:11px 1fr 110px 90px 330px;gap:12px;align-items:center;padding:7px 13px;border-bottom:1px solid var(--bdr-l);background:#fff}
 .col-l{font-size:12px;font-weight:700;color:var(--tx3);letter-spacing:.07em;text-transform:uppercase}
-.bgrow{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--bdr-l);cursor:pointer;transition:background .12s}
+.bgrow{display:grid;grid-template-columns:11px 1fr 110px 90px 330px;gap:12px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--bdr-l);cursor:pointer;transition:background .12s;background:#fff}
 .bgrow:last-child{border-bottom:none}
 .bgrow:hover{background:var(--p50)}
 .bgname{font-size:15px;font-weight:600;color:var(--tx);letter-spacing:-.01em;line-height:1.35}
@@ -229,7 +229,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .h-x{background:var(--gray-d)}
 
 /* ── ACTIVITY ────────────────────────────────────────────── */
-.arow{display:flex;align-items:flex-start;gap:13px;padding:9px 13px;border-bottom:1px solid var(--bdr-l);transition:background .12s}
+.arow{display:flex;align-items:flex-start;gap:13px;padding:9px 13px;border-bottom:1px solid var(--bdr-l);transition:background .12s;background:#fff}
 .arow:last-child{border-bottom:none}
 .arow:hover{background:var(--p50)}
 .opill{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
@@ -458,7 +458,7 @@ function renderSidebar() {
 function renderMain() {
   const el = document.getElementById('main');
   if (S.view === 'dashboard') el.innerHTML = vDashboard();
-  else if (S.view === 'client') el.innerHTML = vClient();
+  else if (S.view === 'client') { el.innerHTML = vClient(); el.scrollTop = 0; }
   else if (S.view === 'book') el.innerHTML = vBook();
   else if (S.view === 'activity') el.innerHTML = vActivity();
   // bind live search inputs after render
@@ -495,9 +495,9 @@ function rowHTML(c) {
 
 function cardHTML(c) {
   const hcls = c.health==='r'?' h-r':c.health==='a'?' h-a':'';
-  const why = WHY[c.id] || `<strong>${esc(c.name)}</strong> has active engagement signals. Review product mix and explore cross-sell opportunities.`;
-  const opener = OPENER[c.id] || `"Hi, I wanted to check in and see how we can best support your business."`;
-  const tps = TPS[c.id] || ['Review current product holdings.','Discuss upcoming financial needs.','Identify referral opportunities.'];
+  const why = WHY[c.id] || genWhy(c);
+  const opener = OPENER[c.id] || genOpener(c);
+  const tps = TPS[c.id] || genTPs(c);
   return `<div class="ocard${hcls}" onclick="go('/client/${c.id}')">
     <div class="ocard-co">${esc(c.co)}</div>
     <div class="ocard-pill-row">${badge(c.rec)}<span class="ocard-time">${esc(c.rt||'')}</span></div>
@@ -527,7 +527,7 @@ function vClient() {
       <div class="chav">${c.ini}</div>
       <div>
         <div class="chname">${esc(c.name)} — ${esc(c.co)}</div>
-        <div class="chsub">${c.tier} · ${c.loc} · Client since ${c.since}</div>
+        <div class="chsub">${c.loc} · Client since ${c.since}</div>
         <div class="chbadges">${c.rec?badge(c.rec):''}${c.prop>=55?`<span class="badge b-prop">${c.prop}% propensity</span>`:''}</div>
       </div>
     </div>
@@ -578,9 +578,9 @@ const TPS = {
   5: ['Identify specific need — equipment, expansion, or working capital.','Highlight SBA loan options or flexible BLOC.','Offer a 30-minute discovery call to walk through options.'],
 };
 function tRec(c) {
-  const why = WHY[c.id] || `<strong>${esc(c.name)}</strong> has active engagement signals. Review product mix and explore cross-sell opportunities.`;
-  const opener = OPENER[c.id] || `"Hi, I wanted to check in and see how we can best support your business."`;
-  const tps = TPS[c.id] || ['Review current product holdings.','Discuss upcoming financial needs.','Identify referral opportunities.'];
+  const why = WHY[c.id] || genWhy(c);
+  const opener = OPENER[c.id] || genOpener(c);
+  const tps = TPS[c.id] || genTPs(c);
   return `
     <div class="two-col">
       <div class="sblock"><div class="sbtitle">Why now</div><div class="sbbody">${why}</div></div>
@@ -594,6 +594,69 @@ function tRec(c) {
       <button class="btn pri" onclick="openModal('call',${c.id})">Call now</button>
       <button class="btn" onclick="openModal('email',${c.id})">Draft email</button>
     </div>`;
+}
+
+function genWhy(c) {
+  const fn = esc(c.co);
+  const templates = {
+    nudge: [
+      `<strong>${c.lcd} days since last RM contact</strong> — propensity at ${c.prop}% suggests high receptivity. Re-engagement window is open now.`,
+      `<strong>No outreach logged in ${c.lcd} days</strong> — last interaction indicated interest in expanding the relationship. Competitor risk is elevated.`,
+      `<strong>Contact gap of ${c.lcd} days with normal account activity</strong> — client is active but unengaged. Optimal moment to reconnect.`,
+      `<strong>${c.lcd}-day contact lapse</strong> — ${c.prop}% propensity score is the highest in the past 90 days for this account.`,
+    ],
+    propensity: [
+      `<strong>Transaction patterns indicate readiness for a new product conversation</strong> — ${c.prop}% propensity, top quartile for ${esc(c.ind)}.`,
+      `<strong>Revenue at ${esc(c.rev)} with only ${c.prods.length} active product(s)</strong> — significant wallet share uncaptured. ${c.prop}% propensity confirmed.`,
+      `<strong>Under-penetrated vs. comparable ${esc(c.ind)} clients at ${esc(c.rev)}</strong> — peer benchmark shows ${c.prods.length + 2} products typical for this profile.`,
+      `<strong>Current mix of ${c.prods.slice(0,2).map(p=>esc(p)).join(' and ')} leaves cross-sell opportunity open</strong> — ${c.prop}% propensity score based on spending patterns.`,
+    ],
+    rules: [
+      `<strong>Account meets threshold for treasury services</strong> — ${esc(c.ind)} profile at ${esc(c.rev)} revenue qualifies. No outreach initiated yet.`,
+      `<strong>CD or term product nearing maturity with no renewal outreach logged</strong> — rate-sensitive client, window is closing.`,
+      `<strong>${fn} holds ${c.prods.length} product(s) vs. ${c.prods.length + 2} typical for comparable ${esc(c.ind)} clients</strong> — product gap warrants a conversation.`,
+      `<strong>BLOC utilization above 70%</strong> — may indicate need for a limit increase or supplemental credit line. Good time to check in.`,
+    ],
+    rt: [
+      `<strong>Browsed financing options on truist.com within the last 24 hours</strong> — high-intent signal. Best window to reach out is now.`,
+      `<strong>Wire transfer above average velocity received this morning</strong> — possible liquidity event or contract close. Cash management conversation is timely.`,
+      `<strong>Application started but not completed on truist.com</strong> — active need indicated. ${c.prop}% propensity confirms product fit.`,
+      `<strong>Large ACH payment received today</strong> — possible contract close or capital infusion. Opportunity to introduce sweep or treasury tools.`,
+    ],
+  };
+  const pool = templates[c.rec] || templates.nudge;
+  return pool[c.id % pool.length];
+}
+
+function genOpener(c) {
+  const fn = esc(c.co.split(' ')[0]);
+  const openers = [
+    `"Hi, I was reviewing your account and noticed some activity I wanted to follow up on — do you have a few minutes this week?"`,
+    `"${fn}, I've been keeping an eye on your account and think there's a timely opportunity worth a quick conversation."`,
+    `"I wanted to reach out personally — I noticed some signals in your account that I think are worth discussing."`,
+    `"Hi, I'm calling because our system flagged your account for a time-sensitive conversation — happy to walk you through what we're seeing."`,
+    `"${fn}, based on your recent activity, I think we have a product that could be a strong fit. Mind if I take 5 minutes to explain?"`,
+    `"I was going through my book this morning and your account stood out — wanted to make sure we're supporting you in the right ways."`,
+  ];
+  return openers[c.id % openers.length];
+}
+
+function genTPs(c) {
+  const allTPs = [
+    `Review current product mix — ${c.prods.length} active product(s) vs. ${c.prods.length + 2} typical for ${esc(c.ind)} clients at ${esc(c.rev)}.`,
+    `Explore treasury management fit given current revenue trajectory and employee headcount (${c.emp}).`,
+    `Discuss business line of credit to support operational flexibility and working capital.`,
+    `Introduce sweep account options to optimize idle cash between billing cycles.`,
+    `Review CD or savings laddering strategy to improve liquidity without sacrificing yield.`,
+    `Ask about upcoming capital needs — equipment, expansion, or hiring — to position lending products early.`,
+    `Highlight Merchant Services if retail/service volume is growing — fee savings opportunity.`,
+    `Discuss payroll integration if headcount is above 10 — simplify ops and deepen relationship.`,
+    `Identify referral potential — clients in ${esc(c.ind)} often have strong professional networks.`,
+    `Ask about personal banking relationship — Premier referral opportunity if deposits exceed threshold.`,
+  ];
+  // pick 3 deterministically based on client id
+  const i = c.id % allTPs.length;
+  return [allTPs[i], allTPs[(i+3)%allTPs.length], allTPs[(i+6)%allTPs.length]];
 }
 
 /* ── CONTEXT TAB ────────────────────────────────────────── */
@@ -996,12 +1059,13 @@ function openModal(type, cid) {
       <div class="mhd"><span class="mttl">✉️ Draft email — ${esc(c.name)}</span><button class="mx" onclick="closeModal()">✕</button></div>
       <div class="mbody">
         <div class="msec"><div class="mlbl">To</div><div class="mval">${esc(c.name)} · ${esc(c.co)}</div></div>
-        <div class="msec"><div class="mlbl">Subject</div><div class="mval hi">${subj[c.id]||'Checking in — how can we help?'}</div></div>
+        <div class="msec"><div class="mlbl">Subject</div><input class="ftextarea" id="email-subj" style="margin-top:4px;padding:7px 10px;resize:none;height:auto" value="${esc(subj[c.id]||'Checking in — how can we help?')}"></div>
         <div class="msec"><div class="mlbl">Draft body (editable)</div><textarea class="ftextarea" id="email-body" rows="9" style="margin-top:4px">${body}</textarea></div>
       </div>
       <div class="mfooter">
         <button class="btn" onclick="closeModal()">Cancel</button>
-        <button class="btn pri" onclick="closeModal();showToast('✉️ Email draft saved')">Save draft</button>
+        <button class="btn" onclick="closeModal();showToast('✉️ Email draft saved')">Save draft</button>
+        <button class="btn pri" onclick="closeModal();showToast('✉️ Email sent')">Send email</button>
       </div>`;
   }
 }
