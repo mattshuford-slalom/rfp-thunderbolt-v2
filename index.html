@@ -384,13 +384,13 @@ const D = {
     ...genClients(),
   ],
   activity: [
-    { id:1, cn:'Brightwell Foods', desc:'Treasury mgmt opened · propensity confirmed · model updated', out:'c', time:'Mon', rec:'propensity', method:'Phone call' },
-    { id:2, cn:'Apex Plumbing', desc:'BLOC accepted · nudge timing logged as effective (36h)', out:'c', time:'Fri', rec:'nudge', method:'Phone call' },
-    { id:3, cn:'Maria Chen', desc:'Cash mgmt meeting scheduled · outcome pending', out:'p', time:'Active', rec:'nudge', method:'Phone call' },
-    { id:4, cn:'Ridgeline HVAC', desc:'Follow-up call scheduled · proposal still active', out:'p', time:'Active', rec:'nudge', method:'Email' },
-    { id:5, cn:'Meza Landscaping', desc:'Not interested · recommendation dismissed · feedback logged', out:'d', time:'Wed', rec:'rules', method:'Phone call' },
-    { id:6, cn:'Summit Roofing Co.', desc:'Treasury referral accepted · Premier intro scheduled', out:'c', time:'Tue', rec:'propensity', method:'In-person meeting' },
-    { id:7, cn:'Harmon & Diaz LLC', desc:'CD renewal confirmed · rate conversation completed', out:'c', time:'Last wk', rec:'rules', method:'Phone call' },
+    { id:1, cn:'Brightwell Foods', desc:'Treasury mgmt opened · propensity confirmed · model updated', out:'c', time:'03/17/26', rec:'propensity', method:'Phone call' },
+    { id:2, cn:'Apex Plumbing', desc:'BLOC accepted · nudge timing logged as effective (36h)', out:'c', time:'03/14/26', rec:'nudge', method:'Phone call' },
+    { id:3, cn:'Maria Chen', desc:'Cash mgmt meeting scheduled · outcome pending', out:'p', time:'03/19/26', rec:'nudge', method:'Phone call' },
+    { id:4, cn:'Ridgeline HVAC', desc:'Follow-up call scheduled · proposal still active', out:'p', time:'03/19/26', rec:'nudge', method:'Email' },
+    { id:5, cn:'Meza Landscaping', desc:'Not interested · recommendation dismissed · feedback logged', out:'d', time:'03/18/26', rec:'rules', method:'Phone call' },
+    { id:6, cn:'Summit Roofing Co.', desc:'Treasury referral accepted · Premier intro scheduled', out:'c', time:'03/16/26', rec:'propensity', method:'In-person meeting' },
+    { id:7, cn:'Harmon & Diaz LLC', desc:'CD renewal confirmed · rate conversation completed', out:'c', time:'03/12/26', rec:'rules', method:'Phone call' },
   ],
 };
 
@@ -1157,7 +1157,8 @@ function submitLogModal(cid) {
   const notes = document.getElementById('mlog-notes')?.value?.trim() || '';
   const method = document.getElementById('mlog-method')?.value || 'Phone call';
   const lbls = {c:'Converted',p:'Pending',d:'Dismissed'};
-  D.activity.unshift({ id: Date.now(), cn: c.name, desc: notes||'No additional notes', out: window.logOutM, time: 'Just now', rec: c.rec||null, method });
+  const now = new Date(); const mm=String(now.getMonth()+1).padStart(2,'0'); const dd=String(now.getDate()).padStart(2,'0'); const yy=String(now.getFullYear()).slice(-2);
+  D.activity.unshift({ id: Date.now(), cn: c.name, desc: notes||'No additional notes', out: window.logOutM, time: `${mm}/${dd}/${yy}`, rec: c.rec||null, method });
   window.logOutM = null;
   closeModal();
   showToast('✓ Outcome logged successfully');
