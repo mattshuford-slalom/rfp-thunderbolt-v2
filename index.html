@@ -395,11 +395,6 @@ function renderMain() {
 function vDashboard() {
   const today = D.clients.filter(c => c.rec);
   return `<div class="content">
-    <div class="stat-row">
-      <div class="stat-box is-warn"><div class="stat-n warn">2</div><div class="stat-l">Nudges overdue</div></div>
-      <div class="stat-box"><div class="stat-n">7</div><div class="stat-l">Open recommendations</div></div>
-      <div class="stat-box is-ok"><div class="stat-n ok">68%</div><div class="stat-l">Portfolio coverage</div></div>
-    </div>
     <div class="lcard">
       <div class="lcard-hd"><span class="lcard-lbl">Today's outreach list</span><span class="lcard-ct">${today.length} clients</span></div>
       ${today.map(c => rowHTML(c)).join('')}
