@@ -108,7 +108,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .lcard-ct{font-size:13px;font-weight:600;color:var(--p700);background:var(--p200);padding:2px 9px;border-radius:var(--rfull)}
 .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
 .ocard{background:var(--sur);border:1px solid var(--bdr-l);border-radius:var(--rmd);padding:16px 18px;cursor:pointer;transition:box-shadow .15s,border-color .15s;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;box-shadow:var(--ssm)}
-.ocard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,var(--p400),var(--p600))}
+.ocard::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,var(--p400),var(--p600))}
 .ocard.h-r{background:#fff}
 .ocard.h-r::before{background:linear-gradient(90deg,var(--red-s),#C0392B)}
 .ocard.h-a{background:#fff}
@@ -286,6 +286,72 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* ============================================================
    DATA
    ============================================================ */
+function genClients() {
+  const FN = ['James','Robert','Michael','William','David','Richard','Joseph','Thomas','Charles','Christopher','Daniel','Matthew','Anthony','Mark','Donald','Steven','Paul','Andrew','Joshua','Kenneth','Kevin','Brian','George','Timothy','Ronald','Edward','Jason','Jeffrey','Ryan','Jacob','Gary','Nicholas','Eric','Jonathan','Stephen','Larry','Justin','Scott','Brandon','Benjamin','Samuel','Raymond','Gregory','Frank','Alexander','Patrick','Jack','Dennis','Jerry','Tyler','Aaron','Jose','Henry','Adam','Douglas','Nathan','Peter','Zachary','Kyle','Walter','Harold','Jeremy','Ethan','Carl','Keith','Roger','Gerald','Christian','Terry','Sean','Arthur','Austin','Noah','Lawrence','Jesse','Joe','Bryan','Albert','Willie','Dylan','Louis','Johnny','Logan','Carlos','Howard','Teresa','Sandra','Patricia','Linda','Barbara','Elizabeth','Jennifer','Maria','Susan','Dorothy','Lisa','Nancy','Karen','Betty','Helen','Sharon','Donna','Carol','Ruth','Michelle','Laura','Sarah','Kimberly','Deborah','Jessica','Shirley','Angela','Melissa','Brenda','Amy','Anna','Rebecca','Virginia','Kathleen','Pamela','Martha','Amanda','Stephanie','Carolyn','Christine','Marie','Janet','Catherine','Frances','Ann','Joyce','Diane','Alice','Julie','Heather','Doris','Gloria','Evelyn','Jean','Cheryl','Katherine','Joan','Ashley','Judith','Rose','Janice','Kelly','Nicole','Judy','Christina','Kathy','Theresa','Beverly','Denise','Tammy','Irene','Jane','Lori','Rachel','Megan','Amber','Lauren','Brittany','Danielle','Samantha','Emma','Olivia','Sophia','Isabella','Ava','Mia','Chloe','Grace','Hannah'];
+  const LN = ['Smith','Johnson','Williams','Brown','Jones','Garcia','Miller','Davis','Rodriguez','Martinez','Hernandez','Lopez','Gonzalez','Wilson','Anderson','Thomas','Taylor','Moore','Jackson','Martin','Lee','Perez','Thompson','White','Harris','Sanchez','Clark','Ramirez','Lewis','Robinson','Walker','Young','Allen','King','Wright','Scott','Torres','Nguyen','Hill','Flores','Green','Adams','Nelson','Baker','Hall','Rivera','Campbell','Mitchell','Carter','Roberts','Phillips','Evans','Turner','Parker','Collins','Edwards','Stewart','Morris','Murphy','Cook','Rogers','Morgan','Peterson','Cooper','Reed','Bailey','Bell','Gomez','Kelly','Howard','Ward','Cox','Diaz','Richardson','Wood','Watson','Brooks','Bennett','Gray','James','Reyes','Cruz','Hughes','Price','Myers','Long','Foster','Sanders','Ross','Morales','Powell','Sullivan','Russell','Ortiz','Jenkins','Gutierrez','Perry','Butler','Barnes','Fisher','Henderson','Coleman','Simmons','Patterson','Jordan','Reynolds','Hamilton','Graham','Kim','Gonzales','Alexander','Ramos','Wallace','Griffin','West','Cole','Hayes','Chavez','Gibson','Bryant','Ellis','Stevens','Murray','Ford','Marshall','Owens','McDonald','Harrison','Ruiz','Kennedy','Wells','Alvarez','Woods','Mendoza','Castillo','Olson','Webb','Washington','Tucker','Freeman','Burns','Henry','Vasquez','Snyder','Simpson','Crawford','Jimenez','Porter','Mason','Shaw','Gordon','Wagner','Hunter','Romero','Hicks','Dixon','Hunt','Palmer','Robertson','Black','Holmes','Stone','Meyer','Boyd','Mills','Warren','Fox','Rose','Rice','Moreno','Schmidt','Patel','Marsh','Warren'];
+  const PFXS = ['Apex','Summit','Ridge','Valley','Peak','Crest','Blue','Green','Iron','Golden','Silver','Eagle','Falcon','Hawk','Bear','Wolf','Bright','Clear','Swift','Stone','Oak','Pine','Cedar','Maple','River','Lake','Bridge','Crown','Star','Premier','Allied','United','National','Metro','Central','Pacific','Atlantic','Southern','Northern','Western','Eastern','Lakeside','Hillside','Riverside','Heritage','Legacy','Pioneer','Horizon','Keystone','Cornerstone','Prestige','Excel','Prime','Core','Arch','Beacon','Charter'];
+  const SFXS = ['Construction','Services','Logistics','Group','Industries','Solutions','Enterprises','Properties','Foods','Healthcare','Technology','Consulting','Associates','Partners','Holdings','Capital','Ventures','Works','Co.','Inc.','LLC','Management','Advisors','Systems','Supply','Distributors','Contractors','Builders','Specialists','Professionals'];
+  const INDS = ['Construction','Logistics','Healthcare','Legal Services','Food & Beverage','HVAC / Contracting','Landscaping','Food Manufacturing','Plumbing / Contracting','Retail','Technology','Real Estate','Financial Services','Manufacturing','Transportation','Education','Hospitality','Auto Services','Dental','Veterinary','Fitness','Electrical','Roofing','Flooring','Painting','Staffing','Marketing','Accounting','Printing','Security','Janitorial','Pest Control','Photography','Catering','Bakery','Brewery','Winery','Trucking','Warehousing','Childcare','Senior Care','Physical Therapy','Optometry','Chiropractic','Architecture','Engineering','Interior Design'];
+  const LOCS = ['Charlotte, NC','Raleigh, NC','Atlanta, GA','Dallas, TX','Phoenix, AZ','Tampa, FL','Nashville, TN','Austin, TX','Denver, CO','Seattle, WA','Portland, OR','Minneapolis, MN','Detroit, MI','Columbus, OH','Indianapolis, IN','Louisville, KY','Memphis, TN','Richmond, VA','Baltimore, MD','Pittsburgh, PA','Cleveland, OH','Cincinnati, OH','Kansas City, MO','St. Louis, MO','Oklahoma City, OK','San Antonio, TX','Fort Worth, TX','Jacksonville, FL','Orlando, FL','Miami, FL','Charlotte, NC','Birmingham, AL','Greensboro, NC','Virginia Beach, VA','Chandler, AZ','Scottsdale, AZ','Henderson, NV','Laredo, TX','Buffalo, NY','Rochester, NY','Akron, OH','Omaha, NE','Tulsa, OK','Arlington, TX','Aurora, CO','Anaheim, CA','Santa Ana, CA','Corpus Christi, TX','Lexington, KY','Anchorage, AK','Stockton, CA','Riverside, CA','St. Paul, MN','Cincinnati, OH','Toledo, OH','Greensboro, NC','Newark, NJ','Plano, TX','Henderson, NV','Lincoln, NE','Bakersfield, CA','Baton Rouge, LA','Fremont, CA','Hialeah, FL','Garland, TX','Madison, WI','Scottsdale, AZ','Glendale, AZ','Winston-Salem, NC','Chesapeake, VA','Norfolk, VA'];
+  const PRODS_ALL = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings','Checking'];
+  const RECS = [null,null,null,'nudge','propensity','rules','rt'];
+  const HEALTHS = ['g','g','g','g','g','a','a','r','x'];
+  const LCDS = [0,1,2,3,5,7,10,14,21,28,35,42,60];
+  const TRIGS = [
+    (c,lcd)=>`Revenue growth signal detected · ${c.prop}% propensity · engagement window open`,
+    (c,lcd)=>`No contact in ${lcd} days · re-engagement trigger · account activity normal`,
+    (c,lcd)=>`CD matures in ${Math.floor(Math.random()*40)+10} days · renewal outreach not yet logged`,
+    (c,lcd)=>`Payroll volume up ${Math.floor(Math.random()*30)+10}% over 60 days · treasury conversation opportunity`,
+    (c,lcd)=>`Proposal sent ${lcd} days ago with no response · follow-up recommended`,
+    (c,lcd)=>`Website intent signal detected · ${c.prop}% propensity for lending products`,
+    (c,lcd)=>`BLOC utilization at ${Math.floor(Math.random()*40)+50}% · expansion conversation warranted`,
+    (c,lcd)=>`Account anniversary approaching · relationship review opportunity`,
+    (c,lcd)=>`Peer benchmark shows under-penetration · ${c.prop}% propensity for additional products`,
+    (c,lcd)=>`High wire transfer volume this month · cash management window narrowing`,
+  ];
+  const NOTES = [
+    c=>`${c.ind} client with ${c.emp} employees. Revenue ${c.rev}. Good cross-sell potential based on product mix and transaction patterns.`,
+    c=>`Established relationship since ${c.since}. ${c.health==='r'?'At-risk — needs immediate outreach.':c.health==='a'?'Needs attention — engagement declining.':'Healthy account. Monitor for upsell opportunities.'}`,
+    c=>`Located in ${c.loc}. Primary products: ${c.prods.join(', ')}. ${c.prop}% propensity score based on peer benchmarks.`,
+    c=>`Single-owner ${c.ind.toLowerCase()} business. Seasonal revenue patterns likely. Review for treasury and payroll fit.`,
+    c=>`Client since ${c.since}. ${c.rec?'Open recommendation requires follow-up within the week.':'No active recommendation — schedule routine check-in.'}`,
+  ];
+  let seed = 31337;
+  const rng=()=>{seed=((seed*1664525+1013904223)&0x7fffffff);return seed/0x7fffffff;};
+  const pick=arr=>arr[Math.floor(rng()*arr.length)];
+  const rInt=(a,b)=>a+Math.floor(rng()*(b-a+1));
+  const clients=[];
+  for(let i=0;i<584;i++){
+    const id=i+9;
+    const fn=pick(FN), ln=pick(LN);
+    const name=fn+' '+ln;
+    const ini=fn[0]+ln[0];
+    const co=pick(PFXS)+' '+pick(SFXS);
+    const ind=pick(INDS);
+    const loc=pick(LOCS);
+    const since=String(rInt(2015,2024));
+    const lcd=pick(LCDS);
+    const lc=lcd===0?'Today':lcd===1?'Yesterday':lcd+' days ago';
+    const health=pick(HEALTHS);
+    const rec=health==='x'?null:pick(RECS);
+    const tier=rng()>0.5?'Tier I':'Tier II';
+    const prop=rInt(20,92);
+    const revN=rng()>0.4?(rInt(10,99)/10).toFixed(1):rInt(1,9);
+    const rev='$'+revN+'M';
+    const emp=rInt(4,150);
+    const nProds=rInt(1,4);
+    const shuffled=[...PRODS_ALL].sort(()=>rng()-0.5).slice(0,nProds);
+    if(!shuffled.includes('Checking'))shuffled.unshift('Checking');
+    const prods=shuffled;
+    const trig=rec?pick(TRIGS)({prop,emp,prods,health,ind,rev,since},lcd):null;
+    const rt=rec?(lcd===0?'Today':lcd<=2?lcd+'d ago':lcd+'d ago'):null;
+    const cObj={id,ini,name,co,tier,loc,since,lc,lcd,health,rec,prods,trig,rt,prop,rev,emp,ind,notes:''};
+    cObj.notes=pick(NOTES)(cObj);
+    clients.push(cObj);
+  }
+  return clients;
+}
+
 const D = {
   rm: { name: 'Jordan Williams', initials: 'JW' },
   day: 'Thursday, Mar 19',
@@ -298,6 +364,7 @@ const D = {
     { id:6, ini:'BF', name:'Brightwell Foods', co:'Brightwell Inc.', tier:'Tier I', loc:'Tampa, FL', since:'2018', lc:'2 days ago', lcd:2, health:'g', rec:null, prods:['Checking','Treasury'], trig:null, rt:null, prop:82, rev:'$11M', emp:88, ind:'Food Manufacturing', notes:'Top client. Treasury management fully established. Consider Premier referral and additional product cross-sells.' },
     { id:7, ini:'AP', name:'Apex Plumbing', co:'Apex Services Co.', tier:'Tier II', loc:'Nashville, TN', since:'2021', lc:'5 days ago', lcd:5, health:'g', rec:null, prods:['Checking','BLOC'], trig:null, rt:null, prop:41, rev:'$2.9M', emp:24, ind:'Plumbing / Contracting', notes:'Healthy relationship. BLOC recently accepted. Follow up in 30 days to confirm satisfaction.' },
     { id:8, ini:'ML', name:'Meza Landscaping', co:'Meza Group', tier:'Tier I', loc:'Dallas, TX', since:'2020', lc:'38 days ago', lcd:38, health:'x', rec:null, prods:['Checking'], trig:null, rt:null, prop:22, rev:'$900K', emp:9, ind:'Landscaping', notes:'No contact in 38 days. Single product. Potential churn risk — needs a check-in call this week.' },
+    ...genClients(),
   ],
   activity: [
     { id:1, cn:'Brightwell Foods', desc:'Treasury mgmt opened · propensity confirmed · model updated', out:'c', time:'Mon' },
@@ -405,7 +472,7 @@ function renderMain() {
    VIEW: DASHBOARD
    ============================================================ */
 function vDashboard() {
-  const today = D.clients.filter(c => c.rec);
+  const today = D.clients.filter(c => c.rec).slice(0, 8);
   return `<div class="content">
     <div class="lcard">
       <div class="lcard-hd"><span class="lcard-lbl">Today's outreach list</span><span class="lcard-ct">${today.length} clients</span></div>
