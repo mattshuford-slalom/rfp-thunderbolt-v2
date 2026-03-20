@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RM Portal — Wireframes v3</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f5f4f0;
+    color: #1a1a18;
+    padding: 32px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 15px; font-weight: 500; color: #444441; margin-bottom: 32px; letter-spacing: 0.02em; }
+
+  .wf-label { font-size: 11px; font-weight: 500; color: #888780; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; margin-top: 36px; }
+  .wf-label:first-of-type { margin-top: 0; }
+
+  .screen { border: 1px solid #d3d1c7; border-radius: 12px; overflow: hidden; background: #ffffff; }
+  .topbar { height: 40px; border-bottom: 0.5px solid #e8e6de; background: #f5f4f0; display: flex; align-items: center; padding: 0 16px; gap: 12px; flex-shrink: 0; }
+  .tb-brand { font-size: 13px; font-weight: 500; color: #1a1a18; }
+  .tb-spacer { flex: 1; }
+  .tb-date { font-size: 11px; color: #888780; }
+  .tb-copilot { font-size: 11px; padding: 4px 10px; border: 0.5px solid #b4b2a9; border-radius: 8px; color: #5f5e5a; cursor: pointer; background: #ffffff; }
+  .tb-copilot.active { background: #1a1a18; color: #ffffff; border-color: transparent; }
+  .tb-back { font-size: 11px; color: #888780; cursor: pointer; }
+  .tb-avatar { width: 24px; height: 24px; border-radius: 50%; background: #d3d1c7; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: #5f5e5a; }
+
+  .body { display: flex; min-height: 460px; }
+  .sidebar { width: 52px; border-right: 0.5px solid #e8e6de; background: #f5f4f0; display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 10px; flex-shrink: 0; }
+  .sb-icon { width: 28px; height: 28px; border-radius: 8px; background: #e8e6de; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #888780; }
+  .sb-icon.active { background: #1a1a18; color: #ffffff; }
+  .content { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat-box { background: #f5f4f0; border-radius: 8px; padding: 10px 12px; }
+  .stat-num { font-size: 22px; font-weight: 500; color: #1a1a18; margin-bottom: 2px; }
+  .stat-lbl { font-size: 11px; color: #888780; }
+  .stat-num.warn { color: #791f1f; }
+  .stat-num.ok { color: #27500a; }
+
+  .list-card { border: 0.5px solid #e8e6de; border-radius: 8px; overflow: hidden; }
+  .list-header { padding: 9px 14px; background: #f5f4f0; border-bottom: 0.5px solid #e8e6de; display: flex; align-items: center; justify-content: space-between; }
+  .list-header-label { font-size: 11px; font-weight: 500; color: #888780; letter-spacing: .04em; text-transform: uppercase; }
+  .list-header-count { font-size: 11px; color: #888780; }
+
+  .client-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 0.5px solid #e8e6de; cursor: pointer; position: relative; }
+  .client-row:last-child { border-bottom: none; }
+  .nudge-stripe { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .nudge-stripe.red { background: #e24b4a; }
+  .nudge-stripe.amber { background: #ba7517; }
+  .cr-avatar { width: 28px; height: 28px; border-radius: 50%; background: #f5f4f0; border: 0.5px solid #e8e6de; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; color: #5f5e5a; flex-shrink: 0; }
+  .cr-body { flex: 1; min-width: 0; }
+  .cr-name { font-size: 12px; font-weight: 500; color: #1a1a18; margin-bottom: 2px; }
+  .cr-trigger { font-size: 11px; color: #5f5e5a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cr-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .cr-chevron { font-size: 12px; color: #888780; }
+
+  .badge { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 10px; }
+  .badge-rt { background: #e6f1fb; color: #0c447c; }
+  .badge-prop { background: #faeeda; color: #633806; }
+  .badge-rules { background: #eaf3de; color: #27500a; }
+  .badge-nudge { background: #fcebeb; color: #791f1f; }
+  .cr-time { font-size: 10px; color: #888780; }
+
+  .copilot-panel { width: 240px; border-left: 0.5px solid #e8e6de; display: flex; flex-direction: column; flex-shrink: 0; }
+  .cp-header { padding: 10px 14px; border-bottom: 0.5px solid #e8e6de; background: #f5f4f0; display: flex; align-items: center; justify-content: space-between; }
+  .cp-title { font-size: 12px; font-weight: 500; color: #1a1a18; }
+  .cp-close { font-size: 12px; color: #888780; }
+  .cp-context { padding: 8px 12px; border-bottom: 0.5px solid #e8e6de; font-size: 11px; color: #888780; background: #f5f4f0; }
+  .cp-messages { flex: 1; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .cp-msg { font-size: 11px; line-height: 1.5; padding: 8px 10px; border-radius: 8px; }
+  .cp-msg.system { background: #f5f4f0; color: #5f5e5a; }
+  .cp-msg.user { background: #e8e6de; color: #1a1a18; align-self: flex-end; max-width: 85%; }
+  .cp-msg.assistant { background: #f5f4f0; color: #5f5e5a; border: 0.5px solid #e8e6de; }
+  .cp-input-area { padding: 10px 12px; border-top: 0.5px solid #e8e6de; display: flex; gap: 8px; align-items: center; }
+  .cp-input { flex: 1; font-size: 11px; padding: 6px 8px; border: 0.5px solid #b4b2a9; border-radius: 8px; color: #888780; background: #ffffff; font-family: inherit; }
+  .cp-send { font-size: 12px; color: #888780; }
+
+  .client-header { padding: 12px 16px; border-bottom: 0.5px solid #e8e6de; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .ch-avatar { width: 36px; height: 36px; border-radius: 50%; background: #f5f4f0; border: 0.5px solid #e8e6de; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: #5f5e5a; flex-shrink: 0; }
+  .ch-name { font-size: 13px; font-weight: 500; color: #1a1a18; }
+  .ch-sub { font-size: 11px; color: #888780; margin-top: 2px; }
+  .ch-badges { display: flex; gap: 6px; margin-top: 4px; }
+
+  .tab-bar { display: flex; border-bottom: 0.5px solid #e8e6de; padding: 0 16px; background: #ffffff; flex-shrink: 0; }
+  .tab { padding: 10px 12px; font-size: 12px; color: #888780; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; white-space: nowrap; }
+  .tab.active { color: #1a1a18; border-bottom-color: #1a1a18; font-weight: 500; }
+
+  .tab-content { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .section-block { border: 0.5px solid #e8e6de; border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; }
+  .sb-title { font-size: 10px; font-weight: 500; color: #888780; letter-spacing: .04em; text-transform: uppercase; }
+  .sb-body { font-size: 11px; color: #5f5e5a; line-height: 1.5; }
+  .sb-body strong { font-weight: 500; color: #1a1a18; }
+  .tp-list { display: flex; flex-direction: column; gap: 5px; }
+  .tp-item { display: flex; gap: 6px; font-size: 11px; color: #5f5e5a; line-height: 1.4; }
+  .tp-num { font-weight: 500; color: #888780; flex-shrink: 0; width: 14px; }
+  .action-row { display: flex; gap: 8px; }
+  .action-btn { padding: 6px 12px; border-radius: 8px; border: 0.5px solid #b4b2a9; font-size: 11px; color: #1a1a18; background: transparent; cursor: pointer; font-family: inherit; }
+  .action-btn.primary { background: #1a1a18; color: #ffffff; border-color: transparent; }
+
+  .search-bar { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 0.5px solid #e8e6de; background: #f5f4f0; }
+  .search-input { flex: 1; font-size: 12px; padding: 5px 8px; border: 0.5px solid #b4b2a9; border-radius: 8px; color: #888780; background: #ffffff; font-family: inherit; }
+  .filter-pill { font-size: 11px; padding: 3px 10px; border-radius: 10px; border: 0.5px solid #b4b2a9; color: #888780; cursor: pointer; white-space: nowrap; }
+  .filter-pill.active { background: #1a1a18; color: #ffffff; border-color: transparent; }
+
+  .col-header { display: grid; grid-template-columns: 8px 1fr 100px 80px 80px 60px; gap: 10px; align-items: center; padding: 7px 14px; border-bottom: 0.5px solid #e8e6de; background: #f5f4f0; }
+  .col-lbl { font-size: 10px; font-weight: 500; color: #888780; letter-spacing: .04em; text-transform: uppercase; }
+  .book-grid-row { display: grid; grid-template-columns: 8px 1fr 100px 80px 80px 60px; gap: 10px; align-items: center; padding: 9px 14px; border-bottom: 0.5px solid #e8e6de; cursor: pointer; }
+  .book-grid-row:last-child { border-bottom: none; }
+  .bg-name { font-size: 12px; font-weight: 500; color: #1a1a18; }
+  .bg-meta { font-size: 11px; color: #888780; }
+  .health-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .h-green { background: #639922; }
+  .h-amber { background: #ba7517; }
+  .h-red { background: #e24b4a; }
+  .h-gray { background: #b4b2a9; }
+
+  .activity-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-bottom: 0.5px solid #e8e6de; }
+  .activity-row:last-child { border-bottom: none; }
+  .outcome-pill { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; margin-top: 1px; }
+  .o-converted { background: #eaf3de; color: #3b6d11; }
+  .o-pending { background: #faeeda; color: #854f0b; }
+  .o-dismissed { background: #f5f4f0; color: #888780; }
+  .ar-body { flex: 1; }
+  .ar-client { font-size: 12px; font-weight: 500; color: #1a1a18; margin-bottom: 2px; }
+  .ar-desc { font-size: 11px; color: #5f5e5a; }
+  .ar-time { font-size: 10px; color: #888780; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<h1>RM Portal — Wireframes v3</h1>
+
+<!-- L0: Daily Dashboard -->
+<div class="wf-label">L0 — Daily dashboard · Copilot panel open</div>
+<div class="screen">
+  <div class="topbar">
+    <span class="tb-brand">RM Portal</span>
+    <div class="tb-spacer"></div>
+    <span class="tb-date">Thursday, Mar 19</span>
+    <span class="tb-copilot active">Copilot</span>
+    <div class="tb-avatar">JW</div>
+  </div>
+  <div class="body">
+    <div class="sidebar">
+      <div class="sb-icon active">⊞</div>
+      <div class="sb-icon">◫</div>
+      <div class="sb-icon">○</div>
+      <div class="sb-icon">↺</div>
+    </div>
+    <div class="content">
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-num warn">2</div><div class="stat-lbl">Nudges overdue</div></div>
+        <div class="stat-box"><div class="stat-num">7</div><div class="stat-lbl">Open recommendations</div></div>
+        <div class="stat-box"><div class="stat-num ok">68%</div><div class="stat-lbl">Portfolio coverage</div></div>
+      </div>
+      <div class="list-card">
+        <div class="list-header">
+          <span class="list-header-label">Today's outreach list</span>
+          <span class="list-header-count">7 clients</span>
+        </div>
+        <div class="client-row">
+          <div class="nudge-stripe red"></div>
+          <div class="cr-avatar" style="margin-left:8px;">MC</div>
+          <div class="cr-body"><div class="cr-name">Maria Chen</div><div class="cr-trigger">$185K deposit · cash mgmt window narrowing · 48h no contact</div></div>
+          <div class="cr-right"><span class="badge badge-nudge">Nudge</span><span class="cr-time">2d ago</span></div>
+          <span class="cr-chevron">›</span>
+        </div>
+        <div class="client-row">
+          <div class="nudge-stripe red"></div>
+          <div class="cr-avatar" style="margin-left:8px;">RH</div>
+          <div class="cr-body"><div class="cr-name">Ridgeline HVAC</div><div class="cr-trigger">Proposal stalled · no follow-up in 14 days</div></div>
+          <div class="cr-right"><span class="badge badge-nudge">Nudge</span><span class="cr-time">14d ago</span></div>
+          <span class="cr-chevron">›</span>
+        </div>
+        <div class="client-row">
+          <div class="nudge-stripe amber"></div>
+          <div class="cr-avatar" style="margin-left:8px;">BH</div>
+          <div class="cr-body"><div class="cr-name">Blue Heron Logistics</div><div class="cr-trigger">Payroll up 34% · growth conversation opportunity</div></div>
+          <div class="cr-right"><span class="badge badge-prop">Propensity</span><span class="cr-time">Today</span></div>
+          <span class="cr-chevron">›</span>
+        </div>
+        <div class="client-row">
+          <div class="nudge-stripe amber"></div>
+          <div class="cr-avatar" style="margin-left:8px;">HD</div>
+          <div class="cr-body"><div class="cr-name">Harmon &amp; Diaz LLC</div><div class="cr-trigger">CD maturity in 28 days · no renewal outreach logged</div></div>
+          <div class="cr-right"><span class="badge badge-rules">Rules</span><span class="cr-time">Today</span></div>
+          <span class="cr-chevron">›</span>
+        </div>
+        <div class="client-row">
+          <div class="cr-avatar" style="margin-left:11px;">PV</div>
+          <div class="cr-body"><div class="cr-name">Palo Verde Dental</div><div class="cr-trigger">Searched "business loan" on truist.com</div></div>
+          <div class="cr-right"><span class="badge badge-rt">Real-time</span><span class="cr-time">8:32a</span></div>
+          <span class="cr-chevron">›</span>
+        </div>
+      </div>
+    </div>
+    <div class="copilot-panel">
+      <div class="cp-header"><span class="cp-title">Copilot</span><span class="cp-close">✕</span></div>
+      <div class="cp-context">General context · no client selected</div>
+      <div class="cp-messages">
+        <div class="cp-msg system">Ask anything about your book, clients, or today's recommendations.</div>
+        <div class="cp-msg user">Which clients have a CD maturing soon?</div>
+        <div class="cp-msg assistant">Harmon &amp; Diaz LLC has a CD maturing in 28 days. No renewal outreach has been logged yet — they're on today's list.</div>
+      </div>
+      <div class="cp-input-area">
+        <input class="cp-input" placeholder="Ask Copilot..."/>
+        <span class="cp-send">↑</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- L1: Client Workspace -->
+<div class="wf-label">L1 — Client workspace · Copilot panel open (context-aware)</div>
+<div class="screen">
+  <div class="topbar">
+    <span class="tb-back">‹ Today's list</span>
+    <div class="tb-spacer"></div>
+    <span class="tb-copilot active">Copilot</span>
+    <div class="tb-avatar">JW</div>
+  </div>
+  <div class="body">
+    <div class="sidebar">
+      <div class="sb-icon">⊞</div>
+      <div class="sb-icon active">◫</div>
+      <div class="sb-icon">○</div>
+      <div class="sb-icon">↺</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+      <div class="client-header">
+        <div class="ch-avatar">MC</div>
+        <div>
+          <div class="ch-name">Maria Chen — Palo Verde Catering</div>
+          <div class="ch-sub">Tier I · Charlotte, NC · Client since 2021</div>
+          <div class="ch-badges">
+            <span class="badge badge-nudge">Nudge active</span>
+            <span class="badge badge-prop">72% propensity</span>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <div class="tab active">Recommendation</div>
+        <div class="tab">Client context</div>
+        <div class="tab">Portfolio position</div>
+        <div class="tab">Log outcome</div>
+      </div>
+      <div class="tab-content">
+        <div class="two-col">
+          <div class="section-block">
+            <div class="sb-title">Why now</div>
+            <div class="sb-body"><strong>$185K wire received Tue</strong> — 3.2× avg velocity. 72% propensity for cash mgmt. Premier threshold met.</div>
+          </div>
+          <div class="section-block">
+            <div class="sb-title">Co-pilot brief</div>
+            <div class="sb-body"><strong>Opener:</strong> "Maria, I noticed strong activity — wanted to check in on how the business is tracking."</div>
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="sb-title">Talking points</div>
+          <div class="tp-list">
+            <div class="tp-item"><span class="tp-num">1.</span><span>Sweep accounts for cash management between jobs.</span></div>
+            <div class="tp-item"><span class="tp-num">2.</span><span>30–60 day payment terms on new contract — treasury tools can bridge.</span></div>
+            <div class="tp-item"><span class="tp-num">3.</span><span>Premier referral at $267K personal deposits.</span></div>
+          </div>
+        </div>
+        <div class="action-row">
+          <button class="action-btn primary">Call now</button>
+          <button class="action-btn">Draft email</button>
+          <button class="action-btn">Log outcome</button>
+        </div>
+      </div>
+    </div>
+    <div class="copilot-panel">
+      <div class="cp-header"><span class="cp-title">Copilot</span><span class="cp-close">✕</span></div>
+      <div class="cp-context">Context: Maria Chen · Palo Verde Catering</div>
+      <div class="cp-messages">
+        <div class="cp-msg system">Loaded context for Maria Chen. Ask anything about this client.</div>
+        <div class="cp-msg user">What products does she currently have?</div>
+        <div class="cp-msg assistant">Maria holds a business checking account and a small business credit card. No lending, treasury, or cash management products. Premier relationship not yet established.</div>
+      </div>
+      <div class="cp-input-area">
+        <input class="cp-input" placeholder="Ask about Maria Chen..."/>
+        <span class="cp-send">↑</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- My Book -->
+<div class="wf-label">My Book</div>
+<div class="screen">
+  <div class="topbar">
+    <span class="tb-brand">RM Portal</span>
+    <div class="tb-spacer"></div>
+    <span class="tb-date">Thursday, Mar 19</span>
+    <span class="tb-copilot">Copilot</span>
+    <div class="tb-avatar">JW</div>
+  </div>
+  <div class="body">
+    <div class="sidebar">
+      <div class="sb-icon">⊞</div>
+      <div class="sb-icon active">◫</div>
+      <div class="sb-icon">○</div>
+      <div class="sb-icon">↺</div>
+    </div>
+    <div class="content">
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-num">22</div><div class="stat-lbl">Total clients</div></div>
+        <div class="stat-box"><div class="stat-num ok">68%</div><div class="stat-lbl">Coverage rate</div></div>
+        <div class="stat-box"><div class="stat-num warn">7</div><div class="stat-lbl">No contact 30+ days</div></div>
+      </div>
+      <div class="list-card">
+        <div class="search-bar">
+          <input class="search-input" placeholder="Search clients..."/>
+          <span class="filter-pill active">All</span>
+          <span class="filter-pill">At risk</span>
+          <span class="filter-pill">No contact</span>
+          <span class="filter-pill">Open rec</span>
+        </div>
+        <div class="col-header">
+          <div></div>
+          <div class="col-lbl">Client</div>
+          <div class="col-lbl">Last contact</div>
+          <div class="col-lbl">Open rec</div>
+          <div class="col-lbl">Products</div>
+          <div class="col-lbl">Tier</div>
+        </div>
+        <div class="book-grid-row">
+          <div class="health-dot h-red"></div>
+          <div><div class="bg-name">Maria Chen</div><div class="bg-meta">Palo Verde Catering</div></div>
+          <div class="bg-meta">2 days ago</div>
+          <div><span class="badge badge-nudge">Nudge</span></div>
+          <div class="bg-meta">Checking, Card</div>
+          <div class="bg-meta">Tier I</div>
+        </div>
+        <div class="book-grid-row">
+          <div class="health-dot h-red"></div>
+          <div><div class="bg-name">Ridgeline HVAC</div><div class="bg-meta">Ridgeline Services</div></div>
+          <div class="bg-meta">14 days ago</div>
+          <div><span class="badge badge-nudge">Nudge</span></div>
+          <div class="bg-meta">Checking, LOC</div>
+          <div class="bg-meta">Tier II</div>
+        </div>
+        <div class="book-grid-row">
+          <div class="health-dot h-amber"></div>
+          <div><div class="bg-name">Blue Heron Logistics</div><div class="bg-meta">Blue Heron LLC</div></div>
+          <div class="bg-meta">6 days ago</div>
+          <div><span class="badge badge-prop">Propensity</span></div>
+          <div class="bg-meta">Checking, Payroll</div>
+          <div class="bg-meta">Tier II</div>
+        </div>
+        <div class="book-grid-row">
+          <div class="health-dot h-amber"></div>
+          <div><div class="bg-name">Harmon &amp; Diaz LLC</div><div class="bg-meta">Harmon Legal Group</div></div>
+          <div class="bg-meta">12 days ago</div>
+          <div><span class="badge badge-rules">Rules</span></div>
+          <div class="bg-meta">Checking, CD</div>
+          <div class="bg-meta">Tier II</div>
+        </div>
+        <div class="book-grid-row">
+          <div class="health-dot h-green"></div>
+          <div><div class="bg-name">Brightwell Foods</div><div class="bg-meta">Brightwell Inc.</div></div>
+          <div class="bg-meta">2 days ago</div>
+          <div class="bg-meta">—</div>
+          <div class="bg-meta">Checking, Treasury</div>
+          <div class="bg-meta">Tier I</div>
+        </div>
+        <div class="book-grid-row">
+          <div class="health-dot h-green"></div>
+          <div><div class="bg-name">Apex Plumbing</div><div class="bg-meta">Apex Services Co.</div></div>
+          <div class="bg-meta">5 days ago</div>
+          <div class="bg-meta">—</div>
+          <div class="bg-meta">Checking, BLOC</div>
+          <div class="bg-meta">Tier II</div>
+        </div>
+        <div class="book-grid-row">
+          <div class="health-dot h-gray"></div>
+          <div><div class="bg-name">Meza Landscaping</div><div class="bg-meta">Meza Group</div></div>
+          <div class="bg-meta">38 days ago</div>
+          <div class="bg-meta">—</div>
+          <div class="bg-meta">Checking</div>
+          <div class="bg-meta">Tier I</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Activity Log -->
+<div class="wf-label">Activity Log</div>
+<div class="screen">
+  <div class="topbar">
+    <span class="tb-brand">RM Portal</span>
+    <div class="tb-spacer"></div>
+    <span class="tb-date">Thursday, Mar 19</span>
+    <span class="tb-copilot">Copilot</span>
+    <div class="tb-avatar">JW</div>
+  </div>
+  <div class="body">
+    <div class="sidebar">
+      <div class="sb-icon">⊞</div>
+      <div class="sb-icon">◫</div>
+      <div class="sb-icon">○</div>
+      <div class="sb-icon active">↺</div>
+    </div>
+    <div class="content">
+      <div class="stat-row">
+        <div class="stat-box"><div class="stat-num ok">4</div><div class="stat-lbl">Converted this month</div></div>
+        <div class="stat-box"><div class="stat-num">2</div><div class="stat-lbl">Pending outcomes</div></div>
+        <div class="stat-box"><div class="stat-num">11</div><div class="stat-lbl">Total actions logged</div></div>
+      </div>
+      <div class="list-card">
+        <div class="search-bar">
+          <input class="search-input" placeholder="Search activity..."/>
+          <span class="filter-pill active">All</span>
+          <span class="filter-pill">Converted</span>
+          <span class="filter-pill">Pending</span>
+          <span class="filter-pill">Dismissed</span>
+        </div>
+        <div class="activity-row">
+          <div class="outcome-pill o-converted">✓</div>
+          <div class="ar-body"><div class="ar-client">Brightwell Foods</div><div class="ar-desc">Treasury mgmt opened · propensity confirmed · model updated</div></div>
+          <div class="ar-time">Mon</div>
+        </div>
+        <div class="activity-row">
+          <div class="outcome-pill o-converted">✓</div>
+          <div class="ar-body"><div class="ar-client">Apex Plumbing</div><div class="ar-desc">BLOC accepted · nudge timing logged as effective (36h)</div></div>
+          <div class="ar-time">Fri</div>
+        </div>
+        <div class="activity-row">
+          <div class="outcome-pill o-pending">~</div>
+          <div class="ar-body"><div class="ar-client">Maria Chen</div><div class="ar-desc">Cash mgmt meeting scheduled · outcome pending</div></div>
+          <div class="ar-time">Active</div>
+        </div>
+        <div class="activity-row">
+          <div class="outcome-pill o-pending">~</div>
+          <div class="ar-body"><div class="ar-client">Ridgeline HVAC</div><div class="ar-desc">Follow-up call scheduled · proposal still active</div></div>
+          <div class="ar-time">Active</div>
+        </div>
+        <div class="activity-row">
+          <div class="outcome-pill o-dismissed">—</div>
+          <div class="ar-body"><div class="ar-client">Meza Landscaping</div><div class="ar-desc">Not interested · recommendation dismissed · feedback logged</div></div>
+          <div class="ar-time">Wed</div>
+        </div>
+        <div class="activity-row">
+          <div class="outcome-pill o-converted">✓</div>
+          <div class="ar-body"><div class="ar-client">Summit Roofing Co.</div><div class="ar-desc">Treasury referral accepted · Premier intro scheduled</div></div>
+          <div class="ar-time">Tue</div>
+        </div>
+        <div class="activity-row">
+          <div class="outcome-pill o-converted">✓</div>
+          <div class="ar-body"><div class="ar-client">Harmon &amp; Diaz LLC</div><div class="ar-desc">CD renewal confirmed · rate conversation completed</div></div>
+          <div class="ar-time">Last wk</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

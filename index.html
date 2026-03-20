@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RM Portal — Truist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --p950:#150428; --p900:#2D0A4E; --p800:#4B286D;
+  --p700:#5E3485; --p600:#7B4DB5; --p500:#9B6FCC;
+  --p400:#B898DC; --p300:#D4BEF0; --p200:#E8DCFA;
+  --p100:#F3EDFC; --p50:#F9F6FE;
+  --bg:#F2EEF9; --sur:#fff;
+  --bdr:#DDD3EF; --bdr-l:#EDE5F8;
+  --tx:#1A0B2E; --tx2:#503D6A; --tx3:#8B78A8;
+  --red:#D93025; --red-l:#FEE8E6; --red-s:#E74C3C;
+  --amb:#B45309; --amb-l:#FEF3E2; --amb-s:#D97706;
+  --grn:#1A7A47; --grn-l:#EAFAF1; --grn-d:#27AE60;
+  --gray-d:#A09CB0;
+  --rmd:10px; --rlg:14px; --rfull:9999px;
+  --ssm:0 1px 3px rgba(75,40,109,.08),0 1px 2px rgba(75,40,109,.04);
+  --smd:0 4px 16px rgba(75,40,109,.10),0 2px 4px rgba(75,40,109,.06);
+  --spur:0 4px 14px rgba(75,40,109,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;height:100vh;display:flex;flex-direction:column}
+
+/* ── APP SHELL ──────────────────────────────────────────── */
+#app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* ── TOPBAR ─────────────────────────────────────────────── */
+.topbar{height:72px;border-bottom:1px solid var(--bdr-l);background:linear-gradient(180deg,#fff 0%,var(--p50) 100%);display:flex;align-items:center;padding:0 28px;gap:16px;flex-shrink:0;z-index:20}
+.tb-logo{display:flex;align-items:center;gap:8px;cursor:pointer;text-decoration:none}
+.tb-lm{width:40px;height:40px;background:linear-gradient(145deg,var(--p700),var(--p900));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(75,40,109,.35);flex-shrink:0}
+.tb-brand{font-size:18px;font-weight:700;color:var(--p900);letter-spacing:-.02em}
+.tb-spacer{flex:1}
+.tb-date{font-size:13px;font-weight:500;color:var(--tx3);white-space:nowrap}
+.tb-cop{font-size:13px;font-weight:600;padding:8px 18px;border:1px solid var(--p300);border-radius:var(--rfull);color:var(--p700);cursor:pointer;background:#fff;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap;user-select:none}
+.tb-cop.on{background:linear-gradient(135deg,var(--p700),var(--p900));color:#fff;border-color:transparent;box-shadow:var(--spur)}
+.tb-back{font-size:14px;font-weight:500;color:var(--tx3);cursor:pointer;display:flex;align-items:center;gap:4px;text-decoration:none}
+.tb-back:hover{color:var(--p700)}
+.tb-av{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--p600),var(--p900));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;box-shadow:0 2px 6px rgba(75,40,109,.3)}.tb-av-info{display:flex;flex-direction:column;line-height:1.2}.tb-av-name{font-size:12px;font-weight:600;color:var(--tx)}.tb-av-role{font-size:10px;color:var(--tx3)}
+
+/* ── LAYOUT ─────────────────────────────────────────────── */
+.layout{flex:1;display:flex;overflow:hidden}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar{width:160px;border-right:1px solid var(--bdr-l);background:linear-gradient(180deg,var(--p50) 0%,#fff 60%);display:flex;flex-direction:column;align-items:flex-start;padding:18px 12px;gap:4px;flex-shrink:0}
+.sb-ic{width:100%;height:48px;border-radius:var(--rmd);display:flex;align-items:center;gap:12px;padding:0 12px;color:var(--tx3);cursor:pointer;transition:all .15s;text-decoration:none;border:none;background:transparent;font-size:13px;font-weight:500}
+.sb-ic:hover{background:var(--p100);color:var(--p700)}.sb-ic svg{flex-shrink:0}
+.sb-ic.on{background:linear-gradient(145deg,var(--p700),var(--p900));color:#fff;box-shadow:0 3px 10px rgba(75,40,109,.35)}
+.sb-div{width:100%;height:1px;background:var(--bdr-l);margin:8px 0}
+
+/* ── MAIN ───────────────────────────────────────────────── */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-width:0}
+
+/* ── COPILOT PANEL ──────────────────────────────────────── */
+.cp-panel{width:280px;border-left:1px solid var(--bdr-l);display:flex;flex-direction:column;flex-shrink:0;background:var(--sur);transition:width .2s,opacity .2s}
+.cp-panel.off{width:0;opacity:0;overflow:hidden;pointer-events:none;border:none}
+.cp-hd{padding:12px 16px;background:linear-gradient(140deg,var(--p900),var(--p700));display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cp-hd-l{display:flex;align-items:center;gap:8px}
+.cp-ic{width:22px;height:22px;background:rgba(255,255,255,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.cp-ttl{font-size:12px;font-weight:700;color:#fff}
+.cp-x{width:22px;height:22px;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:5px;transition:all .15s;background:transparent;border:none}
+.cp-x:hover{background:rgba(255,255,255,.12);color:#fff}
+.cp-ctx{padding:6px 16px;border-bottom:1px solid var(--bdr-l);font-size:10px;font-weight:600;color:var(--p600);background:var(--p50);letter-spacing:.04em;text-transform:uppercase;flex-shrink:0}
+.cp-msgs{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.msg{font-size:11px;line-height:1.65;padding:9px 11px;border-radius:var(--rmd)}
+.msg.sys{background:var(--p50);color:var(--tx3);border:1px solid var(--bdr-l);font-style:italic}
+.msg.usr{background:linear-gradient(135deg,var(--p700),var(--p600));color:#fff;align-self:flex-end;max-width:90%;box-shadow:0 2px 8px rgba(75,40,109,.22)}
+.msg.ast{background:var(--sur);color:var(--tx2);border:1px solid var(--bdr);box-shadow:var(--ssm)}
+.msg.typ{background:var(--p50);color:var(--tx3);border:1px solid var(--bdr-l);letter-spacing:3px}
+.cp-in-area{padding:10px 12px;border-top:1px solid var(--bdr-l);display:flex;gap:8px;align-items:center;background:var(--p50);flex-shrink:0}
+.cp-in{flex:1;font-size:11px;font-family:inherit;padding:7px 11px;border:1px solid var(--bdr);border-radius:var(--rfull);color:var(--tx);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+.cp-in:focus{border-color:var(--p500);box-shadow:0 0 0 3px rgba(155,111,204,.18)}
+.cp-in::placeholder{color:var(--tx3)}
+.cp-btn{width:30px;height:30px;background:linear-gradient(145deg,var(--p700),var(--p900));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(75,40,109,.3);border:none;font-family:inherit}
+.cp-btn:hover{background:linear-gradient(145deg,var(--p600),var(--p800))}
+
+/* ── CONTENT ─────────────────────────────────────────────── */
+.content{padding:20px;display:flex;flex-direction:column;gap:16px}
+
+/* ── STAT ROW ────────────────────────────────────────────── */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat-box{background:var(--sur);border:1px solid var(--bdr-l);border-radius:var(--rmd);padding:16px;position:relative;overflow:hidden}
+.stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--p400),var(--p600));border-radius:3px 3px 0 0}
+.stat-n{font-size:28px;font-weight:700;color:var(--tx);margin-bottom:4px;letter-spacing:-.03em;line-height:1}
+.stat-l{font-size:11px;font-weight:500;color:var(--tx3)}
+.stat-n.warn{color:var(--red)}
+.stat-box.is-warn::before{background:linear-gradient(90deg,var(--red-s),#C0392B)}
+.stat-n.ok{color:var(--grn)}
+.stat-box.is-ok::before{background:linear-gradient(90deg,var(--grn-d),var(--grn))}
+
+/* ── LIST CARD ───────────────────────────────────────────── */
+.lcard{border:1px solid var(--bdr);border-radius:var(--rmd);overflow:hidden;box-shadow:var(--ssm)}
+.lcard-hd{padding:10px 18px;background:linear-gradient(180deg,var(--p50),var(--p100));border-bottom:1px solid var(--bdr-l);display:flex;align-items:center;justify-content:space-between}
+.lcard-lbl{font-size:11px;font-weight:700;color:var(--p800);letter-spacing:.05em;text-transform:uppercase}
+.lcard-ct{font-size:11px;font-weight:600;color:var(--p700);background:var(--p200);padding:2px 9px;border-radius:var(--rfull)}
+
+/* ── CLIENT ROWS ─────────────────────────────────────────── */
+.crow{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--bdr-l);cursor:pointer;position:relative;transition:background .12s}
+.crow:last-child{border-bottom:none}
+.crow:hover{background:var(--p50)}
+.ns{position:absolute;left:0;top:0;bottom:0;width:3px}
+.ns.r{background:var(--red-s)}
+.ns.a{background:var(--amb-s)}
+.cav{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--p200),var(--p300));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--p800);flex-shrink:0;border:1.5px solid var(--p300)}
+.cbody{flex:1;min-width:0}
+.cname{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:2px;letter-spacing:-.01em}
+.ctrig{font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.chev{font-size:18px;color:var(--p400);line-height:1}
+.ctime{font-size:10px;font-weight:500;color:var(--tx3)}
+
+/* ── BADGES ──────────────────────────────────────────────── */
+.badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--rfull);letter-spacing:.01em;white-space:nowrap}
+.b-rt{background:var(--p100);color:var(--p700);border:1px solid var(--p300)}
+.b-prop{background:var(--amb-l);color:var(--amb);border:1px solid rgba(212,130,0,.2)}
+.b-rules{background:var(--grn-l);color:var(--grn);border:1px solid rgba(39,174,96,.2)}
+.b-nudge{background:var(--red-l);color:var(--red);border:1px solid rgba(231,76,60,.2)}
+
+/* ── CLIENT WORKSPACE HEADER ─────────────────────────────── */
+.ch{padding:18px 20px;border-bottom:1px solid var(--bdr-l);display:flex;align-items:center;gap:16px;flex-shrink:0;background:linear-gradient(180deg,var(--p50),#fff)}
+.chav{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--p700),var(--p950));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 3px 12px rgba(75,40,109,.3)}
+.chname{font-size:16px;font-weight:700;color:var(--tx);letter-spacing:-.02em}
+.chsub{font-size:11px;font-weight:500;color:var(--tx3);margin-top:2px}
+.chbadges{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+
+/* ── TAB BAR ─────────────────────────────────────────────── */
+.tabs{display:flex;border-bottom:1px solid var(--bdr-l);padding:0 20px;background:#fff;flex-shrink:0;gap:2px}
+.tab{padding:10px 16px;font-size:12px;font-weight:500;color:var(--tx3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .15s;user-select:none}
+.tab:hover{color:var(--p700)}
+.tab.on{color:var(--p800);border-bottom-color:var(--p800);font-weight:700}
+
+/* ── TAB CONTENT ─────────────────────────────────────────── */
+.tcont{padding:20px;display:flex;flex-direction:column;gap:14px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sblock{border:1px solid var(--bdr-l);border-radius:var(--rmd);padding:14px 16px;display:flex;flex-direction:column;gap:8px;background:var(--sur)}
+.sbtitle{font-size:10px;font-weight:700;color:var(--p600);letter-spacing:.07em;text-transform:uppercase}
+.sbbody{font-size:12px;color:var(--tx2);line-height:1.6}
+.sbbody strong{font-weight:700;color:var(--tx)}
+.tp-list{display:flex;flex-direction:column;gap:8px}
+.tp-item{display:flex;gap:9px;font-size:12px;color:var(--tx2);line-height:1.55}
+.tp-n{font-size:11px;font-weight:700;color:var(--p500);flex-shrink:0;width:16px;padding-top:1px}
+.act-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:9px 20px;border-radius:var(--rmd);border:1px solid var(--bdr);font-size:12px;font-weight:600;color:var(--tx);background:transparent;cursor:pointer;font-family:inherit;transition:all .15s;letter-spacing:-.01em}
+.btn:hover{border-color:var(--p400);color:var(--p700);background:var(--p50)}
+.btn.pri{background:linear-gradient(135deg,var(--p700),var(--p900));color:#fff;border-color:transparent;box-shadow:var(--spur)}
+.btn.pri:hover{background:linear-gradient(135deg,var(--p600),var(--p800));box-shadow:0 6px 18px rgba(75,40,109,.4)}
+
+/* ── CONTEXT TAB ─────────────────────────────────────────── */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.citem{border:1px solid var(--bdr-l);border-radius:var(--rmd);padding:12px 14px}
+.ckey{font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.cval{font-size:13px;font-weight:600;color:var(--tx)}
+.cval.sm{font-size:12px;font-weight:400;color:var(--tx2);line-height:1.5}
+
+/* ── PORTFOLIO TAB ───────────────────────────────────────── */
+.pi{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bdr-l)}
+.pi:last-child{border-bottom:none}
+.pi-name{font-size:13px;font-weight:500;color:var(--tx)}
+.pi-meta{font-size:11px;color:var(--tx3);margin-top:2px}
+.pi-badge{font-size:11px;font-weight:600;color:var(--p700);background:var(--p100);padding:3px 10px;border-radius:var(--rfull);border:1px solid var(--p300)}
+
+/* ── LOG OUTCOME TAB ─────────────────────────────────────── */
+.radio-grp{display:flex;gap:8px;flex-wrap:wrap}
+.rchip{padding:7px 16px;border-radius:var(--rfull);border:1px solid var(--bdr);font-size:12px;font-weight:600;color:var(--tx3);cursor:pointer;transition:all .15s;user-select:none}
+.rchip:hover{border-color:var(--p400);color:var(--p700)}
+.rchip.s-conv{background:var(--grn-l);color:var(--grn);border-color:rgba(39,174,96,.3)}
+.rchip.s-pend{background:var(--amb-l);color:var(--amb);border-color:rgba(212,130,0,.3)}
+.rchip.s-dism{background:var(--p100);color:var(--tx3);border-color:var(--p300)}
+.form-row{display:flex;flex-direction:column;gap:6px}
+.form-lbl{font-size:11px;font-weight:600;color:var(--tx2)}
+.fselect{font-size:12px;font-family:inherit;padding:7px 10px;border:1px solid var(--bdr);border-radius:var(--rmd);color:var(--tx);background:#fff;outline:none}
+.fselect:focus{border-color:var(--p500);box-shadow:0 0 0 3px rgba(155,111,204,.18)}
+.ftextarea{width:100%;font-size:12px;font-family:inherit;padding:10px 12px;border:1px solid var(--bdr);border-radius:var(--rmd);color:var(--tx);resize:none;outline:none;line-height:1.6;transition:border-color .15s}
+.ftextarea:focus{border-color:var(--p500);box-shadow:0 0 0 3px rgba(155,111,204,.18)}
+
+/* ── SEARCH BAR ──────────────────────────────────────────── */
+.sbar{display:flex;align-items:center;gap:8px;padding:10px 18px;border-bottom:1px solid var(--bdr-l);background:var(--p50);flex-wrap:wrap}
+.sinput{flex:1;min-width:140px;font-size:12px;font-family:inherit;padding:6px 12px 6px 30px;border:1px solid var(--bdr);border-radius:var(--rfull);color:var(--tx);background:url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 13 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='5.5' cy='5.5' r='4' stroke='%238B78A8' stroke-width='1.5'/%3E%3Cline x1='9' y1='9' x2='12' y2='12' stroke='%238B78A8' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat 10px center,#fff;outline:none;transition:border-color .15s,box-shadow .15s}
+.sinput:focus{border-color:var(--p500);box-shadow:0 0 0 3px rgba(155,111,204,.18)}
+.sinput::placeholder{color:var(--tx3)}
+.fpill{font-size:11px;font-weight:600;padding:4px 13px;border-radius:var(--rfull);border:1px solid var(--bdr);color:var(--tx3);cursor:pointer;white-space:nowrap;transition:all .15s;user-select:none}
+.fpill:hover{border-color:var(--p400);color:var(--p700)}
+.fpill.on{background:linear-gradient(135deg,var(--p700),var(--p900));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(75,40,109,.28)}
+
+/* ── BOOK GRID ───────────────────────────────────────────── */
+.col-hd{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:8px 18px;border-bottom:1px solid var(--bdr-l);background:var(--p50)}
+.col-l{font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.07em;text-transform:uppercase}
+.bgrow{display:grid;grid-template-columns:11px 1fr 110px 90px 110px 68px;gap:12px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--bdr-l);cursor:pointer;transition:background .12s}
+.bgrow:last-child{border-bottom:none}
+.bgrow:hover{background:var(--p50)}
+.bgname{font-size:13px;font-weight:600;color:var(--tx);letter-spacing:-.01em}
+.bgmeta{font-size:11px;font-weight:500;color:var(--tx3);margin-top:2px}
+.hdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.h-g{background:var(--grn-d)}
+.h-a{background:var(--amb-s)}
+.h-r{background:var(--red-s)}
+.h-x{background:var(--gray-d)}
+
+/* ── ACTIVITY ────────────────────────────────────────────── */
+.arow{display:flex;align-items:flex-start;gap:13px;padding:13px 18px;border-bottom:1px solid var(--bdr-l);transition:background .12s}
+.arow:last-child{border-bottom:none}
+.arow:hover{background:var(--p50)}
+.opill{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.o-c{background:var(--grn-l);color:var(--grn);border:1.5px solid rgba(39,174,96,.25)}
+.o-p{background:var(--amb-l);color:var(--amb);border:1.5px solid rgba(212,130,0,.25)}
+.o-d{background:var(--p100);color:var(--tx3);border:1.5px solid var(--bdr)}
+.abody{flex:1}
+.aclient{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:2px;letter-spacing:-.01em}
+.adesc{font-size:11px;color:var(--tx2);line-height:1.55}
+.atime{font-size:10px;font-weight:600;color:var(--tx3);flex-shrink:0;padding-top:3px}
+
+/* ── MODAL ───────────────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(21,4,40,.55);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.overlay.off{display:none}
+.modal{background:#fff;border-radius:var(--rlg);box-shadow:0 24px 64px rgba(21,4,40,.35);max-width:500px;width:100%;overflow:hidden;animation:mup .2s ease}
+@keyframes mup{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mhd{padding:18px 20px;background:linear-gradient(140deg,var(--p900),var(--p700));display:flex;align-items:center;justify-content:space-between}
+.mttl{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.mx{font-size:20px;color:rgba(255,255,255,.6);cursor:pointer;line-height:1;transition:color .15s;background:transparent;border:none}
+.mx:hover{color:#fff}
+.mbody{padding:20px;display:flex;flex-direction:column;gap:14px}
+.msec{display:flex;flex-direction:column;gap:6px}
+.mlbl{font-size:10px;font-weight:700;color:var(--p600);text-transform:uppercase;letter-spacing:.06em}
+.mval{font-size:13px;color:var(--tx2);line-height:1.55}
+.mval.hi{color:var(--tx);font-weight:600;font-size:14px}
+.mfooter{padding:14px 20px;border-top:1px solid var(--bdr-l);display:flex;gap:8px;justify-content:flex-end;background:var(--p50)}
+
+/* ── TOAST ───────────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--p900);color:#fff;padding:12px 20px;border-radius:var(--rmd);font-size:12px;font-weight:600;z-index:300;box-shadow:var(--spur);display:flex;align-items:center;gap:8px;transition:all .3s;animation:tup .3s ease}
+@keyframes tup{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.toast.off{display:none}
+
+/* ── EMPTY STATE ─────────────────────────────────────────── */
+.empty{padding:48px;text-align:center;color:var(--tx3)}
+.empty-ic{font-size:28px;margin-bottom:10px}
+.empty-txt{font-size:13px;font-weight:500}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar" id="topbar"></div>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="main" id="main"></main>
+    <aside class="cp-panel" id="copilot"></aside>
+  </div>
+</div>
+<div class="overlay off" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+<div class="toast off" id="toast"></div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+const D = {
+  rm: { name: 'Jordan Williams', initials: 'JW' },
+  day: 'Thursday, Mar 19',
+  clients: [
+    { id:1, ini:'MC', name:'Maria Chen', co:'Palo Verde Catering', tier:'Tier I', loc:'Charlotte, NC', since:'2021', lc:'2 days ago', lcd:2, health:'r', rec:'nudge', prods:['Checking','Card'], trig:'$185K deposit · cash mgmt window narrowing · 48h no contact', rt:'2d ago', prop:72, rev:'$2.1M', emp:18, ind:'Food & Beverage', notes:'Long-term relationship. Referred 2 other clients. Seasonal revenue peaks in Q2 and Q4.' },
+    { id:2, ini:'RH', name:'Ridgeline HVAC', co:'Ridgeline Services', tier:'Tier II', loc:'Raleigh, NC', since:'2019', lc:'14 days ago', lcd:14, health:'r', rec:'nudge', prods:['Checking','LOC'], trig:'Proposal stalled · no follow-up in 14 days', rt:'14d ago', prop:58, rev:'$4.8M', emp:34, ind:'HVAC / Contracting', notes:'Active LOC. Equipment financing proposal was sent 14 days ago — needs follow-up urgently before the deal goes cold.' },
+    { id:3, ini:'BH', name:'Blue Heron Logistics', co:'Blue Heron LLC', tier:'Tier II', loc:'Atlanta, GA', since:'2022', lc:'6 days ago', lcd:6, health:'a', rec:'propensity', prods:['Checking','Payroll'], trig:'Payroll up 34% · growth conversation opportunity', rt:'Today', prop:65, rev:'$7.2M', emp:62, ind:'Logistics', notes:'Fast-growing company. Payroll volume increased significantly — strong potential for treasury and expanded banking relationship.' },
+    { id:4, ini:'HD', name:'Harmon & Diaz LLC', co:'Harmon Legal Group', tier:'Tier II', loc:'Charlotte, NC', since:'2020', lc:'12 days ago', lcd:12, health:'a', rec:'rules', prods:['Checking','CD'], trig:'CD maturity in 28 days · no renewal outreach logged', rt:'Today', prop:48, rev:'$3.4M', emp:21, ind:'Legal Services', notes:'CD maturing soon. Client is rate-sensitive — be prepared to discuss current options before they shop elsewhere.' },
+    { id:5, ini:'PV', name:'Palo Verde Dental', co:'Palo Verde Health', tier:'Tier I', loc:'Phoenix, AZ', since:'2023', lc:'Today', lcd:0, health:'g', rec:'rt', prods:['Checking'], trig:'Searched "business loan" on truist.com', rt:'8:32a', prop:55, rev:'$1.8M', emp:12, ind:'Healthcare', notes:'Newer client. Recent web activity indicates lending interest. Good opportunity to deepen the relationship early.' },
+    { id:6, ini:'BF', name:'Brightwell Foods', co:'Brightwell Inc.', tier:'Tier I', loc:'Tampa, FL', since:'2018', lc:'2 days ago', lcd:2, health:'g', rec:null, prods:['Checking','Treasury'], trig:null, rt:null, prop:82, rev:'$11M', emp:88, ind:'Food Manufacturing', notes:'Top client. Treasury management fully established. Consider Premier referral and additional product cross-sells.' },
+    { id:7, ini:'AP', name:'Apex Plumbing', co:'Apex Services Co.', tier:'Tier II', loc:'Nashville, TN', since:'2021', lc:'5 days ago', lcd:5, health:'g', rec:null, prods:['Checking','BLOC'], trig:null, rt:null, prop:41, rev:'$2.9M', emp:24, ind:'Plumbing / Contracting', notes:'Healthy relationship. BLOC recently accepted. Follow up in 30 days to confirm satisfaction.' },
+    { id:8, ini:'ML', name:'Meza Landscaping', co:'Meza Group', tier:'Tier I', loc:'Dallas, TX', since:'2020', lc:'38 days ago', lcd:38, health:'x', rec:null, prods:['Checking'], trig:null, rt:null, prop:22, rev:'$900K', emp:9, ind:'Landscaping', notes:'No contact in 38 days. Single product. Potential churn risk — needs a check-in call this week.' },
+  ],
+  activity: [
+    { id:1, cn:'Brightwell Foods', desc:'Treasury mgmt opened · propensity confirmed · model updated', out:'c', time:'Mon' },
+    { id:2, cn:'Apex Plumbing', desc:'BLOC accepted · nudge timing logged as effective (36h)', out:'c', time:'Fri' },
+    { id:3, cn:'Maria Chen', desc:'Cash mgmt meeting scheduled · outcome pending', out:'p', time:'Active' },
+    { id:4, cn:'Ridgeline HVAC', desc:'Follow-up call scheduled · proposal still active', out:'p', time:'Active' },
+    { id:5, cn:'Meza Landscaping', desc:'Not interested · recommendation dismissed · feedback logged', out:'d', time:'Wed' },
+    { id:6, cn:'Summit Roofing Co.', desc:'Treasury referral accepted · Premier intro scheduled', out:'c', time:'Tue' },
+    { id:7, cn:'Harmon & Diaz LLC', desc:'CD renewal confirmed · rate conversation completed', out:'c', time:'Last wk' },
+  ],
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const S = {
+  view: 'dashboard',
+  cid: null,
+  tab: 'rec',
+  copOpen: true,
+  bsearch: '',
+  bfilter: 'all',
+  asearch: '',
+  afilter: 'all',
+  logOut: null,
+  convs: {
+    general: [{ r:'sys', t:"Ask anything about your book, clients, or today's recommendations." }],
+  },
+};
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+function route() {
+  const h = (location.hash || '#/dashboard').replace('#','');
+  if (!h || h === '/' || h === '/dashboard') { S.view = 'dashboard'; S.cid = null; }
+  else if (h.startsWith('/client/')) { S.view = 'client'; S.cid = parseInt(h.split('/')[2])||1; S.tab = 'rec'; S.logOut = null; }
+  else if (h === '/book') { S.view = 'book'; }
+  else if (h === '/activity') { S.view = 'activity'; }
+  render();
+}
+function go(path) { location.hash = path; }
+window.addEventListener('hashchange', route);
+
+/* ============================================================
+   RENDER ORCHESTRATOR
+   ============================================================ */
+function render() {
+  renderTopbar();
+  renderSidebar();
+  renderMain();
+  renderCopilot();
+}
+
+/* ── TOPBAR ─────────────────────────────────────────────── */
+function renderTopbar() {
+  const isC = S.view === 'client';
+  document.getElementById('topbar').innerHTML = `
+    ${isC
+      ? `<a class="tb-back" href="#/dashboard">‹ Today's list</a>`
+      : `<a class="tb-logo" href="#/dashboard"><div class="tb-lm">T</div><span class="tb-brand">RM Portal</span></a>`}
+    <div class="tb-spacer"></div>
+    <span class="tb-date">${D.day}</span>
+    <button class="tb-cop ${S.copOpen?'on':''}" onclick="toggleCop()"><span style="font-size:13px">✦</span>Copilot</button>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="tb-av-info"><span class="tb-av-name">${D.rm.name}</span><span class="tb-av-role">Relationship Manager</span></div>
+      <div class="tb-av">${D.rm.initials}</div>
+    </div>`;
+}
+
+/* ── SIDEBAR ────────────────────────────────────────────── */
+function renderSidebar() {
+  const av = S.view === 'client' ? 'dashboard' : S.view;
+  document.getElementById('sidebar').innerHTML = `
+    <a class="sb-ic ${av==='dashboard'?'on':''}" href="#/dashboard" title="Dashboard">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+      Dashboard
+    </a>
+    <a class="sb-ic ${av==='book'?'on':''}" href="#/book" title="My Book">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="5" height="12" rx="1"/><rect x="9" y="2" width="5" height="7" rx="1"/><rect x="9" y="11" width="5" height="3" rx="1"/></svg>
+      My Book
+    </a>
+    <div class="sb-div"></div>
+    <a class="sb-ic ${av==='activity'?'on':''}" href="#/activity" title="Activity Log">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,12 5,8 8,10 11,5 14,7"/></svg>
+      Activity Log
+    </a>`;
+}
+
+/* ── MAIN ───────────────────────────────────────────────── */
+function renderMain() {
+  const el = document.getElementById('main');
+  if (S.view === 'dashboard') el.innerHTML = vDashboard();
+  else if (S.view === 'client') el.innerHTML = vClient();
+  else if (S.view === 'book') el.innerHTML = vBook();
+  else if (S.view === 'activity') el.innerHTML = vActivity();
+  // bind live search inputs after render
+  const bs = document.getElementById('book-s');
+  if (bs) bs.oninput = e => { S.bsearch = e.target.value; refreshBook(); };
+  const as = document.getElementById('act-s');
+  if (as) as.oninput = e => { S.asearch = e.target.value; refreshActivity(); };
+}
+
+/* ============================================================
+   VIEW: DASHBOARD
+   ============================================================ */
+function vDashboard() {
+  const today = D.clients.filter(c => c.rec);
+  return `<div class="content">
+    <div class="stat-row">
+      <div class="stat-box is-warn"><div class="stat-n warn">2</div><div class="stat-l">Nudges overdue</div></div>
+      <div class="stat-box"><div class="stat-n">7</div><div class="stat-l">Open recommendations</div></div>
+      <div class="stat-box is-ok"><div class="stat-n ok">68%</div><div class="stat-l">Portfolio coverage</div></div>
+    </div>
+    <div class="lcard">
+      <div class="lcard-hd"><span class="lcard-lbl">Today's outreach list</span><span class="lcard-ct">${today.length} clients</span></div>
+      ${today.map(c => rowHTML(c)).join('')}
+    </div>
+  </div>`;
+}
+
+function rowHTML(c) {
+  const ml = (c.health==='r'||c.health==='a') ? '8px':'14px';
+  const stripe = c.health==='r'?'<div class="ns r"></div>':c.health==='a'?'<div class="ns a"></div>':'';
+  return `<div class="crow" onclick="go('/client/${c.id}')">
+    ${stripe}
+    <div class="cav" style="margin-left:${ml}">${c.ini}</div>
+    <div class="cbody"><div class="cname">${esc(c.name)}</div><div class="ctrig">${esc(c.trig||c.co)}</div></div>
+    <div class="cr-r">${badge(c.rec)}<span class="ctime">${c.rt||''}</span></div>
+    <span class="chev">›</span>
+  </div>`;
+}
+
+function badge(t) {
+  if (!t) return '';
+  const cls = {nudge:'b-nudge',propensity:'b-prop',rules:'b-rules',rt:'b-rt'};
+  const lbl = {nudge:'Nudge',propensity:'Propensity',rules:'Rules',rt:'Real-time'};
+  return `<span class="badge ${cls[t]}">${lbl[t]}</span>`;
+}
+
+/* ============================================================
+   VIEW: CLIENT WORKSPACE
+   ============================================================ */
+function vClient() {
+  const c = D.clients.find(x => x.id === S.cid) || D.clients[0];
+  const tabs = [{k:'rec',l:'Recommendation'},{k:'ctx',l:'Client context'},{k:'port',l:'Portfolio position'},{k:'log',l:'Log outcome'}];
+  return `
+    <div class="ch">
+      <div class="chav">${c.ini}</div>
+      <div>
+        <div class="chname">${esc(c.name)} — ${esc(c.co)}</div>
+        <div class="chsub">${c.tier} · ${c.loc} · Client since ${c.since}</div>
+        <div class="chbadges">${c.rec?badge(c.rec):''}${c.prop>=55?`<span class="badge b-prop">${c.prop}% propensity</span>`:''}</div>
+      </div>
+    </div>
+    <div class="tabs">
+      ${tabs.map(t=>`<div class="tab ${S.tab===t.k?'on':''}" onclick="switchTab('${t.k}')">${t.l}</div>`).join('')}
+    </div>
+    <div class="tcont" id="tcont">${tabContent(c)}</div>`;
+}
+
+function switchTab(t) {
+  S.tab = t;
+  S.logOut = null;
+  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('on', el.getAttribute('onclick').includes("'"+t+"'")));
+  const c = D.clients.find(x => x.id === S.cid);
+  document.getElementById('tcont').innerHTML = tabContent(c);
+  const as = document.getElementById('act-s');
+  if (as) as.oninput = e => { S.asearch = e.target.value; refreshActivity(); };
+}
+
+function tabContent(c) {
+  if (S.tab==='rec') return tRec(c);
+  if (S.tab==='ctx') return tCtx(c);
+  if (S.tab==='port') return tPort(c);
+  if (S.tab==='log') return tLog(c);
+  return '';
+}
+
+/* ── RECOMMENDATION TAB ─────────────────────────────────── */
+const WHY = {
+  1: '<strong>$185K wire received Tue</strong> — 3.2× avg velocity. 72% propensity for cash mgmt. Premier threshold met.',
+  2: '<strong>Proposal sent 14 days ago</strong> with no response logged. Risk of losing deal to a competitor.',
+  3: '<strong>Payroll volume up 34%</strong> over 60 days. Growth trajectory indicates readiness for treasury services.',
+  4: '<strong>CD matures in 28 days.</strong> No renewal outreach logged. Client is rate-sensitive — window is closing.',
+  5: '<strong>Website intent signal:</strong> searched "business loan" at 8:32am. High-intent moment to connect.',
+};
+const OPENER = {
+  1: `"Maria, I noticed some strong activity in your account — wanted to check in on how the business is tracking."`,
+  2: `"Hi, I wanted to follow up on the equipment financing proposal we sent over — did you have a chance to review it?"`,
+  3: `"I noticed your payroll volume has grown significantly — I'd love to discuss how we can support that growth."`,
+  4: `"Your CD is coming up for maturity soon. I wanted to reach out before that date to make sure we find the right option."`,
+  5: `"Hi, I noticed some activity on our site and wanted to reach out personally — happy to help with any financing needs."`,
+};
+const TPS = {
+  1: ['Sweep accounts for cash management between jobs.','30–60 day payment terms on new contract — treasury tools can bridge.','Premier referral at $267K personal deposits.'],
+  2: ['Revisit equipment financing terms with an updated rate sheet.','Discuss payment structure aligned to project cash flow.','If deal is lost, ask for feedback and log for future follow-up.'],
+  3: ['Introduce treasury management for growing payroll complexity.','Discuss business line of credit to support hiring.','Mention dedicated concierge service for Tier II growth clients.'],
+  4: ['Present current CD renewal rates and compare to market.','Discuss laddering strategy for better liquidity.','Offer a brief rate hold to secure the relationship.'],
+  5: ['Identify specific need — equipment, expansion, or working capital.','Highlight SBA loan options or flexible BLOC.','Offer a 30-minute discovery call to walk through options.'],
+};
+function tRec(c) {
+  const why = WHY[c.id] || `<strong>${esc(c.name)}</strong> has active engagement signals. Review product mix and explore cross-sell opportunities.`;
+  const opener = OPENER[c.id] || `"Hi, I wanted to check in and see how we can best support your business."`;
+  const tps = TPS[c.id] || ['Review current product holdings.','Discuss upcoming financial needs.','Identify referral opportunities.'];
+  return `
+    <div class="two-col">
+      <div class="sblock"><div class="sbtitle">Why now</div><div class="sbbody">${why}</div></div>
+      <div class="sblock"><div class="sbtitle">Copilot brief</div><div class="sbbody"><strong>Opener:</strong> ${opener}</div></div>
+    </div>
+    <div class="sblock">
+      <div class="sbtitle">Talking points</div>
+      <div class="tp-list">${tps.map((tp,i)=>`<div class="tp-item"><span class="tp-n">${i+1}.</span><span>${tp}</span></div>`).join('')}</div>
+    </div>
+    <div class="act-row">
+      <button class="btn pri" onclick="openModal('call',${c.id})">Call now</button>
+      <button class="btn" onclick="openModal('email',${c.id})">Draft email</button>
+      <button class="btn" onclick="switchTab('log')">Log outcome</button>
+    </div>`;
+}
+
+/* ── CONTEXT TAB ────────────────────────────────────────── */
+function tCtx(c) {
+  return `<div class="cgrid">
+    <div class="citem"><div class="ckey">Industry</div><div class="cval">${c.ind}</div></div>
+    <div class="citem"><div class="ckey">Annual Revenue</div><div class="cval">${c.rev}</div></div>
+    <div class="citem"><div class="ckey">Employees</div><div class="cval">${c.emp}</div></div>
+    <div class="citem"><div class="ckey">Location</div><div class="cval">${c.loc}</div></div>
+    <div class="citem"><div class="ckey">Client Since</div><div class="cval">${c.since}</div></div>
+    <div class="citem"><div class="ckey">Tier</div><div class="cval">${c.tier}</div></div>
+    <div class="citem" style="grid-column:span 2"><div class="ckey">RM Notes</div><div class="cval sm">${esc(c.notes)}</div></div>
+  </div>`;
+}
+
+/* ── PORTFOLIO TAB ──────────────────────────────────────── */
+function pbal(cid, prod) {
+  const n = ((cid * 31 + prod.charCodeAt(0)) * 1664525 + 1013904223) >>> 0;
+  return (n % 800) + 100;
+}
+const PSTATUS = { CD:'Matures 28d', Treasury:'Full suite', Payroll:'Processing', BLOC:'Active', LOC:'Active', Checking:'Active', Card:'Active' };
+function tPort(c) {
+  const allProds = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings'];
+  const suggested = allProds.filter(p => !c.prods.includes(p)).slice(0,3);
+  return `
+    <div class="sblock">
+      <div class="sbtitle">Current products (${c.prods.length})</div>
+      ${c.prods.map(p => `
+        <div class="pi">
+          <div><div class="pi-name">${p}</div><div class="pi-meta">$${pbal(c.id,p)}K ${p==='Treasury'?'full suite':p==='Payroll'?'processing active':'balance'}</div></div>
+          <div class="pi-badge">${PSTATUS[p]||'Active'}</div>
+        </div>`).join('')}
+    </div>
+    <div class="sblock">
+      <div class="sbtitle">Opportunities</div>
+      <div class="sbbody">Based on ${esc(c.name)}'s profile, consider: <strong>${suggested.join(', ')}</strong>. ${c.prop}% propensity score based on transaction patterns and peer benchmarks.</div>
+    </div>`;
+}
+
+/* ── LOG OUTCOME TAB ────────────────────────────────────── */
+function tLog(c) {
+  const sel = S.logOut;
+  return `<div style="display:flex;flex-direction:column;gap:14px">
+    <div class="form-row">
+      <div class="form-lbl">Outcome</div>
+      <div class="radio-grp">
+        <div class="rchip ${sel==='c'?'s-conv':''}" onclick="setOut('c')">✓ Converted</div>
+        <div class="rchip ${sel==='p'?'s-pend':''}" onclick="setOut('p')">~ Still pending</div>
+        <div class="rchip ${sel==='d'?'s-dism':''}" onclick="setOut('d')">— Dismissed</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-lbl">Contact method</div>
+      <select class="fselect" id="log-method"><option>Phone call</option><option>Email</option><option>In-person meeting</option><option>Video call</option></select>
+    </div>
+    <div class="form-row">
+      <div class="form-lbl">Notes</div>
+      <textarea class="ftextarea" id="log-notes" rows="4" placeholder="What happened? Any follow-up needed?"></textarea>
+    </div>
+    <div class="act-row">
+      <button class="btn pri" onclick="submitLog()">Save outcome</button>
+      <button class="btn" onclick="switchTab('rec')">Cancel</button>
+    </div>
+  </div>`;
+}
+
+function setOut(o) {
+  S.logOut = o;
+  document.querySelectorAll('.rchip').forEach(el => {
+    const clicked = el.getAttribute('onclick').includes("'"+o+"'");
+    el.className = 'rchip' + (clicked ? (o==='c'?' s-conv':o==='p'?' s-pend':' s-dism') : '');
+  });
+}
+
+function submitLog() {
+  if (!S.logOut) { showToast('⚠ Please select an outcome'); return; }
+  const c = D.clients.find(x => x.id === S.cid);
+  const notes = document.getElementById('log-notes')?.value?.trim() || '';
+  const lbls = {c:'Converted',p:'Pending',d:'Dismissed'};
+  D.activity.unshift({ id: Date.now(), cn: c.name, desc: `Outcome logged: ${lbls[S.logOut]} · ${notes||'No additional notes'}`, out: S.logOut, time: 'Just now' });
+  S.logOut = null;
+  showToast('✓ Outcome logged successfully');
+  go('/activity');
+}
+
+/* ============================================================
+   VIEW: MY BOOK
+   ============================================================ */
+function vBook() {
+  const nc = D.clients.filter(c => c.lcd >= 30).length;
+  return `<div class="content">
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-n">${D.clients.length}</div><div class="stat-l">Total clients</div></div>
+      <div class="stat-box is-ok"><div class="stat-n ok">68%</div><div class="stat-l">Coverage rate</div></div>
+      <div class="stat-box is-warn"><div class="stat-n warn">${nc}</div><div class="stat-l">No contact 30+ days</div></div>
+    </div>
+    <div class="lcard">
+      <div class="sbar">
+        <input class="sinput" id="book-s" placeholder="Search clients…" value="${esc(S.bsearch)}"/>
+        <span class="fpill ${S.bfilter==='all'?'on':''}" onclick="setBF('all')">All</span>
+        <span class="fpill ${S.bfilter==='risk'?'on':''}" onclick="setBF('risk')">At risk</span>
+        <span class="fpill ${S.bfilter==='nocon'?'on':''}" onclick="setBF('nocon')">No contact</span>
+        <span class="fpill ${S.bfilter==='orec'?'on':''}" onclick="setBF('orec')">Open rec</span>
+      </div>
+      <div class="col-hd">
+        <div></div>
+        <div class="col-l">Client</div>
+        <div class="col-l">Last contact</div>
+        <div class="col-l">Open rec</div>
+        <div class="col-l">Products</div>
+        <div class="col-l">Tier</div>
+      </div>
+      <div id="book-rows">${bookRows()}</div>
+    </div>
+  </div>`;
+}
+
+function bookRows() {
+  let cs = D.clients;
+  if (S.bsearch) { const q=S.bsearch.toLowerCase(); cs=cs.filter(c=>c.name.toLowerCase().includes(q)||c.co.toLowerCase().includes(q)); }
+  if (S.bfilter==='risk') cs=cs.filter(c=>c.health==='r'||c.health==='a');
+  else if (S.bfilter==='nocon') cs=cs.filter(c=>c.lcd>=14);
+  else if (S.bfilter==='orec') cs=cs.filter(c=>c.rec);
+  if (!cs.length) return `<div class="empty"><div class="empty-ic">🔍</div><div class="empty-txt">No clients match your search</div></div>`;
+  const hmap={r:'h-r',a:'h-a',g:'h-g',x:'h-x'};
+  return cs.map(c=>`
+    <div class="bgrow" onclick="go('/client/${c.id}')">
+      <div class="hdot ${hmap[c.health]}"></div>
+      <div><div class="bgname">${esc(c.name)}</div><div class="bgmeta">${esc(c.co)}</div></div>
+      <div class="bgmeta">${esc(c.lc)}</div>
+      <div>${c.rec?badge(c.rec):'<span class="bgmeta">—</span>'}</div>
+      <div class="bgmeta">${c.prods.join(', ')}</div>
+      <div class="bgmeta">${c.tier}</div>
+    </div>`).join('');
+}
+
+function setBF(f) { S.bfilter=f; S.bsearch=''; re('book-rows',bookRows()); rebind(); }
+function refreshBook() { re('book-rows', bookRows()); }
+
+/* ============================================================
+   VIEW: ACTIVITY LOG
+   ============================================================ */
+function vActivity() {
+  const conv = D.activity.filter(a=>a.out==='c').length;
+  const pend = D.activity.filter(a=>a.out==='p').length;
+  return `<div class="content">
+    <div class="stat-row">
+      <div class="stat-box is-ok"><div class="stat-n ok">${conv}</div><div class="stat-l">Converted this month</div></div>
+      <div class="stat-box"><div class="stat-n">${pend}</div><div class="stat-l">Pending outcomes</div></div>
+      <div class="stat-box"><div class="stat-n">${D.activity.length}</div><div class="stat-l">Total actions logged</div></div>
+    </div>
+    <div class="lcard">
+      <div class="sbar">
+        <input class="sinput" id="act-s" placeholder="Search activity…" value="${esc(S.asearch)}"/>
+        <span class="fpill ${S.afilter==='all'?'on':''}" onclick="setAF('all')">All</span>
+        <span class="fpill ${S.afilter==='c'?'on':''}" onclick="setAF('c')">Converted</span>
+        <span class="fpill ${S.afilter==='p'?'on':''}" onclick="setAF('p')">Pending</span>
+        <span class="fpill ${S.afilter==='d'?'on':''}" onclick="setAF('d')">Dismissed</span>
+      </div>
+      <div id="act-rows">${actRows()}</div>
+    </div>
+  </div>`;
+}
+
+function actRows() {
+  let acts = D.activity;
+  if (S.asearch) { const q=S.asearch.toLowerCase(); acts=acts.filter(a=>a.cn.toLowerCase().includes(q)||a.desc.toLowerCase().includes(q)); }
+  if (S.afilter!=='all') acts=acts.filter(a=>a.out===S.afilter);
+  if (!acts.length) return `<div class="empty"><div class="empty-ic">🔍</div><div class="empty-txt">No results match your filter</div></div>`;
+  const ic={c:'✓',p:'~',d:'—'};
+  const ocls={c:'o-c',p:'o-p',d:'o-d'};
+  return acts.map(a=>`
+    <div class="arow">
+      <div class="opill ${ocls[a.out]}">${ic[a.out]}</div>
+      <div class="abody"><div class="aclient">${esc(a.cn)}</div><div class="adesc">${esc(a.desc)}</div></div>
+      <div class="atime">${a.time}</div>
+    </div>`).join('');
+}
+
+function setAF(f) { S.afilter=f; S.asearch=''; re('act-rows',actRows()); rebind(); }
+function refreshActivity() { re('act-rows', actRows()); }
+
+/* ============================================================
+   COPILOT
+   ============================================================ */
+function convKey() { return S.view==='client' ? 'c'+S.cid : 'general'; }
+function getConv() {
+  const k = convKey();
+  if (!S.convs[k]) {
+    const c = D.clients.find(x=>x.id===S.cid);
+    S.convs[k] = [{ r:'sys', t: c?`Loaded context for ${c.name}. Ask anything about this client.`:'Ask anything.' }];
+  }
+  return S.convs[k];
+}
+
+function renderCopilot() {
+  const el = document.getElementById('copilot');
+  if (!S.copOpen) { el.className='cp-panel off'; el.innerHTML=''; return; }
+  el.className = 'cp-panel';
+  const c = S.view==='client' ? D.clients.find(x=>x.id===S.cid) : null;
+  const ctx = c ? `Context: ${c.name} · ${c.co}` : 'General · No client selected';
+  const ph = c ? `Ask about ${c.name}…` : 'Ask Copilot…';
+  const conv = getConv();
+  el.innerHTML = `
+    <div class="cp-hd">
+      <div class="cp-hd-l"><div class="cp-ic">✦</div><span class="cp-ttl">Copilot</span></div>
+      <button class="cp-x" onclick="toggleCop()">✕</button>
+    </div>
+    <div class="cp-ctx">${ctx}</div>
+    <div class="cp-msgs" id="cp-msgs">${conv.map(m=>`<div class="msg ${m.r==='sys'?'sys':m.r==='usr'?'usr':'ast'}">${m.t}</div>`).join('')}</div>
+    <div class="cp-in-area">
+      <input class="cp-in" id="cp-in" placeholder="${ph}"/>
+      <button class="cp-btn" onclick="sendCopilot()">↑</button>
+    </div>`;
+  const inp = document.getElementById('cp-in');
+  if (inp) inp.onkeydown = e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCopilot();} };
+  scrollCop();
+}
+
+function scrollCop() { const m=document.getElementById('cp-msgs'); if(m) m.scrollTop=m.scrollHeight; }
+function toggleCop() { S.copOpen=!S.copOpen; renderTopbar(); renderCopilot(); }
+
+function sendCopilot() {
+  const inp = document.getElementById('cp-in');
+  const txt = inp?.value?.trim();
+  if (!txt) return;
+  inp.value = '';
+  const conv = getConv();
+  conv.push({ r:'usr', t: esc(txt) });
+  renderCopilot();
+  // typing indicator
+  const msgs = document.getElementById('cp-msgs');
+  if (msgs) {
+    const t = document.createElement('div');
+    t.className='msg typ'; t.id='cp-typ'; t.textContent='· · ·';
+    msgs.appendChild(t); scrollCop();
+  }
+  setTimeout(() => {
+    conv.push({ r:'ast', t: copilotReply(txt) });
+    renderCopilot();
+  }, 800 + Math.random()*600);
+}
+
+function copilotReply(q) {
+  q = q.toLowerCase();
+  const c = S.view==='client' ? D.clients.find(x=>x.id===S.cid) : null;
+  if (c) {
+    if (/product|hold|have|currently/.test(q)) return `${c.name} currently holds: <strong>${c.prods.join(', ')}</strong>. No ${['Treasury','BLOC','LOC'].filter(p=>!c.prods.includes(p)).slice(0,2).join(' or ')} yet — both are strong cross-sell opportunities.`;
+    if (/revenue|size|big|large/.test(q)) return `${c.co} generates approximately <strong>${c.rev}</strong> in annual revenue with <strong>${c.emp} employees</strong>. Industry: ${c.ind}.`;
+    if (/propensity|likelihood|score|chance/.test(q)) return `${c.name} has a <strong>${c.prop}% propensity score</strong> for next-product adoption, based on transaction behavior and peer benchmarks.`;
+    if (/contact|last|when|touch/.test(q)) return `Last contact with ${c.name} was <strong>${c.lc}</strong>. ${c.lcd>7?'This is approaching the coverage threshold — outreach recommended soon.':'Coverage looks current.'}`;
+    if (/note|background|context|tell|about/.test(q)) return c.notes;
+    if (/suggest|recommend|next|should|opport/.test(q)) { const sugg=['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services'].filter(p=>!c.prods.includes(p)).slice(0,3); return `Top recommendations for ${c.name}: <strong>${sugg.join(', ')}</strong>. Based on wallet share analysis and peer benchmarking.`; }
+    return `${c.name} · ${c.tier} · ${c.ind} · ${c.rev} revenue · ${c.prop}% propensity. Last contact: ${c.lc}. Is there something specific I can help with?`;
+  }
+  if (/cd|matur/.test(q)) return `Harmon & Diaz LLC has a CD maturing in 28 days. No renewal outreach has been logged — they're on today's list.`;
+  if (/nudge|overdue|miss/.test(q)) return `2 nudges are currently overdue: <strong>Maria Chen</strong> (cash mgmt, 48h no contact) and <strong>Ridgeline HVAC</strong> (proposal stalled, 14 days).`;
+  if (/coverage|portfolio|percent/.test(q)) return `Portfolio coverage is at <strong>68%</strong>. Meza Landscaping is the most at-risk at 38 days without contact.`;
+  if (/propensity|highest|best/.test(q)) return `Highest propensity clients: <strong>Brightwell Foods (82%)</strong>, Maria Chen (72%), Blue Heron Logistics (65%).`;
+  if (/priority|who|first|start/.test(q)) return `Start with <strong>Maria Chen</strong> — active nudge, 72% propensity, and a clear $185K signal. Then follow up with Ridgeline HVAC.`;
+  if (/book|how many|total|client/.test(q)) return `Your book has <strong>${D.clients.length} clients</strong>: ${D.clients.filter(c=>c.health==='r').length} at-risk, ${D.clients.filter(c=>c.health==='a').length} need attention, ${D.clients.filter(c=>c.health==='g').length} healthy.`;
+  return `I can help with any client in your book, today's recommendations, or portfolio insights. Try asking about a specific client or "who should I call first?"`;
+}
+
+/* ============================================================
+   MODALS
+   ============================================================ */
+function openModal(type, cid) {
+  const c = D.clients.find(x=>x.id===cid)||D.clients[0];
+  const overlay = document.getElementById('overlay');
+  const modal = document.getElementById('modal');
+  overlay.classList.remove('off');
+  if (type==='call') {
+    const tps = TPS[c.id]||['Review product holdings.','Discuss financial needs.','Identify cross-sell opportunities.'];
+    modal.innerHTML = `
+      <div class="mhd"><span class="mttl">📞 Call prep — ${esc(c.name)}</span><button class="mx" onclick="closeModal()">✕</button></div>
+      <div class="mbody">
+        <div class="msec"><div class="mlbl">Opener</div><div class="mval hi">${OPENER[c.id]||'"Hi, checking in to see how we can support your business."'}</div></div>
+        <div class="msec"><div class="mlbl">Client context</div><div class="mval">${esc(c.notes)}</div></div>
+        <div class="msec"><div class="mlbl">Talking points</div><div class="mval">${tps.map((t,i)=>`${i+1}. ${t}`).join('<br>')}</div></div>
+      </div>
+      <div class="mfooter">
+        <button class="btn" onclick="closeModal()">Close</button>
+        <button class="btn pri" onclick="closeModal();showToast('📞 Call logged for ${esc(c.name)}')">Mark as called</button>
+      </div>`;
+  } else if (type==='email') {
+    const subj = {1:'Quick check-in — account activity and next steps',2:'Following up on equipment financing proposal',3:'Supporting your business growth — let\'s talk',4:'Your CD is maturing soon — options to consider',5:'Reaching out about your financing needs'};
+    const fn = c.name.split(' ')[0];
+    const body = `Hi ${fn},\n\nI hope you're doing well. I wanted to reach out personally — I noticed some recent activity and want to make sure we're supporting you in the best way possible.\n\n${(TPS[c.id]||['Review your current banking relationship.'])[0]}\n\nI'd love to schedule a quick call at your convenience. Just reply to this email or call me directly.\n\nBest,\nJordan Williams\nRelationship Manager, Truist Bank`;
+    modal.innerHTML = `
+      <div class="mhd"><span class="mttl">✉️ Draft email — ${esc(c.name)}</span><button class="mx" onclick="closeModal()">✕</button></div>
+      <div class="mbody">
+        <div class="msec"><div class="mlbl">To</div><div class="mval">${esc(c.name)} · ${esc(c.co)}</div></div>
+        <div class="msec"><div class="mlbl">Subject</div><div class="mval hi">${subj[c.id]||'Checking in — how can we help?'}</div></div>
+        <div class="msec"><div class="mlbl">Draft body (editable)</div><textarea class="ftextarea" id="email-body" rows="9" style="margin-top:4px">${body}</textarea></div>
+      </div>
+      <div class="mfooter">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn pri" onclick="closeModal();showToast('✉️ Email draft saved')">Save draft</button>
+      </div>`;
+  }
+}
+function closeModal() { document.getElementById('overlay').classList.add('off'); }
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let _toastT;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast';
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => { t.className='toast off'; }, 3200);
+}
+
+/* ============================================================
+   UTILS
+   ============================================================ */
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function re(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html; }
+function rebind() {
+  const bs=document.getElementById('book-s'); if(bs) bs.oninput=e=>{S.bsearch=e.target.value;refreshBook();};
+  const as=document.getElementById('act-s'); if(as) as.oninput=e=>{S.asearch=e.target.value;refreshActivity();};
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+window.addEventListener('load', () => {
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const now = new Date();
+  D.day = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}`;
+  route();
+});
+</script>
+</body>
+</html>
