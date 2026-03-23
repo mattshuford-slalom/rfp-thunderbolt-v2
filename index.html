@@ -327,6 +327,50 @@ function genClients() {
   const INDS = ['Construction','Logistics','Healthcare','Legal Services','Food & Beverage','HVAC / Contracting','Landscaping','Food Manufacturing','Plumbing / Contracting','Retail','Technology','Real Estate','Financial Services','Manufacturing','Transportation','Education','Hospitality','Auto Services','Dental','Veterinary','Fitness','Electrical','Roofing','Flooring','Painting','Staffing','Marketing','Accounting','Printing','Security','Janitorial','Pest Control','Photography','Catering','Bakery','Brewery','Winery','Trucking','Warehousing','Childcare','Senior Care','Physical Therapy','Optometry','Chiropractic','Architecture','Engineering','Interior Design'];
   const LOCS = ['Charlotte, NC','Raleigh, NC','Atlanta, GA','Dallas, TX','Phoenix, AZ','Tampa, FL','Nashville, TN','Austin, TX','Denver, CO','Seattle, WA','Portland, OR','Minneapolis, MN','Detroit, MI','Columbus, OH','Indianapolis, IN','Louisville, KY','Memphis, TN','Richmond, VA','Baltimore, MD','Pittsburgh, PA','Cleveland, OH','Cincinnati, OH','Kansas City, MO','St. Louis, MO','Oklahoma City, OK','San Antonio, TX','Fort Worth, TX','Jacksonville, FL','Orlando, FL','Miami, FL','Charlotte, NC','Birmingham, AL','Greensboro, NC','Virginia Beach, VA','Chandler, AZ','Scottsdale, AZ','Henderson, NV','Laredo, TX','Buffalo, NY','Rochester, NY','Akron, OH','Omaha, NE','Tulsa, OK','Arlington, TX','Aurora, CO','Anaheim, CA','Santa Ana, CA','Corpus Christi, TX','Lexington, KY','Anchorage, AK','Stockton, CA','Riverside, CA','St. Paul, MN','Cincinnati, OH','Toledo, OH','Greensboro, NC','Newark, NJ','Plano, TX','Henderson, NV','Lincoln, NE','Bakersfield, CA','Baton Rouge, LA','Fremont, CA','Hialeah, FL','Garland, TX','Madison, WI','Scottsdale, AZ','Glendale, AZ','Winston-Salem, NC','Chesapeake, VA','Norfolk, VA'];
   const PRODS_ALL = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings','Checking'];
+
+  const PROD_NAMES = {
+    Checking:            'Dynamic Business Checking',
+    Treasury:            'Treasury Management',
+    BLOC:                'Business Line of Credit',
+    LOC:                 'Small Business Line of Credit',
+    CD:                  'Business Certificate of Deposit',
+    Payroll:             'Truist Online Payroll',
+    Card:                'Business Cash Rewards Card',
+    'Merchant Services': 'Merchant Services',
+    'Business Savings':  'Business Money Market',
+  };
+
+  const PROD_TAGLINE = {
+    Checking:            'Full-featured checking with 500 monthly transactions and tier-based relationship perks.',
+    Treasury:            'Full cash management suite — sweep accounts, payment automation, and working capital optimization.',
+    BLOC:                'Revolving credit up to $250K (with collateral) — flexible access to working capital as needs arise.',
+    LOC:                 'Revolving line of credit up to $100K — manage seasonal cash flow and short-term working capital gaps.',
+    CD:                  'Guaranteed fixed return on idle cash — choose your term from 7 days to 5 years.',
+    Payroll:             'Fully automated payroll, tax filing, and direct deposit for businesses with 1–100 employees.',
+    Card:                'Cash back on every purchase — no annual fee, 0% intro APR for 9 months, $300 welcome bonus.',
+    'Merchant Services': 'Point-of-sale and payment acceptance solutions to capture revenue at every transaction.',
+    'Business Savings':  'Business Money Market with competitive APY and check-writing access on balances over $5K.',
+  };
+
+  function rankMissingProds(c) {
+    const pool = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings'];
+    const missing = pool.filter(p => !c.prods.includes(p));
+    const revM = parseFloat((c.rev || '0').replace(/[^0-9.]/g, '')) || 0;
+    const ind = (c.ind || '').toLowerCase();
+    const score = p => {
+      if (p === 'Payroll')           return c.emp >= 10 ? 90 : c.emp >= 5 ? 65 : 35;
+      if (p === 'Card')              return 70;
+      if (p === 'Business Savings')  return revM >= 2 ? 72 : 55;
+      if (p === 'Treasury')          return revM >= 5 ? 88 : revM >= 2 ? 58 : 28;
+      if (p === 'BLOC')              return revM >= 3 ? 78 : 48;
+      if (p === 'LOC')               { const base = revM < 3 ? 68 : 42; return c.prods.includes('BLOC') ? base - 30 : base; }
+      if (p === 'CD')                return revM >= 2 ? 55 : 40;
+      if (p === 'Merchant Services') return /food|retail|catering|dental|health/.test(ind) ? 75 : 40;
+      return 50;
+    };
+    return missing.sort((a, b) => score(b) - score(a));
+  }
+
   const RECS = [null,null,null,'nudge','propensity','rules','rt'];
   const HEALTHS = ['g','g','g','g','g','a','a','r','x'];
   const LCDS = [0,1,2,3,5,7,10,14,21,28,35,42,60];
@@ -394,8 +438,8 @@ const D = {
     { id:3, ini:'BH', name:'Blue Heron Logistics', co:'Blue Heron LLC', tier:'Tier II', loc:'Atlanta, GA', since:'2022', lc:'6 days ago', lcd:6, health:'a', rec:'propensity', prods:['Checking','Payroll'], trig:'Payroll up 34% · growth conversation opportunity', rt:'Today', prop:65, rev:'$7.2M', emp:62, ind:'Logistics', notes:'Fast-growing company. Payroll volume increased significantly — strong potential for treasury and expanded banking relationship.' },
     { id:4, ini:'HD', name:'Harmon & Diaz LLC', co:'Harmon Legal Group', tier:'Tier II', loc:'Charlotte, NC', since:'2020', lc:'12 days ago', lcd:12, health:'a', rec:'rules', prods:['Checking','CD'], trig:'CD maturity in 28 days · no renewal outreach logged', rt:'Today', prop:48, rev:'$3.4M', emp:21, ind:'Legal Services', notes:'CD maturing soon. Client is rate-sensitive — be prepared to discuss current options before they shop elsewhere.' },
     { id:5, ini:'PV', name:'Palo Verde Dental', co:'Palo Verde Health', tier:'Tier I', loc:'Phoenix, AZ', since:'2023', lc:'Today', lcd:0, health:'g', rec:'rt', prods:['Checking'], trig:'Searched "business loan" on truist.com', rt:'8:32a', prop:55, rev:'$1.8M', emp:12, ind:'Healthcare', notes:'Newer client. Recent web activity indicates lending interest. Good opportunity to deepen the relationship early.' },
-    { id:6, ini:'BF', name:'Brightwell Foods', co:'Brightwell Inc.', tier:'Tier I', loc:'Tampa, FL', since:'2018', lc:'2 days ago', lcd:2, health:'g', rec:null, prods:['Checking','Treasury'], trig:null, rt:null, prop:82, rev:'$11M', emp:88, ind:'Food Manufacturing', notes:'Top client. Treasury management fully established. Consider Premier referral and additional product cross-sells.' },
-    { id:7, ini:'AP', name:'Apex Plumbing', co:'Apex Services Co.', tier:'Tier II', loc:'Nashville, TN', since:'2021', lc:'5 days ago', lcd:5, health:'g', rec:null, prods:['Checking','BLOC'], trig:null, rt:null, prop:41, rev:'$2.9M', emp:24, ind:'Plumbing / Contracting', notes:'Healthy relationship. BLOC recently accepted. Follow up in 30 days to confirm satisfaction.' },
+    { id:6, ini:'BF', name:'Brightwell Foods', co:'Brightwell Inc.', tier:'Tier I', loc:'Tampa, FL', since:'2018', lc:'2 days ago', lcd:2, health:'g', rec:null, prods:['Checking','Treasury','Payroll','Card'], trig:null, rt:null, prop:82, rev:'$11M', emp:88, ind:'Food Manufacturing', notes:'Top client. Treasury management and Online Payroll fully established for 88 employees. Business Cash Rewards Card active. Next opportunity: Merchant Services or Business Line of Credit.' },
+    { id:7, ini:'AP', name:'Apex Plumbing', co:'Apex Services Co.', tier:'Tier II', loc:'Nashville, TN', since:'2021', lc:'5 days ago', lcd:5, health:'g', rec:null, prods:['Checking','BLOC','Card'], trig:null, rt:null, prop:41, rev:'$2.9M', emp:24, ind:'Plumbing / Contracting', notes:'Healthy relationship. Business Line of Credit recently accepted. Business Cash Rewards Card added for materials purchasing. Follow up in 30 days to explore Truist Online Payroll for 24 employees.' },
     { id:8, ini:'ML', name:'Meza Landscaping', co:'Meza Group', tier:'Tier I', loc:'Dallas, TX', since:'2020', lc:'38 days ago', lcd:38, health:'x', rec:null, prods:['Checking'], trig:null, rt:null, prop:22, rev:'$900K', emp:9, ind:'Landscaping', notes:'No contact in 38 days. Single product. Potential churn risk — needs a check-in call this week.' },
     ...genClients(),
   ],
@@ -617,11 +661,11 @@ function tabContent(c) {
 
 /* ── RECOMMENDATION TAB ─────────────────────────────────── */
 const WHY = {
-  1: '<strong>$185K wire received Tue</strong> — 3.2× avg velocity. 72% propensity for cash mgmt. Premier threshold met.',
-  2: '<strong>Proposal sent 14 days ago</strong> with no response logged. Risk of losing deal to a competitor.',
-  3: '<strong>Payroll volume up 34%</strong> over 60 days. Growth trajectory indicates readiness for treasury services.',
-  4: '<strong>CD matures in 28 days.</strong> No renewal outreach logged. Client is rate-sensitive — window is closing.',
-  5: '<strong>Website intent signal:</strong> searched "business loan" at 8:32am. High-intent moment to connect.',
+  1: '<strong>$185K wire received Tue</strong> — 3.2× avg velocity. 72% propensity for Business Money Market and cash management. Premier threshold met.',
+  2: '<strong>Commercial Vehicle & Equipment Loan proposal sent 14 days ago</strong> (up to $250K, 84-mo terms) with no response logged. Risk of losing deal to a competitor.',
+  3: '<strong>Truist Online Payroll volume up 34%</strong> over 60 days. Growth trajectory indicates readiness for Treasury Management and expanded credit lines.',
+  4: '<strong>Business Certificate of Deposit matures in 28 days.</strong> No renewal outreach logged. Client is rate-sensitive — consider laddering into Business Money Market.',
+  5: '<strong>Website intent signal:</strong> searched "business loan" at 8:32am — high-intent trigger for a Simple Business Loan (up to $50K, no collateral) or Line of Credit conversation.',
 };
 const OPENER = {
   1: `"Maria, I noticed some strong activity in your account — wanted to check in on how the business is tracking."`,
@@ -631,11 +675,31 @@ const OPENER = {
   5: `"Hi, I noticed some activity on our site and wanted to reach out personally — happy to help with any financing needs."`,
 };
 const TPS = {
-  1: ['Sweep accounts for cash management between jobs.','30–60 day payment terms on new contract — treasury tools can bridge.','Premier referral at $267K personal deposits.'],
-  2: ['Revisit equipment financing terms with an updated rate sheet.','Discuss payment structure aligned to project cash flow.','If deal is lost, ask for feedback and log for future follow-up.'],
-  3: ['Introduce treasury management for growing payroll complexity.','Discuss business line of credit to support hiring.','Mention dedicated concierge service for Tier II growth clients.'],
-  4: ['Present current CD renewal rates and compare to market.','Discuss laddering strategy for better liquidity.','Offer a brief rate hold to secure the relationship.'],
-  5: ['Identify specific need — equipment, expansion, or working capital.','Highlight SBA loan options or flexible BLOC.','Offer a 30-minute discovery call to walk through options.'],
+  1: [
+    'Open a Business Money Market to sweep idle catering revenue into a higher-yield account (3.40% APY) between events.',
+    'Truist Online Payroll automates tax filing and direct deposit for 18 employees — save hours during Q2 and Q4 peak seasons.',
+    'A Small Business Line of Credit (up to $100K, revolving) covers cash flow gaps between event deposits and vendor payment terms.',
+  ],
+  2: [
+    'Revisit the Commercial Vehicle & Equipment Loan — up to $250K, terms up to 84 months, with 100% financing available.',
+    'Highlight the Dynamic Business Checking relationship discount: up to 0.50% rate reduction on any loan.',
+    'If the deal stalls, offer a Business Line of Credit (up to $250K with collateral) as a flexible alternative to term financing.',
+  ],
+  3: [
+    'Introduce Treasury Management — payroll growth to 62 employees at $7.2M revenue signals the need for sweep accounts and payment automation.',
+    'A Business Line of Credit (up to $250K with collateral) supports hiring and operational expansion during this growth phase.',
+    'Confirm Truist Online Payroll is keeping pace with the 34% headcount increase — explore higher-tier plan if needed.',
+  ],
+  4: [
+    'Present current Business Certificate of Deposit renewal rates — offer a brief rate hold to prevent rate shopping.',
+    'Propose a CD laddering strategy across 3-month, 6-month, and 12-month terms for improved liquidity without sacrificing yield.',
+    'Introduce the Business Money Market as a flexible alternative if they want check-writing access on a portion of idle cash.',
+  ],
+  5: [
+    'For a healthcare practice at $1.8M revenue, a Simple Business Loan (up to $50K, no collateral required) is the fastest path to funding.',
+    'If the need is larger or ongoing, a Small Business Line of Credit (up to $100K, revolving) may be the better long-term fit.',
+    'Offer a 30-minute discovery call — reference the 8:32am site search directly as the conversation starter.',
+  ],
 };
 function tRec(c) {
   const why = WHY[c.id] || genWhy(c);
@@ -737,22 +801,27 @@ function pbal(cid, prod) {
   const n = ((cid * 31 + prod.charCodeAt(0)) * 1664525 + 1013904223) >>> 0;
   return (n % 800) + 100;
 }
-const PSTATUS = { CD:'Matures 28d', Treasury:'Full suite', Payroll:'Processing', BLOC:'Active', LOC:'Active', Checking:'Active', Card:'Active' };
+const PSTATUS = { CD:'Matures 28d', Treasury:'Full suite', Payroll:'Processing', BLOC:'Active', LOC:'Active', Checking:'Primary', Card:'Active', 'Merchant Services':'Active', 'Business Savings':'Active' };
 function tPort(c) {
-  const allProds = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings'];
-  const suggested = allProds.filter(p => !c.prods.includes(p)).slice(0,3);
+  const topMissing = rankMissingProds(c).slice(0, 3);
+  const fn = c.name.split(' ')[0];
+  const prodMeta = {
+    Treasury:'cash management suite', Payroll:'automated payroll', BLOC:'revolving credit',
+    LOC:'revolving credit', CD:'fixed-term deposit', Card:'cash back rewards',
+    'Merchant Services':'payment acceptance', 'Business Savings':'money market', Checking:'primary checking',
+  };
   return `
     <div class="sblock">
       <div class="sbtitle">Current products (${c.prods.length})</div>
       ${c.prods.map(p => `
         <div class="pi">
-          <div><div class="pi-name">${p}</div><div class="pi-meta">$${pbal(c.id,p)}K ${p==='Treasury'?'full suite':p==='Payroll'?'processing active':'balance'}</div></div>
+          <div><div class="pi-name">${PROD_NAMES[p]||p}</div><div class="pi-meta">$${pbal(c.id,p)}K · ${prodMeta[p]||'active'}</div></div>
           <div class="pi-badge">${PSTATUS[p]||'Active'}</div>
         </div>`).join('')}
     </div>
     <div class="sblock">
       <div class="sbtitle">Opportunities</div>
-      <div class="sbbody">Based on ${esc(c.name)}'s profile, consider: <strong>${suggested.join(', ')}</strong>. ${c.prop}% propensity score based on transaction patterns and peer benchmarks.</div>
+      <div class="sbbody">Based on ${esc(fn)}'s profile (${c.ind} · ${c.rev} · ${c.emp} employees), top cross-sell opportunities:<br><strong>${topMissing.map(p=>PROD_NAMES[p]||p).join(', ')}</strong>.<br><br>${c.prop}% propensity score — comparable ${c.ind} firms hold ${c.prods.length+2} products on average.</div>
     </div>`;
 }
 
@@ -1260,7 +1329,7 @@ function copilotReply(q) {
   const ALL_PRODS = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings'];
 
   if (c) {
-    const missing = ALL_PRODS.filter(p => !c.prods.includes(p));
+    const missing = rankMissingProds(c);
     const top3Missing = missing.slice(0, 3);
     const fn = c.name.split(' ')[0];
 
@@ -1268,10 +1337,10 @@ function copilotReply(q) {
     if (/why|trigger|signal|reason|rec\b|recommend/.test(q)) {
       const why = WHY[c.id] || genWhy(c);
       const recDetail = {
-        nudge:      `With ${c.lcd} days since last RM contact and a ${c.prop}% propensity score, the engagement window is open. Waiting longer increases churn risk.`,
-        propensity: `This Offer is driven by a ${c.prop}% model score — ${fn} ranks in the top quartile for ${c.ind} clients at ${c.rev} revenue. Transaction patterns confirm readiness for a new product conversation.`,
-        rules:      `This Referral was triggered by an account rule — either a maturing product, utilization threshold, or product gap vs. peer benchmarks for ${c.ind}. Client should be introduced to the relevant product or specialist.`,
-        rt:         `This Advice alert is based on a live intent signal. Real-time triggers convert at 2–3× higher rates than scheduled outreach — acting within the next few hours is strongly recommended.`,
+        nudge:      `With ${c.lcd} days since last RM contact and a ${c.prop}% propensity score, the engagement window is open. Top opportunity: <strong>${PROD_NAMES[top3Missing[0]]||top3Missing[0]||'a new product'}</strong>. Waiting longer increases churn risk.`,
+        propensity: `This Offer is driven by a ${c.prop}% model score — ${fn} ranks in the top quartile for ${c.ind} clients at ${c.rev} revenue. Highest-confidence opportunity: <strong>${PROD_NAMES[top3Missing[0]]||top3Missing[0]||'a new product'}</strong> based on transaction patterns and peer benchmarks.`,
+        rules:      `This Referral was triggered by an account rule — a maturing product, utilization threshold, or product gap vs. peers. Best next step: introduce <strong>${PROD_NAMES[top3Missing[0]]||top3Missing[0]||'a relevant product'}</strong> or connect ${fn} with the appropriate specialist.`,
+        rt:         `This Advice alert is based on a live intent signal. Real-time triggers convert at 2–3× the rate of scheduled outreach. Act within the next few hours on <strong>${PROD_NAMES[top3Missing[0]]||top3Missing[0]||'the identified opportunity'}</strong>.`,
       };
       return `${why}<br><br>${recDetail[c.rec] || ''}`;
     }
@@ -1279,13 +1348,17 @@ function copilotReply(q) {
     // Products held + gap analysis
     if (/product|hold|have|own|currently/.test(q)) {
       const pctWallet = Math.round((c.prods.length / ALL_PRODS.length) * 100);
-      return `${fn} currently holds <strong>${c.prods.join(', ')}</strong> — ${c.prods.length} of 8 available products (<strong>${pctWallet}% wallet share</strong>). Strongest gaps for a ${c.ind} business at ${c.rev}: <strong>${top3Missing.join(', ')}</strong>. Peer benchmarks show similar clients average ${c.prods.length + 2} products.`;
+      const heldNames = c.prods.map(p => PROD_NAMES[p]||p).join(', ');
+      const gapNames = top3Missing.map(p => PROD_NAMES[p]||p).join(', ');
+      return `${fn} currently holds <strong>${heldNames}</strong> — ${c.prods.length} of 8 available products (<strong>${pctWallet}% wallet share</strong>). Strongest gaps for a ${c.ind} business at ${c.rev}: <strong>${gapNames}</strong>. Peer benchmarks show similar clients average ${c.prods.length + 2} products.`;
     }
 
     // Wallet share / penetration
     if (/wallet|share|penetrat|miss/.test(q)) {
       const pctWallet = Math.round((c.prods.length / ALL_PRODS.length) * 100);
-      return `${fn}'s wallet share is <strong>${pctWallet}%</strong> (${c.prods.length} of 8 products). Comparable ${c.ind} clients at ${c.rev} typically hold ${c.prods.length + 2} products. The highest-value gaps are <strong>${top3Missing[0]}</strong>${top3Missing[1] ? ' and <strong>' + top3Missing[1] + '</strong>' : ''}, based on revenue profile and transaction patterns.`;
+      const gapName0 = PROD_NAMES[top3Missing[0]] || top3Missing[0];
+      const gapName1 = top3Missing[1] ? (PROD_NAMES[top3Missing[1]] || top3Missing[1]) : null;
+      return `${fn}'s wallet share is <strong>${pctWallet}%</strong> (${c.prods.length} of 8 products). Comparable ${c.ind} clients at ${c.rev} typically hold ${c.prods.length + 2} products. The highest-value gaps are <strong>${gapName0}</strong>${gapName1 ? ' and <strong>' + gapName1 + '</strong>' : ''}, based on revenue profile and transaction patterns.`;
     }
 
     // Revenue / size / firmographic
@@ -1322,16 +1395,18 @@ function copilotReply(q) {
     if (/suggest|recommend|next|should|opport|cross.?sell/.test(q)) {
       const topPick = top3Missing[0];
       const fitReason = {
-        Treasury:          `cash flow management at ${c.rev} revenue`,
-        BLOC:              `flexible working capital for a ${c.emp}-person team`,
-        LOC:               `credit access for operational smoothing`,
-        CD:                `low-risk yield on idle deposits`,
-        Payroll:           `payroll processing with ${c.emp} employees`,
-        Card:              `business purchasing and expense control`,
-        'Merchant Services': `revenue capture for ${c.ind} businesses`,
-        'Business Savings': `tiered yield on excess cash`,
+        Treasury:          `a full cash management suite (sweep accounts, payment automation) is well-justified at ${c.rev} in revenue`,
+        BLOC:              `a revolving Business Line of Credit up to $250K provides flexible working capital for a ${c.emp}-person ${c.ind} operation`,
+        LOC:               `a Small Business Line of Credit up to $100K helps smooth seasonal or operational cash flow gaps common in ${c.ind}`,
+        CD:                `a Business Certificate of Deposit locks in a guaranteed fixed return on idle cash — terms from 7 days to 5 years`,
+        Payroll:           `Truist Online Payroll automates tax filing and direct deposit for ${c.emp} employees — run payroll in 3 clicks`,
+        Card:              `the Business Cash Rewards Card earns cash back on every purchase with no annual fee — ideal for everyday business spending`,
+        'Merchant Services': `payment acceptance solutions help capture every transaction for a ${c.ind} business at ${c.rev} in revenue`,
+        'Business Savings':  `the Business Money Market earns a competitive APY with check-writing access — best for balances over $5K`,
       };
-      return `Top cross-sell opportunities for ${fn}: <strong>${top3Missing.join(', ')}</strong>.<br><br>Best immediate fit: <strong>${topPick}</strong> — ${fitReason[topPick] || 'well-matched to this profile'}. With a ${c.prop}% propensity score and ${c.rev} revenue, this is a high-confidence conversation to have.`;
+      const topPickName = PROD_NAMES[topPick] || topPick;
+      const top3Names = top3Missing.map(p => PROD_NAMES[p]||p).join(', ');
+      return `Top cross-sell opportunities for ${fn}: <strong>${top3Names}</strong>.<br><br>Best immediate fit: <strong>${topPickName}</strong> — ${fitReason[topPick] || 'well-matched to this profile'}. With a ${c.prop}% propensity score and ${c.rev} revenue, this is a high-confidence recommendation.`;
     }
 
     // Opener / how to start the call / script
@@ -1371,7 +1446,8 @@ function copilotReply(q) {
     // Peer / benchmark comparison
     if (/peer|benchmark|compar|similar|typical/.test(q)) {
       const peerCount = c.prods.length + 2;
-      return `${c.ind} clients at ${c.rev} revenue typically hold <strong>${peerCount} banking products</strong>. ${fn} has ${c.prods.length} — a gap of ${peerCount - c.prods.length} product(s). The most common missing products for this peer group are <strong>${top3Missing.slice(0,2).join(' and ')}</strong>.`;
+      const peerGapNames = top3Missing.slice(0,2).map(p => PROD_NAMES[p]||p).join(' and ');
+      return `${c.ind} clients at ${c.rev} revenue typically hold <strong>${peerCount} banking products</strong>. ${fn} has ${c.prods.length} — a gap of ${peerCount - c.prods.length} product(s). The most common missing products for this peer group are <strong>${peerGapNames}</strong>.`;
     }
 
     // Outreach approach / method / strategy
@@ -1391,7 +1467,9 @@ function copilotReply(q) {
       const tps = TPS[c.id] || genTPs(c);
       const pctWallet = Math.round((c.prods.length / ALL_PRODS.length) * 100);
       const urgencyFlag = c.health === 'r' ? '🔴 At-risk — contact today.' : c.health === 'a' ? '🟡 Needs attention soon.' : '🟢 Healthy account.';
-      return `<strong>${fn} · ${c.co}</strong>${c.rec ? ` · ${c.rec.charAt(0).toUpperCase() + c.rec.slice(1)} rec` : ''}<br><br>${urgencyFlag}<br><br><strong>Why now:</strong> ${why}<br><br><strong>Opener:</strong> ${opener}<br><br><strong>Talking points:</strong><br>1. ${tps[0]}<br>2. ${tps[1]}<br>3. ${tps[2]}<br><br><strong>Portfolio:</strong> ${c.prods.join(', ')} · ${pctWallet}% wallet share · Top gap: ${top3Missing[0] || 'fully penetrated'}.`;
+      const sumHeldNames = c.prods.map(p => PROD_NAMES[p]||p).join(', ');
+      const sumTopGap = PROD_NAMES[top3Missing[0]] || top3Missing[0] || 'fully penetrated';
+      return `<strong>${fn} · ${c.co}</strong>${c.rec ? ` · ${c.rec.charAt(0).toUpperCase() + c.rec.slice(1)} rec` : ''}<br><br>${urgencyFlag}<br><br><strong>Why now:</strong> ${why}<br><br><strong>Opener:</strong> ${opener}<br><br><strong>Talking points:</strong><br>1. ${tps[0]}<br>2. ${tps[1]}<br>3. ${tps[2]}<br><br><strong>Portfolio:</strong> ${sumHeldNames} · ${pctWallet}% wallet share · Top gap: ${sumTopGap}.`;
     }
 
     // Urgency / red flags / anything I should know
@@ -1418,7 +1496,9 @@ function copilotReply(q) {
 
     // Industry / sector specific questions
     if (/industry|sector|space|type of business|what (kind|type) of/.test(q)) {
-      return `${c.co} operates in <strong>${c.ind}</strong> — ${c.loc}, ${c.emp} employees, ${c.rev} revenue. Typical product mix for ${c.ind} businesses at this revenue tier includes ${c.prods.length + 2} banking products. ${fn} currently holds ${c.prods.length}, with ${top3Missing[0]} and ${top3Missing[1] || 'Business Savings'} as the strongest gaps for this industry.`;
+      const ind0 = PROD_NAMES[top3Missing[0]] || top3Missing[0];
+      const ind1 = PROD_NAMES[top3Missing[1]] || top3Missing[1] || 'Business Money Market';
+      return `${c.co} operates in <strong>${c.ind}</strong> — ${c.loc}, ${c.emp} employees, ${c.rev} revenue. Typical product mix for ${c.ind} businesses at this revenue tier includes ${c.prods.length + 2} banking products. ${fn} currently holds ${c.prods.length}, with <strong>${ind0}</strong> and <strong>${ind1}</strong> as the strongest gaps for this industry profile.`;
     }
 
     // Fallback for client context — synthesize a useful full-picture answer
@@ -1428,7 +1508,9 @@ function copilotReply(q) {
     const recLine = c.rec
       ? `Active <strong>${c.rec}</strong> recommendation: ${why}`
       : `No active recommendation — but propensity is at <strong>${c.prop}%</strong>.`;
-    return `Here's what I know about <strong>${fn}</strong>:<br><br>${recLine}<br><br><strong>Portfolio:</strong> ${c.prods.join(', ')} · ${pctWallet}% wallet share. Top gap: <strong>${top3Missing[0]}</strong>.<br><strong>Last contact:</strong> ${c.lc} · <strong>Propensity:</strong> ${c.prop}% · <strong>Revenue:</strong> ${c.rev} · <strong>Employees:</strong> ${c.emp}.<br><br>${c.notes}`;
+    const heldNamesF = c.prods.map(p => PROD_NAMES[p]||p).join(', ');
+    const topGapNameF = PROD_NAMES[top3Missing[0]] || top3Missing[0];
+    return `Here's what I know about <strong>${fn}</strong>:<br><br>${recLine}<br><br><strong>Portfolio:</strong> ${heldNamesF} · ${pctWallet}% wallet share. Top gap: <strong>${topGapNameF}</strong>.<br><strong>Last contact:</strong> ${c.lc} · <strong>Propensity:</strong> ${c.prop}% · <strong>Revenue:</strong> ${c.rev} · <strong>Employees:</strong> ${c.emp}.<br><br>${c.notes}`;
   }
 
   // ── General / non-client view ────────────────────────────
