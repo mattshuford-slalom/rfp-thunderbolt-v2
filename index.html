@@ -612,6 +612,9 @@ function completedCardHTML(c, info) {
     <div class="ocard-co">${esc(c.co)}</div>
     <div class="ocard-pill-row">${badge(c.rec)}<span class="ocard-time">${esc(c.rt||'')}</span></div>
     <div class="done-row"><span class="${chipClass}">✓ ${outLabel}</span><span class="done-ts">${info.ts || 'Today'}</span></div>
+    <div class="act-row" onclick="event.stopPropagation()" style="margin-top:8px">
+      <button class="btn pri" style="font-size:13px;padding:6px 14px" onclick="viewOutcomeModal(${c.id})">View Outcome</button>
+    </div>
   </div>`;
 }
 
@@ -1674,15 +1677,51 @@ function openModal(type, cid) {
 }
 function closeModal() { document.getElementById('overlay').classList.add('off'); }
 
+function viewOutcomeModal(cid) {
+  const c = D.clients.find(x=>x.id===cid)||D.clients[0];
+  const info = S.completedIds[cid];
+  if (!info) return;
+  const outLabels = {c:'Converted',p:'Pending',d:'Dismissed'};
+  const chipClass = info.out==='c' ? 'done-chip' : info.out==='p' ? 'done-chip pend' : 'done-chip dism';
+  const modal = document.getElementById('modal');
+  const overlay = document.getElementById('overlay');
+  overlay.classList.remove('off');
+  modal.innerHTML = `
+    <div class="mhd"><span class="mttl">📋 Outcome — ${esc(c.co)}</span><button class="mx" onclick="closeModal()">✕</button></div>
+    <div class="mbody">
+      <div class="msec">
+        <div class="mlbl">Outcome</div>
+        <span class="${chipClass}" style="display:inline-block;margin-top:2px">✓ ${outLabels[info.out]||'Logged'}</span>
+      </div>
+      <div class="msec">
+        <div class="mlbl">Contact method</div>
+        <div style="font-size:14px;color:var(--tx);margin-top:2px">${esc(info.method||'—')}</div>
+      </div>
+      <div class="msec">
+        <div class="mlbl">Notes</div>
+        <div style="font-size:14px;color:var(--tx2);margin-top:2px;white-space:pre-wrap">${info.notes ? esc(info.notes) : '<span style="color:var(--tx3)">No notes recorded</span>'}</div>
+      </div>
+      <div class="msec">
+        <div class="mlbl">Logged</div>
+        <div style="font-size:14px;color:var(--tx2);margin-top:2px">${esc(info.ts||'Today')}</div>
+      </div>
+    </div>
+    <div class="mfooter">
+      <button class="btn" onclick="showLogModal(${cid}, null, S.completedIds[${cid}])">Edit outcome</button>
+      <button class="btn pri" onclick="closeModal()">Done</button>
+    </div>`;
+}
+
 function sendEmailAndLog(cid) {
   showToast('\u2709\ufe0f Email sent');
   showLogModal(cid, 'Email');
 }
 
-function showLogModal(cid, defaultMethod) {
+function showLogModal(cid, defaultMethod, prefill) {
   const c = D.clients.find(x=>x.id===cid)||D.clients[0];
   const modal = document.getElementById('modal');
-  let logOut = null;
+  let logOut = prefill ? prefill.out : null;
+  if (prefill && prefill.out) window.logOutM = prefill.out;
   const render = () => {
     modal.innerHTML = `
       <div class="mhd"><span class="mttl">📋 Log outcome — ${esc(c.name)}</span><button class="mx" onclick="closeModal()">✕</button></div>
@@ -1722,10 +1761,16 @@ function showLogModal(cid, defaultMethod) {
     });
   };
   render();
-  // Pre-select method if provided
-  if (defaultMethod) {
+  // Pre-select method if provided (explicit arg takes priority, then prefill)
+  const methodToSet = defaultMethod || (prefill && prefill.method);
+  if (methodToSet) {
     const sel = modal.querySelector('#mlog-method');
-    if (sel) Array.from(sel.options).forEach(o => { o.selected = o.value === defaultMethod; });
+    if (sel) Array.from(sel.options).forEach(o => { o.selected = o.value === methodToSet; });
+  }
+  // Pre-fill notes if editing
+  if (prefill && prefill.notes) {
+    const ta = modal.querySelector('#mlog-notes');
+    if (ta) ta.value = prefill.notes;
   }
 }
 
