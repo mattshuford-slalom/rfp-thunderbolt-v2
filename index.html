@@ -932,78 +932,117 @@ function getConv() {
 }
 
 function getSuggestions() {
-  const c = S.view==='client' ? D.clients.find(x=>x.id===S.cid) : null;
+  const c = S.view === 'client' ? D.clients.find(x => x.id === S.cid) : null;
   const fn = c ? c.name.split(' ')[0] : '';
   const conv = getConv();
-  const asked = new Set(conv.filter(m=>m.r==='usr').map(m=>m.t.toLowerCase()));
+  const asked = new Set(conv.filter(m => m.r === 'usr').map(m => m.t.toLowerCase()));
+
+  // Helper: has the user already asked about a topic?
+  const alreadyAsked = (...patterns) =>
+    [...asked].some(t => patterns.some(p => new RegExp(p).test(t)));
+
   let pool = [];
 
   if (c) {
-    const tabFirst = {
-      rec:  [`What triggered this recommendation?`, `What current products does ${fn} own?`, `Summarize recent touchpoint activity.`],
-      ctx:  [`How long has ${fn} been a client?`, `What industry are they in?`, `What is ${fn}'s annual revenue?`],
-      port: [`What products are missing from the portfolio?`, `What is their wallet share?`, `What should I recommend next?`],
-      log:  [`What outcome should I log?`, `What is the best next step after this call?`, `How do I follow up after a dismissal?`],
-    };
-    const extra = [
-      `What products does ${fn} have?`,
-      `What is ${fn}'s propensity score?`,
-      `What was the last contact with ${fn}?`,
-      `What is ${fn}'s annual revenue?`,
-      `What should I recommend next?`,
-    ];
-    const priority = tabFirst[S.tab] || extra.slice(0,3);
-    pool = [...priority, ...extra.filter(s=>!priority.includes(s))];
-  } else if (S.view==='book') {
+    const hasAskedWhy     = alreadyAsked('why','trigger','signal','reason','rec');
+    const hasAskedProduct = alreadyAsked('product','hold','have','own','currently');
+    const hasAskedOpener  = alreadyAsked('opener','start','begin','call','reach','say','script');
+    const hasAskedTP      = alreadyAsked('talk','point','discuss','cover','agenda');
+    const hasAskedProp    = alreadyAsked('propensity','likelihood','score','chance');
+    const hasAskedRev     = alreadyAsked('revenue','size','emp','employ');
+    const hasAskedContact = alreadyAsked('contact','last','when','touch','outreach');
+    const hasAskedHealth  = alreadyAsked('health','risk','status','churn');
+    const hasAskedWallet  = alreadyAsked('wallet','share','penetrat','miss');
+    const hasAskedLog     = alreadyAsked('log','outcome','convert','after','next step');
+
+    // Stage-aware pool: surface what hasn't been covered yet, in logical order
+    const progressive = [
+      !hasAskedWhy     && `Why was this recommendation triggered?`,
+      !hasAskedProduct && `What products does ${fn} currently hold?`,
+      !hasAskedOpener  && `What's the best call opener for ${fn}?`,
+      !hasAskedTP      && `What are the top talking points?`,
+      !hasAskedProp    && `How strong is ${fn}'s propensity score?`,
+      !hasAskedWallet  && `What is ${fn}'s wallet share?`,
+      !hasAskedRev     && `What's ${fn}'s revenue and team size?`,
+      !hasAskedContact && `When was ${fn} last contacted?`,
+      !hasAskedHealth  && `How healthy is this account?`,
+      !hasAskedLog     && `How should I log an outcome after this call?`,
+    ].filter(Boolean);
+
+    // Tab-specific starters shown when conversation is fresh
+    if (asked.size === 0) {
+      const tabStarters = {
+        rec:  [`Why was this recommendation triggered?`, `What's the best call opener for ${fn}?`, `What are the top talking points?`],
+        ctx:  [`Summarize ${fn}'s background`, `How healthy is this account?`, `What products is ${fn} missing?`],
+        port: [`What is ${fn}'s wallet share?`, `What's the next best product to introduce?`, `How does their mix compare to peers?`],
+        log:  [`How should I log a conversion?`, `What do I do if they declined?`, `What's the best follow-up after this call?`],
+      };
+      pool = tabStarters[S.tab] || tabStarters.rec;
+    } else {
+      pool = progressive;
+    }
+
+    // After an assistant reply, inject contextual drill-downs at the front
+    const lastAst = [...conv].reverse().find(m => m.r === 'ast');
+    if (lastAst) {
+      const r = lastAst.t.toLowerCase();
+      const fups = [];
+      if (/trigger|signal|wire|intent|browse|payroll up|cd matur/.test(r) && !hasAskedOpener)
+        fups.push(`What's the best call opener for ${fn}?`);
+      if (/opener|say|reach out/.test(r) && !hasAskedTP)
+        fups.push(`What are the top talking points?`);
+      if (/talking point|discuss/.test(r) && !hasAskedLog)
+        fups.push(`How should I log an outcome after this call?`);
+      if (/product|hold|missing|cross/.test(r) && !hasAskedWallet)
+        fups.push(`What is ${fn}'s wallet share?`);
+      if (/wallet|share|penetrat/.test(r))
+        fups.push(`What's the next best product to introduce?`);
+      if (/propensity|%/.test(r) && !hasAskedWhy)
+        fups.push(`Why was this recommendation triggered?`);
+      if (/revenue|employee|industry/.test(r) && !hasAskedProduct)
+        fups.push(`What products does ${fn} currently hold?`);
+      if (/last contact|days ago|overdue|threshold/.test(r))
+        fups.push(`What's the best outreach approach right now?`);
+      if (/at.risk|declining|overdue/.test(r) && !hasAskedOpener)
+        fups.push(`What's the best call opener for ${fn}?`);
+      if (/dismissed|dismissed|declined/.test(r))
+        fups.push(`What's the best follow-up after a dismissal?`);
+      if (fups.length) pool = [...fups, ...pool.filter(s => !fups.includes(s))];
+    }
+
+  } else if (S.view === 'book') {
     pool = [
-      'Who has not been contacted in 30 or more days?',
-      'Which clients are at risk?',
-      'Who has the highest propensity score?',
-      'Show me clients with open recommendations',
-      'Which clients are Tier I?',
-      'Who should I prioritise this week?',
+      `Who hasn't been contacted in 30+ days?`,
+      'Which clients are at risk of churning?',
+      'Who has the highest propensity score today?',
+      'Which clients have an open recommendation?',
+      'Which Tier I clients need attention?',
+      'Who should I prioritize this week?',
+      `How many clients are in my book?`,
+      'What is my portfolio coverage rate?',
     ];
-  } else if (S.view==='activity') {
+  } else if (S.view === 'activity') {
     pool = [
-      'How many conversions this month?',
+      'How many conversions have I logged this month?',
       'Which recommendations were dismissed?',
-      'What is still pending?',
-      'Show me recent wins',
-      'Which clients have pending outcomes?',
+      'What outcomes are still pending?',
+      'What were my most recent wins?',
+      'Which clients still need a follow-up?',
     ];
   } else {
+    // Dashboard
     pool = [
       'Who should I call first today?',
       'Which clients have a CD maturing soon?',
       'Are any nudges overdue?',
-      'What is my portfolio coverage?',
-      'Who has the highest propensity score?',
+      'What is my portfolio coverage rate?',
+      'Who has the highest propensity score today?',
+      'Which clients are at risk?',
+      `What's on my outreach list today?`,
     ];
   }
 
-  // After a reply, prepend follow-ups relevant to what was said
-  const lastAst = [...conv].reverse().find(m=>m.r==='ast');
-  if (lastAst) {
-    const r = lastAst.t.toLowerCase();
-    const fups = [];
-    if (/checking|treasury|bloc|loc|cd|payroll|card|holds|products/.test(r))
-      fups.push('What products are missing from the portfolio?', 'What should I recommend next?');
-    if (/propensity|score|%/.test(r))
-      fups.push('What recent signals triggered this recommendation?', 'What are the top talking points?');
-    if (/opener|call|reach out/.test(r))
-      fups.push('What are the top talking points?', 'What outcome should I log?');
-    if (/revenue|employees|industry/.test(r))
-      fups.push('What products are missing from the portfolio?', 'What is their wallet share?');
-    if (/last contact|days ago|coverage/.test(r))
-      fups.push('What is the recommended outreach approach?', 'What are the top talking points?');
-    if (/nudge|overdue|stalled|14 day/.test(r))
-      fups.push('Who should I call first today?', 'What are the top talking points?');
-    if (/recommend|cross-sell|opportunit/.test(r))
-      fups.push('What is the best next step after this call?', 'What outcome should I log?');
-    if (fups.length) pool = [...fups, ...pool.filter(s=>!fups.includes(s))];
-  }
-
-  return pool.filter(s=>!asked.has(s.toLowerCase())).slice(0,3);
+  return pool.filter(s => !asked.has(s.toLowerCase())).slice(0, 3);
 }
 
 function refreshSuggestions() {
@@ -1077,24 +1116,191 @@ function sendCopilot() {
 }
 
 function copilotReply(q) {
+  const qRaw = q;
   q = q.toLowerCase();
-  const c = S.view==='client' ? D.clients.find(x=>x.id===S.cid) : null;
+  const c = S.view === 'client' ? D.clients.find(x => x.id === S.cid) : null;
+  const conv = getConv();
+  const lastAst = [...conv].reverse().find(m => m.r === 'ast');
+  const lastAstText = lastAst ? lastAst.t.toLowerCase() : '';
+  const ALL_PRODS = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings'];
+
   if (c) {
-    if (/product|hold|have|currently/.test(q)) return `${c.name} currently holds: <strong>${c.prods.join(', ')}</strong>. No ${['Treasury','BLOC','LOC'].filter(p=>!c.prods.includes(p)).slice(0,2).join(' or ')} yet — both are strong cross-sell opportunities.`;
-    if (/revenue|size|big|large/.test(q)) return `${c.co} generates approximately <strong>${c.rev}</strong> in annual revenue with <strong>${c.emp} employees</strong>. Industry: ${c.ind}.`;
-    if (/propensity|likelihood|score|chance/.test(q)) return `${c.name} has a <strong>${c.prop}% propensity score</strong> for next-product adoption, based on transaction behavior and peer benchmarks.`;
-    if (/contact|last|when|touch/.test(q)) return `Last contact with ${c.name} was <strong>${c.lc}</strong>. ${c.lcd>7?'This is approaching the coverage threshold — outreach recommended soon.':'Coverage looks current.'}`;
-    if (/note|background|context|tell|about/.test(q)) return c.notes;
-    if (/suggest|recommend|next|should|opport/.test(q)) { const sugg=['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services'].filter(p=>!c.prods.includes(p)).slice(0,3); return `Top recommendations for ${c.name}: <strong>${sugg.join(', ')}</strong>. Based on wallet share analysis and peer benchmarking.`; }
-    return `${c.name} · ${c.tier} · ${c.ind} · ${c.rev} revenue · ${c.prop}% propensity. Last contact: ${c.lc}. Is there something specific I can help with?`;
+    const missing = ALL_PRODS.filter(p => !c.prods.includes(p));
+    const top3Missing = missing.slice(0, 3);
+    const fn = c.name.split(' ')[0];
+
+    // Why / trigger / signal / recommendation rationale
+    if (/why|trigger|signal|reason|rec\b|recommend/.test(q)) {
+      const why = WHY[c.id] || genWhy(c);
+      const recDetail = {
+        nudge:      `With ${c.lcd} days since last RM contact and a ${c.prop}% propensity score, the engagement window is open. Waiting longer increases churn risk.`,
+        propensity: `Their ${c.prop}% propensity ranks ${fn} in the top quartile for ${c.ind} clients at ${c.rev} revenue. Transaction patterns confirm readiness for a new product conversation.`,
+        rules:      `A business rule fired based on account profile — either a maturing product, utilization threshold, or product gap vs. peer benchmarks for ${c.ind}.`,
+        rt:         `This is a live intent signal. Real-time triggers convert at 2–3× higher rates than scheduled outreach — acting within the next few hours is strongly recommended.`,
+      };
+      return `${why}<br><br>${recDetail[c.rec] || ''}`;
+    }
+
+    // Products held + gap analysis
+    if (/product|hold|have|own|currently/.test(q)) {
+      const pctWallet = Math.round((c.prods.length / ALL_PRODS.length) * 100);
+      return `${fn} currently holds <strong>${c.prods.join(', ')}</strong> — ${c.prods.length} of 8 available products (<strong>${pctWallet}% wallet share</strong>). Strongest gaps for a ${c.ind} business at ${c.rev}: <strong>${top3Missing.join(', ')}</strong>. Peer benchmarks show similar clients average ${c.prods.length + 2} products.`;
+    }
+
+    // Wallet share / penetration
+    if (/wallet|share|penetrat|miss/.test(q)) {
+      const pctWallet = Math.round((c.prods.length / ALL_PRODS.length) * 100);
+      return `${fn}'s wallet share is <strong>${pctWallet}%</strong> (${c.prods.length} of 8 products). Comparable ${c.ind} clients at ${c.rev} typically hold ${c.prods.length + 2} products. The highest-value gaps are <strong>${top3Missing[0]}</strong>${top3Missing[1] ? ' and <strong>' + top3Missing[1] + '</strong>' : ''}, based on revenue profile and transaction patterns.`;
+    }
+
+    // Revenue / size / firmographic
+    if (/revenue|size|big|large|emp|team|headcount/.test(q)) {
+      const peerProds = c.prods.length + 2;
+      return `${c.co} generates approximately <strong>${c.rev}</strong> in annual revenue with <strong>${c.emp} employees</strong>. Industry: <strong>${c.ind}</strong>, Location: ${c.loc}, Client since ${c.since}. At this revenue level, comparable ${c.ind} companies typically hold ${peerProds} banking products — ${fn} currently has ${c.prods.length}.`;
+    }
+
+    // Propensity score context
+    if (/propensity|likelihood|score|chance/.test(q)) {
+      const tier = c.prop >= 75 ? 'top decile — act now, this window is narrow'
+                 : c.prop >= 60 ? 'top quartile — strong signal, good time to reach out'
+                 : c.prop >= 45 ? 'above average for this segment'
+                 : 'moderate signal — prioritize after higher-propensity clients';
+      return `${fn}'s propensity score is <strong>${c.prop}%</strong> (${tier}). Score is driven by ${c.prods.length} active product(s), transaction velocity over the last 90 days, peer benchmarks for ${c.ind} at ${c.rev} revenue, and ${c.lcd > 0 ? `${c.lcd}-day contact gap` : 'recent RM engagement'}.`;
+    }
+
+    // Last contact / cadence
+    if (/contact|last|when|touch|outreach|cadence/.test(q)) {
+      const urgency = c.lcd >= 21 ? `This significantly exceeds the 10-day cadence target — immediate outreach required.`
+                    : c.lcd >= 10 ? `This is at the coverage threshold. Schedule a touchpoint today to stay current.`
+                    : c.lcd >= 5  ? `Getting close to the 10-day cadence target. Plan a contact within the next few days.`
+                    : `Coverage looks current.`;
+      const recNote = c.rec ? ` There's also an active <strong>${c.rec}</strong> recommendation requiring a follow-up action.` : '';
+      return `Last RM contact with ${fn} was <strong>${c.lc}</strong> (${c.lcd} day${c.lcd === 1 ? '' : 's'} ago). ${urgency}${recNote}`;
+    }
+
+    // Notes / background / history
+    if (/note|background|context|tell me about|history|summary|summarize/.test(q)) {
+      return `${c.notes}<br><br><strong>Key facts:</strong> ${c.tier} client · ${c.ind} · ${c.rev} revenue · ${c.emp} employees · ${c.loc} · Client since ${c.since}.`;
+    }
+
+    // Suggest / next product / recommend
+    if (/suggest|recommend|next|should|opport|cross.?sell/.test(q)) {
+      const topPick = top3Missing[0];
+      const fitReason = {
+        Treasury:          `cash flow management at ${c.rev} revenue`,
+        BLOC:              `flexible working capital for a ${c.emp}-person team`,
+        LOC:               `credit access for operational smoothing`,
+        CD:                `low-risk yield on idle deposits`,
+        Payroll:           `payroll processing with ${c.emp} employees`,
+        Card:              `business purchasing and expense control`,
+        'Merchant Services': `revenue capture for ${c.ind} businesses`,
+        'Business Savings': `tiered yield on excess cash`,
+      };
+      return `Top cross-sell opportunities for ${fn}: <strong>${top3Missing.join(', ')}</strong>.<br><br>Best immediate fit: <strong>${topPick}</strong> — ${fitReason[topPick] || 'well-matched to this profile'}. With a ${c.prop}% propensity score and ${c.rev} revenue, this is a high-confidence conversation to have.`;
+    }
+
+    // Opener / how to start the call / script
+    if (/opener|start|begin|open|call|reach|say|script|how to approach/.test(q)) {
+      const opener = OPENER[c.id] || genOpener(c);
+      const tps = TPS[c.id] || genTPs(c);
+      return `Suggested opener: ${opener}<br><br>Lead with: <em>${tps[0]}</em><br><br>Keep it under 30 seconds — goal is to earn the next 5 minutes.`;
+    }
+
+    // Talking points
+    if (/talk|point|discuss|cover|agenda|prep/.test(q)) {
+      const tps = TPS[c.id] || genTPs(c);
+      return `Talking points for ${fn}:<br>1. ${tps[0]}<br>2. ${tps[1]}<br>3. ${tps[2]}<br><br>If they push back, acknowledge and pivot to the next point. Log the outcome when you're done.`;
+    }
+
+    // Health / risk / churn
+    if (/health|risk|status|churn|at.?risk|danger/.test(q)) {
+      const healthMsg = {
+        r: `<strong>At-risk.</strong> ${fn} hasn't been contacted in ${c.lcd} days and has an active ${c.rec || 'alert'}. Without immediate outreach, churn probability is elevated. Prioritize this call today.`,
+        a: `<strong>Needs attention.</strong> ${fn}'s engagement is declining. Contact within the next 3–5 days is recommended to maintain the relationship and act on the open recommendation.`,
+        g: `<strong>Healthy.</strong> ${fn}'s account is in good standing. Maintain the regular 10–14 day check-in cadence and look for cross-sell opportunities — propensity is at ${c.prop}%.`,
+        x: `<strong>Inactive / no signal.</strong> ${fn} has no current health indicator. They may be newly onboarded or have low engagement. A check-in call is warranted.`,
+      };
+      return healthMsg[c.health] || `Health status unavailable for ${fn}.`;
+    }
+
+    // Outcome logging guidance
+    if (/log|outcome|convert|result|after|next step|follow.?up/.test(q)) {
+      return `After speaking with ${fn}, log the outcome using the <strong>Log Outcome</strong> section below:<br><br>• <strong>Converted</strong> — product accepted or meeting confirmed. Note what was agreed.<br>• <strong>Pending</strong> — client is interested but not ready. Set a specific follow-up date.<br>• <strong>Dismissed</strong> — client declined. Note their reason — this improves future propensity scoring and resurfaces them in 30–60 days when signals strengthen.`;
+    }
+
+    // After dismissal
+    if (/dismiss|decline|said no|not interest|reject/.test(q)) {
+      return `Log as <strong>Dismissed</strong> and capture their reason in the notes field. Common patterns worth noting: "not the right time," "already working with another provider," or budget constraints. The model will resurface ${fn} when new signals emerge — typically in 30–60 days, or sooner if a real-time trigger fires.`;
+    }
+
+    // Peer / benchmark comparison
+    if (/peer|benchmark|compar|similar|typical/.test(q)) {
+      const peerCount = c.prods.length + 2;
+      return `${c.ind} clients at ${c.rev} revenue typically hold <strong>${peerCount} banking products</strong>. ${fn} has ${c.prods.length} — a gap of ${peerCount - c.prods.length} product(s). The most common missing products for this peer group are <strong>${top3Missing.slice(0,2).join(' and ')}</strong>.`;
+    }
+
+    // Outreach approach (general)
+    if (/approach|method|way|how should i|strategy/.test(q)) {
+      const method = c.rec === 'rt' ? 'Phone call — real-time signals require immediate, personal outreach for highest conversion.'
+                   : c.lcd >= 14   ? 'Phone call — re-engagement after a long gap is more effective by voice than email.'
+                   : c.rec === 'propensity' ? 'Either phone or email — propensity signals are warm but not urgent. A brief personalized email can open the door.'
+                   : 'Phone call or email based on your prior relationship with this client.';
+      return `Recommended outreach method for ${fn}: <strong>${method}</strong><br><br>Best time to reach ${c.ind} businesses is typically mid-morning (9–11am) or early afternoon (1–3pm) on Tuesday–Thursday.`;
+    }
+
+    // Fallback — context-aware summary using current tab + prior reply
+    const tabCtx = {
+      rec:  `I'm looking at the active <strong>${c.rec || 'recommendation'}</strong> for ${fn}. Trigger: ${WHY[c.id] || `${c.prop}% propensity, ${c.lcd} days since last contact`}. Try asking about the opener, talking points, or wallet share.`,
+      ctx:  `Reviewing <strong>${fn}'s context</strong> — ${c.tier} · ${c.ind} · ${c.rev} revenue · ${c.emp} employees · ${c.loc}. Client since ${c.since}. What would you like to dig into?`,
+      port: `<strong>${fn}'s portfolio</strong>: holds ${c.prods.join(', ')} (${c.prods.length} products, ${Math.round(c.prods.length/8*100)}% wallet share). Top gaps: ${top3Missing.join(', ')}. What would you like to know?`,
+      log:  `Ready to log an outcome for ${fn}. Use Converted, Pending, or Dismissed — each affects future recommendation timing and propensity scoring.`,
+    };
+    return tabCtx[S.tab] || `${fn} · ${c.tier} · ${c.ind} · ${c.rev} · ${c.prop}% propensity · Last contact: ${c.lc}. Ask about products, talking points, the opener, or how to log an outcome.`;
   }
-  if (/cd|matur/.test(q)) return `Harmon & Diaz LLC has a CD maturing in 28 days. No renewal outreach has been logged — they're on today's list.`;
-  if (/nudge|overdue|miss/.test(q)) return `2 nudges are currently overdue: <strong>Maria Chen</strong> (cash mgmt, 48h no contact) and <strong>Ridgeline HVAC</strong> (proposal stalled, 14 days).`;
-  if (/coverage|portfolio|percent/.test(q)) return `Portfolio coverage is at <strong>68%</strong>. Meza Landscaping is the most at-risk at 38 days without contact.`;
-  if (/propensity|highest|best/.test(q)) return `Highest propensity clients: <strong>Brightwell Foods (82%)</strong>, Maria Chen (72%), Blue Heron Logistics (65%).`;
-  if (/priority|who|first|start/.test(q)) return `Start with <strong>Maria Chen</strong> — active nudge, 72% propensity, and a clear $185K signal. Then follow up with Ridgeline HVAC.`;
-  if (/book|how many|total|client/.test(q)) return `Your book has <strong>${D.clients.length} clients</strong>: ${D.clients.filter(c=>c.health==='r').length} at-risk, ${D.clients.filter(c=>c.health==='a').length} need attention, ${D.clients.filter(c=>c.health==='g').length} healthy.`;
-  return `I can help with any client in your book, today's recommendations, or portfolio insights. Try asking about a specific client or "who should I call first?"`;
+
+  // ── General / non-client view ────────────────────────────
+  if (/cd|matur/.test(q))
+    return `<strong>Harmon & Diaz LLC</strong> has a CD maturing in 28 days with no renewal outreach logged. They're rate-sensitive — reach out before they shop competing rates. Recommendation type: Rules-based. They're on today's outreach list.`;
+
+  if (/nudge|overdue|stall/.test(q))
+    return `Two nudges are currently active: <strong>Maria Chen</strong> (cash mgmt signal, $185K deposit, 48h no contact, 72% propensity) and <strong>Ridgeline HVAC</strong> (equipment financing proposal stalled at 14 days — at risk of going cold). Both need contact today.`;
+
+  if (/coverage|percent|rate/.test(q)) {
+    const noContact = D.clients.filter(c => c.lcd >= 30).length;
+    return `Portfolio coverage is at <strong>68%</strong>. <strong>${noContact} clients</strong> have had no contact in 30+ days. Meza Landscaping is the highest churn risk at 38 days with a single product. At-risk count: ${D.clients.filter(c=>c.health==='r').length}.`;
+  }
+
+  if (/propensity|highest|best score/.test(q))
+    return `Top propensity clients today: <strong>Brightwell Foods (82%)</strong>, Maria Chen (72%), Blue Heron Logistics (65%), Palo Verde Dental (55%). All four have open recommendations — Brightwell Foods has the highest score but no active rec, making it an opportunistic call.`;
+
+  if (/priority|who first|start|begin|today|call/.test(q))
+    return `Priority outreach today: <strong>1. Maria Chen</strong> — active nudge, $185K signal, 72% propensity, 48h no contact. <strong>2. Ridgeline HVAC</strong> — proposal stalled 14 days, risk of losing deal. <strong>3. Harmon & Diaz</strong> — CD maturing in 28 days, no renewal outreach yet. <strong>4. Blue Heron Logistics</strong> — propensity triggered, payroll up 34%.`;
+
+  if (/book|how many|total|all client/.test(q)) {
+    const atRisk = D.clients.filter(c => c.health === 'r').length;
+    const needAttn = D.clients.filter(c => c.health === 'a').length;
+    const healthy = D.clients.filter(c => c.health === 'g').length;
+    const openRecs = D.clients.filter(c => c.rec).length;
+    return `Your book has <strong>${D.clients.length} total clients</strong>: ${atRisk} at-risk, ${needAttn} need attention, ${healthy} healthy. <strong>${openRecs} clients</strong> have open recommendations today. Portfolio coverage: 68%.`;
+  }
+
+  if (/at.?risk|churn|danger/.test(q))
+    return `At-risk clients: <strong>Maria Chen</strong> (nudge active, 48h no contact) and <strong>Ridgeline HVAC</strong> (proposal stalled, 14 days). Both need outreach today. Use the <em>Needs contact</em> filter in Clients view for the full at-risk list — ${D.clients.filter(c=>c.lcd>=28).length} clients have had no contact in 28+ days.`;
+
+  if (/tier i|tier 1|top|premium/.test(q))
+    return `Your Tier I clients include Maria Chen, Palo Verde Dental, Brightwell Foods, and Meza Landscaping. Tier I accounts should be contacted at least every 7 days. Of these, Meza Landscaping is the most overdue at 38 days.`;
+
+  if (/activity|log|outcome|conversion|win/.test(q)) {
+    const conv2 = D.activity.filter(a => a.out === 'c').length;
+    const pend = D.activity.filter(a => a.out === 'p').length;
+    const dism = D.activity.filter(a => a.out === 'd').length;
+    return `Activity this period: <strong>${conv2} conversions</strong>, ${pend} pending, ${dism} dismissed. Most recent win: <strong>Brightwell Foods</strong> — Treasury management opened (propensity recommendation). Last pending: <strong>Palo Verde Dental</strong> — terms sheet sent for loan inquiry.`;
+  }
+
+  if (/outreach|list|today|dashboard/.test(q))
+    return `Today's outreach list has <strong>${D.clients.filter(c=>c.rec).slice(0,8).length} clients</strong>: includes nudges for Maria Chen and Ridgeline HVAC, a propensity rec for Blue Heron Logistics, a rules-based alert for Harmon & Diaz, and a real-time signal for Palo Verde Dental.`;
+
+  return `I can help with client details, today's recommendations, portfolio insights, or activity summaries. Try asking "Who should I call first today?" or navigate to a client profile for specific guidance.`;
 }
 
 /* ============================================================
