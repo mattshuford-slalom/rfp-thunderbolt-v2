@@ -835,7 +835,7 @@ function pbal(cid, prod) {
 const PSTATUS = { CD:'Matures 28d', Treasury:'Full suite', Payroll:'Processing', BLOC:'Active', LOC:'Active', Checking:'Primary', Card:'Active', 'Merchant Services':'Active', 'Business Savings':'Active' };
 function tPort(c) {
   const topMissing = rankMissingProds(c).slice(0, 3);
-  const fn = c.name.split(' ')[0];
+  const fn = c.co;
   const prodMeta = {
     Treasury:'cash management suite', Payroll:'automated payroll', BLOC:'revolving credit',
     LOC:'revolving credit', CD:'fixed-term deposit', Card:'cash back rewards',
@@ -1049,7 +1049,7 @@ function getConv() {
 
 function getSuggestions() {
   const c = S.view === 'client' ? D.clients.find(x => x.id === S.cid) : null;
-  const fn = c ? c.name.split(' ')[0] : '';
+  const fn = c ? c.co : '';
   const conv = getConv();
   const asked = new Set(conv.filter(m => m.r === 'usr').map(m => m.t.toLowerCase()));
 
@@ -1365,7 +1365,7 @@ function copilotReply(q) {
   if (c) {
     const missing = rankMissingProds(c);
     const top3Missing = missing.slice(0, 3);
-    const fn = c.name.split(' ')[0];
+    const fn = c.co;
 
     // Why / trigger / signal / recommendation rationale
     if (/why|trigger|signal|reason|rec\b|recommend/.test(q)) {
@@ -1568,21 +1568,21 @@ function copilotReply(q) {
   }
 
   if (/cd|matur/.test(q))
-    return `<strong>Harmon & Diaz LLC</strong> has a CD maturing in 28 days with no renewal outreach logged. They're rate-sensitive — reach out before they shop competing rates. Recommendation type: Rules-based. They're on today's outreach list.`;
+    return `<strong>Harmon Legal Group</strong> has a CD maturing in 28 days with no renewal outreach logged. They're rate-sensitive — reach out before they shop competing rates. Recommendation type: Rules-based. They're on today's outreach list.`;
 
   if (/nudge|overdue|stall/.test(q))
-    return `Two Nudges are currently active: <strong>Maria Chen</strong> (cash mgmt signal, $185K deposit, 48h no contact, 72% propensity) and <strong>Ridgeline HVAC</strong> (equipment financing proposal stalled at 14 days — at risk of going cold). Both need contact today.`;
+    return `Two Nudges are currently active: <strong>Palo Verde Catering</strong> (cash mgmt signal, $185K deposit, 48h no contact, 72% propensity) and <strong>Ridgeline Services</strong> (equipment financing proposal stalled at 14 days — at risk of going cold). Both need contact today.`;
 
   if (/coverage|percent|rate/.test(q)) {
     const noContact = D.clients.filter(c => c.lcd >= 30).length;
-    return `Portfolio coverage is at <strong>68%</strong>. <strong>${noContact} clients</strong> have had no contact in 30+ days. Meza Landscaping is the highest churn risk at 38 days with a single product. At-risk count: ${D.clients.filter(c=>c.health==='r').length}.`;
+    return `Portfolio coverage is at <strong>68%</strong>. <strong>${noContact} clients</strong> have had no contact in 30+ days. Meza Group is the highest churn risk at 38 days with a single product. At-risk count: ${D.clients.filter(c=>c.health==='r').length}.`;
   }
 
   if (/propensity|highest|best score/.test(q))
-    return `Top propensity clients today: <strong>Brightwell Foods (82%)</strong>, Maria Chen (72%), Blue Heron Logistics (65%), Palo Verde Dental (55%). All four have open recommendations — Brightwell Foods has the highest score but no active rec, making it an opportunistic call.`;
+    return `Top propensity clients today: <strong>Brightwell Inc. (82%)</strong>, Palo Verde Catering (72%), Blue Heron LLC (65%), Palo Verde Health (55%). All four have open recommendations — Brightwell Inc. has the highest score but no active rec, making it an opportunistic call.`;
 
   if (/priority|who first|start|begin|today|call|morning|plan my/.test(q))
-    return `Priority outreach today: <strong>1. Maria Chen</strong> — active Nudge, $185K signal, 72% propensity, 48h no contact. <strong>2. Ridgeline HVAC</strong> — proposal stalled 14 days, risk of losing deal. <strong>3. Harmon & Diaz</strong> — CD maturing in 28 days, Referral not yet actioned. <strong>4. Blue Heron Logistics</strong> — Offer triggered, payroll up 34%.`;
+    return `Priority outreach today: <strong>1. Palo Verde Catering</strong> — active Nudge, $185K signal, 72% propensity, 48h no contact. <strong>2. Ridgeline Services</strong> — proposal stalled 14 days, risk of losing deal. <strong>3. Harmon Legal Group</strong> — CD maturing in 28 days, Referral not yet actioned. <strong>4. Blue Heron LLC</strong> — Offer triggered, payroll up 34%.`;
 
   if (/book|how many|total|all client/.test(q)) {
     const atRisk = D.clients.filter(c => c.health === 'r').length;
@@ -1593,43 +1593,43 @@ function copilotReply(q) {
   }
 
   if (/at.?risk|churn|danger/.test(q))
-    return `At-risk clients: <strong>Maria Chen</strong> (nudge active, 48h no contact) and <strong>Ridgeline HVAC</strong> (proposal stalled, 14 days). Both need outreach today. Use the <em>Needs contact</em> filter in Clients view for the full at-risk list — ${D.clients.filter(c=>c.lcd>=28).length} clients have had no contact in 28+ days.`;
+    return `At-risk clients: <strong>Palo Verde Catering</strong> (nudge active, 48h no contact) and <strong>Ridgeline Services</strong> (proposal stalled, 14 days). Both need outreach today. Use the <em>Needs contact</em> filter in Clients view for the full at-risk list — ${D.clients.filter(c=>c.lcd>=28).length} clients have had no contact in 28+ days.`;
 
   if (/tier i|tier 1|top|premium/.test(q))
-    return `Your Tier I clients include Maria Chen, Palo Verde Dental, Brightwell Foods, and Meza Landscaping. Tier I accounts should be contacted at least every 7 days. Of these, Meza Landscaping is the most overdue at 38 days.`;
+    return `Your Tier I clients include Palo Verde Catering, Palo Verde Health, Brightwell Inc., and Meza Group. Tier I accounts should be contacted at least every 7 days. Of these, Meza Group is the most overdue at 38 days.`;
 
   if (/activity|log|outcome|conversion|win/.test(q)) {
     const conv2 = D.activity.filter(a => a.out === 'c').length;
     const pend = D.activity.filter(a => a.out === 'p').length;
     const dism = D.activity.filter(a => a.out === 'd').length;
-    return `Activity this period: <strong>${conv2} conversions</strong>, ${pend} pending, ${dism} dismissed. Most recent win: <strong>Brightwell Foods</strong> — Treasury offer accepted (Offer recommendation). Last pending: <strong>Palo Verde Dental</strong> — Advice acted on, terms sheet sent for loan inquiry.`;
+    return `Activity this period: <strong>${conv2} conversions</strong>, ${pend} pending, ${dism} dismissed. Most recent win: <strong>Brightwell Inc.</strong> — Treasury offer accepted (Offer recommendation). Last pending: <strong>Palo Verde Health</strong> — Advice acted on, terms sheet sent for loan inquiry.`;
   }
 
   if (/outreach|list|today|dashboard/.test(q))
-return `Today's outreach list has <strong>${D.clients.filter(c=>c.rec).slice(0,8).length} clients</strong>: Nudges for Maria Chen and Ridgeline HVAC, an Offer for Blue Heron Logistics, a Referral alert for Harmon & Diaz, and an Advice alert for Palo Verde Dental.`;
+return `Today's outreach list has <strong>${D.clients.filter(c=>c.rec).slice(0,8).length} clients</strong>: Nudges for Palo Verde Catering and Ridgeline Services, an Offer for Blue Heron LLC, a Referral alert for Harmon Legal Group, and an Advice alert for Palo Verde Health.`;
 
   if (/summary|overview|brief|how am i|doing|snapshot|what's (going on|happening|my)|catch me up|morning|help/.test(q)) {
     const atRisk = D.clients.filter(c => c.health === 'r').length;
     const noContact = D.clients.filter(c => c.lcd >= 30).length;
     const openRecs = D.clients.filter(c => c.rec).length;
     const conv2 = D.activity.filter(a => a.out === 'c').length;
-    return `Here's your snapshot for today:<br><br><strong>Outreach list:</strong> ${openRecs} clients with open recommendations — top priority is <strong>Maria Chen</strong> (nudge, $185K signal) and <strong>Ridgeline HVAC</strong> (proposal stalling).<br><br><strong>Book health:</strong> ${atRisk} at-risk, ${noContact} with no contact in 30+ days, 68% coverage rate.<br><br><strong>Activity:</strong> ${conv2} conversions logged this month. <strong>Palo Verde Dental</strong> and <strong>Irongate Construction</strong> have pending outcomes awaiting follow-up.<br><br><strong>Highest propensity:</strong> Brightwell Foods (82%), Maria Chen (72%), Blue Heron Logistics (65%).`;
+    return `Here's your snapshot for today:<br><br><strong>Outreach list:</strong> ${openRecs} clients with open recommendations — top priority is <strong>Palo Verde Catering</strong> (nudge, $185K signal) and <strong>Ridgeline Services</strong> (proposal stalling).<br><br><strong>Book health:</strong> ${atRisk} at-risk, ${noContact} with no contact in 30+ days, 68% coverage rate.<br><br><strong>Activity:</strong> ${conv2} conversions logged this month. <strong>Palo Verde Health</strong> and <strong>Irongate Construction</strong> have pending outcomes awaiting follow-up.<br><br><strong>Highest propensity:</strong> Brightwell Inc. (82%), Palo Verde Catering (72%), Blue Heron LLC (65%).`;
   }
 
   if (/product|treasury|bloc|loc|cd|payroll|card|merchant|saving/.test(q)) {
     const recClients = D.clients.filter(c => c.rec).slice(0,4);
-    return `Across today's outreach list, the most common product opportunities are: <strong>Treasury</strong> (Brightwell Foods, Blue Heron), <strong>LOC / BLOC</strong> (Ridgeline HVAC, Palo Verde Dental), and <strong>CD renewal</strong> (Harmon & Diaz). Navigate to a client profile to see their specific product gap and wallet share.`;
+    return `Across today's outreach list, the most common product opportunities are: <strong>Treasury</strong> (Brightwell Inc., Blue Heron), <strong>LOC / BLOC</strong> (Ridgeline Services, Palo Verde Health), and <strong>CD renewal</strong> (Harmon Legal Group). Navigate to a client profile to see their specific product gap and wallet share.`;
   }
 
   if (/recommend|rec\b|suggestion|who (to|should) call|what (rec|action)/.test(q))
-    return `Open recommendations today: <strong>Maria Chen</strong> (Nudge — cash mgmt), <strong>Ridgeline HVAC</strong> (Nudge — stalled proposal), <strong>Blue Heron Logistics</strong> (Offer — payroll growth), <strong>Harmon & Diaz</strong> (Referral — CD maturing), <strong>Palo Verde Dental</strong> (Advice — web intent). Click any client on the dashboard to see the full brief.`;
+    return `Open recommendations today: <strong>Palo Verde Catering</strong> (Nudge — cash mgmt), <strong>Ridgeline Services</strong> (Nudge — stalled proposal), <strong>Blue Heron LLC</strong> (Offer — payroll growth), <strong>Harmon Legal Group</strong> (Referral — CD maturing), <strong>Palo Verde Health</strong> (Advice — web intent). Click any client on the dashboard to see the full brief.`;
 
   // Smart general fallback — synthesize a useful book snapshot rather than a dead end
   {
     const atRisk = D.clients.filter(c => c.health === 'r').length;
     const openRecs = D.clients.filter(c => c.rec).length;
     const noContact = D.clients.filter(c => c.lcd >= 30).length;
-    return `I'm not sure I caught that — here's what's most relevant right now:<br><br>• <strong>${openRecs} open recommendations</strong> on today's outreach list<br>• <strong>${atRisk} at-risk clients</strong> needing immediate contact<br>• <strong>${noContact} clients</strong> with no contact in 30+ days<br>• Top priority: <strong>Maria Chen</strong> (nudge, 72% propensity) → open her profile for the full brief<br><br>Try asking: "Who should I call first?", "What's my coverage rate?", or name a specific client.`;
+    return `I'm not sure I caught that — here's what's most relevant right now:<br><br>• <strong>${openRecs} open recommendations</strong> on today's outreach list<br>• <strong>${atRisk} at-risk clients</strong> needing immediate contact<br>• <strong>${noContact} clients</strong> with no contact in 30+ days<br>• Top priority: <strong>Palo Verde Catering</strong> (nudge, 72% propensity) → open their profile for the full brief<br><br>Try asking: "Who should I call first?", "What's my coverage rate?", or name a specific client.`;
   }
 }
 
