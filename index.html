@@ -1158,7 +1158,7 @@ function renderCopilot() {
       ${cardsHTML(false)}
       ${inputHTML}
     ` : `
-      <div class="cp-empty"><div class="cp-ask">${(()=>{const h=new Date().getHours();const g=h<12?'Good morning,':h<17?'Good afternoon,':'Good evening,';return `${g}<br>how can I help?`;})()}</div></div>
+      <div class="cp-empty"><div class="cp-ask">${(()=>{const h=new Date().getHours();const g=h<12?'Good morning,':h<17?'Good afternoon,':'Good evening,';const fn=D.rm.name.split(' ')[0];return `${g} ${fn}.<br>How can I help?`;})()}</div></div>
       ${inputHTML}
       ${cardsHTML(true)}
     `}`;
