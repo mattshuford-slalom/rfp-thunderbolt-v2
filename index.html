@@ -61,31 +61,43 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .main{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-width:0}
 
 /* ── COPILOT PANEL ──────────────────────────────────────── */
-.cp-panel{width:400px;border-left:1px solid var(--bdr-l);display:flex;flex-direction:column;flex-shrink:0;background:var(--sur);transition:width .2s,opacity .2s}
+.cp-panel{width:400px;border-left:1px solid var(--bdr-l);display:flex;flex-direction:column;flex-shrink:0;background:#fff;transition:width .2s,opacity .2s}
 .cp-panel.off{width:0;opacity:0;overflow:hidden;pointer-events:none;border:none}
-.cp-hd{padding:12px 16px;background:linear-gradient(140deg,var(--p900),var(--p700));display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.cp-hd{height:52px;padding:0 16px;background:linear-gradient(140deg,var(--p900),var(--p700));border-bottom:none;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .cp-hd-l{display:flex;align-items:center;gap:8px}
-.cp-ic{width:22px;height:22px;background:rgba(255,255,255,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
-.cp-ttl{font-size:14px;font-weight:700;color:#fff}
-.cp-x{width:22px;height:22px;font-size:13px;color:rgba(255,255,255,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:5px;transition:all .15s;background:transparent;border:none}
-.cp-x:hover{background:rgba(255,255,255,.12);color:#fff}
-.cp-ctx{padding:6px 16px;border-bottom:1px solid var(--bdr-l);font-size:12px;font-weight:600;color:var(--p600);background:var(--p50);letter-spacing:.04em;text-transform:uppercase;flex-shrink:0}
-.cp-msgs{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
-.msg{font-size:14px;line-height:1.65;padding:9px 11px;border-radius:var(--rmd)}
-.msg.sys{background:var(--p50);color:var(--tx3);border:1px solid var(--bdr-l);font-style:italic}
-.msg.usr{background:linear-gradient(135deg,var(--p700),var(--p600));color:#fff;align-self:flex-end;max-width:90%;box-shadow:0 2px 8px rgba(75,40,109,.22)}
-.msg.ast{background:var(--sur);color:var(--tx2);border:1px solid var(--bdr);box-shadow:var(--ssm)}
-.msg.typ{background:var(--p50);color:var(--tx3);border:1px solid var(--bdr-l);letter-spacing:3px}
-.cp-in-area{padding:10px 12px;border-top:1px solid var(--bdr-l);display:flex;gap:8px;align-items:center;background:var(--p50);flex-shrink:0}
-.cp-in{flex:1;font-size:14px;font-family:inherit;padding:7px 11px;border:1px solid var(--bdr);border-radius:var(--rfull);color:var(--tx);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s}
-.cp-in:focus{border-color:var(--p500);box-shadow:0 0 0 3px rgba(155,111,204,.18)}
-.cp-in::placeholder{color:var(--tx3)}
-.cp-btn{width:32px;height:32px;background:linear-gradient(145deg,var(--p700),var(--p900));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(75,40,109,.3);border:none;font-family:inherit}
-.cp-btn:hover{background:linear-gradient(145deg,var(--p600),var(--p800))}
-.cp-sugg{padding:8px 12px 6px;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid var(--bdr-l);background:var(--p50);flex-shrink:0}
-.cp-sugg-lbl{width:100%;font-size:12px;font-weight:600;color:var(--tx3);letter-spacing:.05em;text-transform:uppercase;margin-bottom:2px}
-.sq{font-size:13px;font-weight:500;color:var(--p700);background:#fff;border:1px solid var(--p300);border-radius:var(--rfull);padding:4px 11px;cursor:pointer;transition:all .15s;white-space:nowrap;user-select:none}
-.sq:hover{background:var(--p100);border-color:var(--p500)}
+.cp-hd-r{display:flex;align-items:center;gap:2px}
+.cp-ic{width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cp-ttl{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.cp-icon-btn{width:28px;height:28px;border:none;background:transparent;border-radius:6px;cursor:pointer;color:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.cp-icon-btn:hover{background:rgba(255,255,255,.15);color:#fff}
+.cp-x{width:28px;height:28px;border:none;background:transparent;border-radius:6px;cursor:pointer;color:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.cp-x:hover{background:rgba(255,255,255,.15);color:#fff}
+.cp-ctx{padding:5px 16px;border-bottom:1px solid var(--bdr-l);font-size:10.5px;font-weight:700;color:var(--p600);background:var(--p50);letter-spacing:.06em;text-transform:uppercase;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px 32px;pointer-events:none}
+.cp-ask{font-size:26px;font-weight:800;color:var(--tx);text-align:center;line-height:1.2;letter-spacing:-.03em}
+.cp-msgs{flex:1;padding:12px 14px 6px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;min-height:0}
+.msg{font-size:13.5px;line-height:1.65;padding:10px 13px;border-radius:14px}
+.msg.usr{background:linear-gradient(135deg,var(--p700),var(--p600));color:#fff;align-self:flex-end;max-width:88%;box-shadow:0 2px 8px rgba(75,40,109,.22);border-bottom-right-radius:4px}
+.msg.ast{background:#f5f5f5;color:var(--tx2);border-top-left-radius:4px}
+.msg.typ{background:#f5f5f5;color:var(--tx3);letter-spacing:3px;align-self:flex-start;border-top-left-radius:4px}
+.cp-in-area{padding:10px 14px 14px;background:#fff;flex-shrink:0}
+.cp-in-wrap{border:1.5px solid #ddd;border-radius:14px;background:#fff;transition:border-color .15s,box-shadow .15s}
+.cp-in-wrap:focus-within{border-color:var(--p400);box-shadow:0 0 0 3px rgba(155,111,204,.12)}
+.cp-in{width:100%;font-size:14px;font-family:inherit;padding:12px 14px 6px;border:none;color:var(--tx);background:transparent;outline:none;resize:none;line-height:1.5;min-height:44px;max-height:120px;overflow-y:auto;display:block}
+.cp-in::placeholder{color:#aaa}
+.cp-in-toolbar{display:flex;align-items:center;justify-content:space-between;padding:4px 10px 8px}
+.cp-in-plus{width:28px;height:28px;border-radius:50%;border:1.5px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;line-height:1;color:#666;cursor:pointer;transition:all .15s;font-family:inherit}
+.cp-in-plus:hover{border-color:var(--p400);color:var(--p700)}
+.cp-btn{width:30px;height:30px;background:transparent;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--tx3);cursor:pointer;flex-shrink:0;border:none;font-family:inherit;transition:all .15s}
+.cp-btn:hover{color:var(--p700);background:var(--p100)}
+.cp-btn.listening{color:var(--red);animation:mic-pulse 1s ease-in-out infinite}
+@keyframes mic-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.18);opacity:.75}}
+.cp-cards{padding:0 14px 12px;display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.cp-card{border:1px solid #e0e0e0;border-radius:12px;padding:13px 16px;font-size:13.5px;color:var(--tx);cursor:pointer;background:#fff;transition:background .12s,border-color .12s;line-height:1.45;text-align:left;user-select:none;width:100%;font-family:inherit;box-shadow:none}
+.cp-card:hover{background:#f9f9fc;border-color:var(--p300)}
+.cp-card-link{color:var(--p700);font-weight:600}
+.cp-see-more{text-align:right;font-size:12.5px;font-weight:500;color:#888;cursor:pointer;padding:0 2px;transition:color .12s;user-select:none;background:none;border:none;font-family:inherit;width:100%}
+.cp-see-more:hover{color:var(--p700)}
 
 /* ── CONTENT ─────────────────────────────────────────────── */
 .content{padding:14px;display:flex;flex-direction:column;gap:11px}
@@ -436,6 +448,7 @@ const S = {
   asearch: '',
   afilter: 'all',
   logOut: null,
+  suggMore: false,
   convs: {
     general: [{ r:'sys', t:"Ask anything about your book, clients, or today's recommendations." }],
   },
@@ -1042,46 +1055,166 @@ function getSuggestions() {
     ];
   }
 
-  return pool.filter(s => !asked.has(s.toLowerCase())).slice(0, 3);
+  return pool.filter(s => !asked.has(s.toLowerCase())).slice(0, 6);
+}
+
+/* helpers for new Copilot layout */
+function getCtxLabel() {
+  if (S.view === 'client') {
+    const c = D.clients.find(x => x.id === S.cid);
+    return c ? `Context: ${c.name} · ${c.co}` : 'Context: Client workspace';
+  }
+  return 'Context: General · No client selected';
+}
+
+function formatCardText(s) {
+  const c = S.view === 'client' ? D.clients.find(x => x.id === S.cid) : null;
+  if (!c) return esc(s);
+  const fn = c.name.split(' ')[0];
+  let html = esc(s);
+  [c.name, c.co, fn].forEach(name => {
+    if (name && name.length > 3 && s.includes(name))
+      html = html.replace(esc(name), `<span class="cp-card-link">${esc(name)}</span>`);
+  });
+  return html;
+}
+
+function clearConv() {
+  const k = convKey();
+  const c = S.view === 'client' ? D.clients.find(x => x.id === S.cid) : null;
+  S.convs[k] = [{ r: 'sys', t: c ? `Loaded context for ${c.name}. Ask anything about this client.` : 'Ask anything.' }];
+  S.suggMore = false;
+  renderCopilot();
+}
+
+function toggleMoreSuggs() {
+  S.suggMore = !S.suggMore;
+  refreshSuggestions();
 }
 
 function refreshSuggestions() {
   const el = document.getElementById('cp-sugg');
   if (!el) return;
-  const suggs = getSuggestions();
-  el.innerHTML = suggs.length
-    ? '<div class="cp-sugg-lbl">Suggested</div>' + suggs.map(s=>`<span class="sq" data-q="${esc(s)}" onclick="useSuggestion(this.dataset.q)">${esc(s)}</span>`).join('')
-    : '';
+  const conv = getConv();
+  const hasMessages = conv.some(m => m.r === 'usr');
+  const all = getSuggestions();
+  const visible = all.slice(0, S.suggMore ? 6 : 3);
+  const canShowMore = all.length > 3;
+  el.innerHTML = visible.map(s =>
+    `<button class="cp-card" data-q="${esc(s)}" onclick="useSuggestion(this.dataset.q)">${formatCardText(s)}</button>`
+  ).join('') + (canShowMore && !hasMessages
+    ? `<button class="cp-see-more" onclick="toggleMoreSuggs()">${S.suggMore ? 'See less ∧' : 'See more ∨'}</button>`
+    : '');
 }
 
 function renderCopilot() {
   const el = document.getElementById('copilot');
-  if (!S.copOpen) { el.className='cp-panel off'; el.innerHTML=''; return; }
+  if (!S.copOpen) { el.className = 'cp-panel off'; el.innerHTML = ''; return; }
   el.className = 'cp-panel';
-  const c = S.view==='client' ? D.clients.find(x=>x.id===S.cid) : null;
-  const ctx = c ? `Context: ${c.name} · ${c.co}` : 'General · No client selected';
-  const ph = c ? `Ask about ${c.name}…` : 'Ask Copilot…';
   const conv = getConv();
-  const suggs = getSuggestions();
+  const hasMessages = conv.some(m => m.r === 'usr');
+  const ctx = getCtxLabel();
+  const all = getSuggestions();
+  const visible = all.slice(0, S.suggMore ? 6 : 3);
+  const canShowMore = all.length > 3;
+
+  const cardsHTML = (showSeeMore) => `<div class="cp-cards" id="cp-sugg">
+    ${visible.map(s => `<button class="cp-card" data-q="${esc(s)}" onclick="useSuggestion(this.dataset.q)">${formatCardText(s)}</button>`).join('')}
+    ${showSeeMore && canShowMore ? `<button class="cp-see-more" onclick="toggleMoreSuggs()">${S.suggMore ? 'See less ∧' : 'See more ∨'}</button>` : ''}
+  </div>`;
+
+  const inputHTML = `<div class="cp-in-area">
+    <div class="cp-in-wrap">
+      <textarea class="cp-in" id="cp-in" placeholder="Message Copilot" rows="1"></textarea>
+      <div class="cp-in-toolbar">
+        <button class="cp-in-plus" title="New chat" onclick="clearConv()">+</button>
+        <button class="cp-btn" id="cp-mic-btn" onclick="toggleDictation()" title="Speak to Copilot">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>`;
+
   el.innerHTML = `
     <div class="cp-hd">
-      <div class="cp-hd-l"><img src="microsoft_copilot-logo_brandlogos.net_zaqzr.png" style="width:22px;height:22px"><span class="cp-ttl">Copilot</span></div>
-      <button class="cp-x" onclick="toggleCop()">✕</button>
+      <div class="cp-hd-l">
+        <img src="microsoft_copilot-logo_brandlogos.net_zaqzr.png" style="width:20px;height:20px;flex-shrink:0">
+        <span class="cp-ttl">Copilot</span>
+      </div>
+      <div class="cp-hd-r">
+        ${hasMessages ? `<button class="cp-icon-btn" title="New chat" onclick="clearConv()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8A5 5 0 1 1 8 3"/><polyline points="11,1 13.5,3.5 11,6"/></svg>
+        </button>` : ''}
+        <button class="cp-x" onclick="toggleCop()">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg>
+        </button>
+      </div>
     </div>
-    <div class="cp-ctx">${ctx}</div>
-    <div class="cp-msgs" id="cp-msgs">${conv.map(m=>`<div class="msg ${m.r==='sys'?'sys':m.r==='usr'?'usr':'ast'}">${m.t}</div>`).join('')}</div>
-    <div class="cp-sugg" id="cp-sugg">${(()=>{const s=getSuggestions();return s.length?'<div class="cp-sugg-lbl">Suggested</div>'+s.map(q=>`<span class="sq" data-q="${esc(q)}" onclick="useSuggestion(this.dataset.q)">${esc(q)}</span>`).join(''):'';})()} </div>
-    <div class="cp-in-area">
-      <input class="cp-in" id="cp-in" placeholder="${ph}"/>
-      <button class="cp-btn" onclick="sendCopilot()">↑</button>
-    </div>`;
+    <div class="cp-ctx">${esc(ctx)}</div>
+    ${hasMessages ? `
+      <div class="cp-msgs" id="cp-msgs">
+        ${conv.filter(m => m.r !== 'sys').map(m => `<div class="msg ${m.r === 'usr' ? 'usr' : 'ast'}">${m.t}</div>`).join('')}
+      </div>
+      ${cardsHTML(false)}
+      ${inputHTML}
+    ` : `
+      <div class="cp-empty"><div class="cp-ask">${(()=>{const h=new Date().getHours();const g=h<12?'Good morning,':h<17?'Good afternoon,':'Good evening,';return `${g}<br>how can I help?`;})()}</div></div>
+      ${inputHTML}
+      ${cardsHTML(true)}
+    `}`;
+
   const inp = document.getElementById('cp-in');
-  if (inp) inp.onkeydown = e => { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendCopilot();} };
-  scrollCop();
+  if (inp) {
+    inp.onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendCopilot(); } };
+    inp.oninput = function () { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 120) + 'px'; };
+  }
+  if (hasMessages) scrollCop();
 }
 
 function scrollCop() { const m=document.getElementById('cp-msgs'); if(m) m.scrollTop=m.scrollHeight; }
 function toggleCop() { S.copOpen=!S.copOpen; renderTopbar(); renderCopilot(); }
+
+let _recognition = null;
+let _dictating = false;
+function toggleDictation() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) { showToast('⚠ Speech recognition not supported in this browser'); return; }
+  if (_dictating && _recognition) { _recognition.stop(); return; }
+  _recognition = new SpeechRecognition();
+  _recognition.lang = 'en-US';
+  _recognition.interimResults = true;
+  _recognition.continuous = false;
+  const btn = document.getElementById('cp-mic-btn');
+  const inp = document.getElementById('cp-in');
+  let interim = '';
+  _dictating = true;
+  if (btn) btn.classList.add('listening');
+  if (inp) inp.placeholder = 'Listening…';
+  _recognition.onresult = e => {
+    interim = '';
+    let final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+      else interim += e.results[i][0].transcript;
+    }
+    if (inp) inp.value = final || interim;
+    if (inp) { inp.style.height = 'auto'; inp.style.height = Math.min(inp.scrollHeight, 120) + 'px'; }
+  };
+  _recognition.onend = () => {
+    _dictating = false;
+    if (btn) btn.classList.remove('listening');
+    if (inp) inp.placeholder = 'Message Copilot';
+    const val = inp ? inp.value.trim() : '';
+    if (val) sendCopilot();
+  };
+  _recognition.onerror = e => {
+    _dictating = false;
+    if (btn) btn.classList.remove('listening');
+    if (inp) inp.placeholder = 'Message Copilot';
+    if (e.error !== 'no-speech' && e.error !== 'aborted') showToast('⚠ Mic error: ' + e.error);
+  };
+  _recognition.start();
+}
 function useSuggestion(txt) {
   const inp = document.getElementById('cp-in');
   if (!inp || !txt) return;
@@ -1094,8 +1227,10 @@ function sendCopilot() {
   const txt = inp?.value?.trim();
   if (!txt) return;
   inp.value = '';
+  inp.style.height = '';
   const conv = getConv();
   conv.push({ r:'usr', t: esc(txt) });
+  S.suggMore = false;
   renderCopilot();
   // typing indicator
   const msgs = document.getElementById('cp-msgs');
@@ -1108,7 +1243,7 @@ function sendCopilot() {
     conv.push({ r:'ast', t: copilotReply(txt) });
     const msgsEl = document.getElementById('cp-msgs');
     if (msgsEl) {
-      msgsEl.innerHTML = conv.map(m=>`<div class="msg ${m.r==='sys'?'sys':m.r==='usr'?'usr':'ast'}">${m.t}</div>`).join('');
+      msgsEl.innerHTML = conv.filter(m=>m.r!=='sys').map(m=>`<div class="msg ${m.r==='usr'?'usr':'ast'}">${m.t}</div>`).join('');
       scrollCop();
     } else { renderCopilot(); }
     refreshSuggestions();
