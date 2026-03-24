@@ -145,7 +145,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .ocard-pill-row{display:flex;align-items:center;gap:8px}
 .ocard-co{font-size:15px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ocard-poc{font-size:12px;color:var(--tx3);margin-top:1px}
-.ocard-why{font-size:13px;color:var(--tx2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ocard-why{font-size:13px;color:var(--tx2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ocard-footer{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
 .ocard-time{font-size:12px;color:var(--tx3);font-weight:500}
 
@@ -338,49 +338,6 @@ function genClients() {
   const LOCS = ['Charlotte, NC','Raleigh, NC','Atlanta, GA','Dallas, TX','Phoenix, AZ','Tampa, FL','Nashville, TN','Austin, TX','Denver, CO','Seattle, WA','Portland, OR','Minneapolis, MN','Detroit, MI','Columbus, OH','Indianapolis, IN','Louisville, KY','Memphis, TN','Richmond, VA','Baltimore, MD','Pittsburgh, PA','Cleveland, OH','Cincinnati, OH','Kansas City, MO','St. Louis, MO','Oklahoma City, OK','San Antonio, TX','Fort Worth, TX','Jacksonville, FL','Orlando, FL','Miami, FL','Charlotte, NC','Birmingham, AL','Greensboro, NC','Virginia Beach, VA','Chandler, AZ','Scottsdale, AZ','Henderson, NV','Laredo, TX','Buffalo, NY','Rochester, NY','Akron, OH','Omaha, NE','Tulsa, OK','Arlington, TX','Aurora, CO','Anaheim, CA','Santa Ana, CA','Corpus Christi, TX','Lexington, KY','Anchorage, AK','Stockton, CA','Riverside, CA','St. Paul, MN','Cincinnati, OH','Toledo, OH','Greensboro, NC','Newark, NJ','Plano, TX','Henderson, NV','Lincoln, NE','Bakersfield, CA','Baton Rouge, LA','Fremont, CA','Hialeah, FL','Garland, TX','Madison, WI','Scottsdale, AZ','Glendale, AZ','Winston-Salem, NC','Chesapeake, VA','Norfolk, VA'];
   const PRODS_ALL = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings','Checking'];
 
-  const PROD_NAMES = {
-    Checking:            'Dynamic Business Checking',
-    Treasury:            'Treasury Management',
-    BLOC:                'Business Line of Credit',
-    LOC:                 'Small Business Line of Credit',
-    CD:                  'Business Certificate of Deposit',
-    Payroll:             'Truist Online Payroll',
-    Card:                'Business Cash Rewards Card',
-    'Merchant Services': 'Merchant Services',
-    'Business Savings':  'Business Money Market',
-  };
-
-  const PROD_TAGLINE = {
-    Checking:            'Full-featured checking with 500 monthly transactions and tier-based relationship perks.',
-    Treasury:            'Full cash management suite — sweep accounts, payment automation, and working capital optimization.',
-    BLOC:                'Revolving credit up to $250K (with collateral) — flexible access to working capital as needs arise.',
-    LOC:                 'Revolving line of credit up to $100K — manage seasonal cash flow and short-term working capital gaps.',
-    CD:                  'Guaranteed fixed return on idle cash — choose your term from 7 days to 5 years.',
-    Payroll:             'Fully automated payroll, tax filing, and direct deposit for businesses with 1–100 employees.',
-    Card:                'Cash back on every purchase — no annual fee, 0% intro APR for 9 months, $300 welcome bonus.',
-    'Merchant Services': 'Point-of-sale and payment acceptance solutions to capture revenue at every transaction.',
-    'Business Savings':  'Business Money Market with competitive APY and check-writing access on balances over $5K.',
-  };
-
-  function rankMissingProds(c) {
-    const pool = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings'];
-    const missing = pool.filter(p => !c.prods.includes(p));
-    const revM = parseFloat((c.rev || '0').replace(/[^0-9.]/g, '')) || 0;
-    const ind = (c.ind || '').toLowerCase();
-    const score = p => {
-      if (p === 'Payroll')           return c.emp >= 10 ? 90 : c.emp >= 5 ? 65 : 35;
-      if (p === 'Card')              return 70;
-      if (p === 'Business Savings')  return revM >= 2 ? 72 : 55;
-      if (p === 'Treasury')          return revM >= 5 ? 88 : revM >= 2 ? 58 : 28;
-      if (p === 'BLOC')              return revM >= 3 ? 78 : 48;
-      if (p === 'LOC')               { const base = revM < 3 ? 68 : 42; return c.prods.includes('BLOC') ? base - 30 : base; }
-      if (p === 'CD')                return revM >= 2 ? 55 : 40;
-      if (p === 'Merchant Services') return /food|retail|catering|dental|health/.test(ind) ? 75 : 40;
-      return 50;
-    };
-    return missing.sort((a, b) => score(b) - score(a));
-  }
-
   const RECS = [null,null,null,'nudge','propensity','rules','rt'];
   const HEALTHS = ['g','g','g','g','g','a','a','r','x'];
   const LCDS = [0,1,2,3,5,7,10,14,21,28,35,42,60];
@@ -437,6 +394,49 @@ function genClients() {
     clients.push(cObj);
   }
   return clients;
+}
+
+const PROD_NAMES = {
+  Checking:            'Dynamic Business Checking',
+  Treasury:            'Treasury Management',
+  BLOC:                'Business Line of Credit',
+  LOC:                 'Small Business Line of Credit',
+  CD:                  'Business Certificate of Deposit',
+  Payroll:             'Truist Online Payroll',
+  Card:                'Business Cash Rewards Card',
+  'Merchant Services': 'Merchant Services',
+  'Business Savings':  'Business Money Market',
+};
+
+const PROD_TAGLINE = {
+  Checking:            'Full-featured checking with 500 monthly transactions and tier-based relationship perks.',
+  Treasury:            'Full cash management suite — sweep accounts, payment automation, and working capital optimization.',
+  BLOC:                'Revolving credit up to $250K (with collateral) — flexible access to working capital as needs arise.',
+  LOC:                 'Revolving line of credit up to $100K — manage seasonal cash flow and short-term working capital gaps.',
+  CD:                  'Guaranteed fixed return on idle cash — choose your term from 7 days to 5 years.',
+  Payroll:             'Fully automated payroll, tax filing, and direct deposit for businesses with 1–100 employees.',
+  Card:                'Cash back on every purchase — no annual fee, 0% intro APR for 9 months, $300 welcome bonus.',
+  'Merchant Services': 'Point-of-sale and payment acceptance solutions to capture revenue at every transaction.',
+  'Business Savings':  'Business Money Market with competitive APY and check-writing access on balances over $5K.',
+};
+
+function rankMissingProds(c) {
+  const pool = ['Treasury','BLOC','LOC','CD','Payroll','Card','Merchant Services','Business Savings'];
+  const missing = pool.filter(p => !c.prods.includes(p));
+  const revM = parseFloat((c.rev || '0').replace(/[^0-9.]/g, '')) || 0;
+  const ind = (c.ind || '').toLowerCase();
+  const score = p => {
+    if (p === 'Payroll')           return c.emp >= 10 ? 90 : c.emp >= 5 ? 65 : 35;
+    if (p === 'Card')              return 70;
+    if (p === 'Business Savings')  return revM >= 2 ? 72 : 55;
+    if (p === 'Treasury')          return revM >= 5 ? 88 : revM >= 2 ? 58 : 28;
+    if (p === 'BLOC')              return revM >= 3 ? 78 : 48;
+    if (p === 'LOC')               { const base = revM < 3 ? 68 : 42; return c.prods.includes('BLOC') ? base - 30 : base; }
+    if (p === 'CD')                return revM >= 2 ? 55 : 40;
+    if (p === 'Merchant Services') return /food|retail|catering|dental|health/.test(ind) ? 75 : 40;
+    return 50;
+  };
+  return missing.sort((a, b) => score(b) - score(a));
 }
 
 const D = {
