@@ -18,7 +18,7 @@
   --bdr:#DDD3EF; --bdr-l:#EDE5F8;
   --tx:#1A0B2E; --tx2:#503D6A; --tx3:#8B78A8;
   --red:#D93025; --red-l:#FEE8E6; --red-s:#E74C3C;
-  --amb:#B45309; --amb-l:#FEF3E2; --amb-s:#D97706;
+  --amb:#9A7A00; --amb-l:#FDFBE8; --amb-s:#D4A017;
   --grn:#1A7A47; --grn-l:#EAFAF1; --grn-d:#27AE60;
   --gray-d:#A09CB0;
   --rmd:10px; --rlg:14px; --rfull:9999px;
@@ -126,7 +126,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .ocard.h-a{background:#fff}
 .ocard.h-a::before{background:linear-gradient(90deg,var(--amb-s),var(--amb))}
 .ocard.rec-nudge::before{background:var(--red)}
-.ocard.rec-prop::before{background:var(--amb)}
+.ocard.rec-prop::before{background:var(--amb-s)}
 .ocard.rec-rules::before{background:var(--grn)}
 .ocard.rec-rt::before{background:var(--p600)}
 .ocard:hover{box-shadow:0 4px 16px rgba(75,40,109,.13);border-color:var(--p300)}
@@ -134,7 +134,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .ocard.done:hover{box-shadow:var(--ssm);border-color:var(--bdr-l)}
 .done-row{display:flex;align-items:center;gap:8px;margin-top:2px}
 .done-chip{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:var(--rfull);background:var(--grn-l);color:var(--grn);border:1px solid rgba(39,174,96,.25)}
-.done-chip.pend{background:var(--amb-l);color:var(--amb);border-color:rgba(212,130,0,.25)}
+.done-chip.pend{background:var(--amb-l);color:var(--amb);border-color:rgba(160,112,0,.25)}
 .done-chip.dism{background:var(--red-l);color:var(--red);border-color:rgba(217,48,37,.25)}
 .done-ts{font-size:11.5px;color:var(--tx3)}
 .completed-hd{padding:10px 14px 7px;border-top:1px solid var(--bdr-l);background:var(--p50);display:flex;align-items:center;justify-content:space-between}
@@ -167,7 +167,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 /* ── BADGES ──────────────────────────────────────────────── */
 .badge{font-size:12px;font-weight:700;padding:2px 8px;border-radius:var(--rfull);letter-spacing:.01em;white-space:nowrap}
 .b-rt{background:var(--p100);color:var(--p700);border:1px solid var(--p300)}
-.b-prop{background:var(--amb-l);color:var(--amb);border:1px solid rgba(212,130,0,.2)}
+.b-prop{background:var(--amb-l);color:var(--amb);border:1px solid rgba(160,112,0,.2)}
 .b-rules{background:var(--grn-l);color:var(--grn);border:1px solid rgba(39,174,96,.2)}
 .b-nudge{background:var(--red-l);color:var(--red);border:1px solid rgba(231,76,60,.2)}
 
@@ -222,7 +222,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .rchip{padding:7px 16px;border-radius:var(--rfull);border:1px solid var(--bdr);font-size:14px;font-weight:600;color:var(--tx3);cursor:pointer;transition:all .15s;user-select:none}
 .rchip:hover{border-color:var(--p400);color:var(--p700)}
 .rchip.s-conv{background:var(--grn-l);color:var(--grn);border-color:rgba(39,174,96,.3)}
-.rchip.s-pend{background:var(--amb-l);color:var(--amb);border-color:rgba(212,130,0,.3)}
+.rchip.s-pend{background:var(--amb-l);color:var(--amb);border-color:rgba(160,112,0,.3)}
 .rchip.s-dism{background:var(--red-l);color:var(--red);border-color:rgba(217,48,37,.3)}
 .form-row{display:flex;flex-direction:column;gap:6px}
 .form-lbl{font-size:13px;font-weight:600;color:var(--tx2)}
@@ -260,7 +260,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:
 .arow:hover{background:var(--p50)}
 .opill{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
 .o-c{background:var(--grn-l);color:var(--grn);border:1.5px solid rgba(39,174,96,.25)}
-.o-p{background:var(--amb-l);color:var(--amb);border:1.5px solid rgba(212,130,0,.25)}
+.o-p{background:var(--amb-l);color:var(--amb);border:1.5px solid rgba(160,112,0,.25)}
 .o-d{background:var(--red-l);color:var(--red);border:1.5px solid rgba(217,48,37,.3)}
 .abody{flex:1}
 .aclient{font-size:15px;font-weight:600;color:var(--tx);margin-bottom:2px;letter-spacing:-.01em}
@@ -445,9 +445,9 @@ const D = {
   rm: { name: 'Jordan Williams', initials: 'JW' },
   day: 'Thursday, Mar 19',
   clients: [
-    { id:1, ini:'MC', name:'Maria Chen', co:'Palo Verde Catering', tier:'Tier I', loc:'Charlotte, NC', since:'2021', lc:'2 days ago', lcd:2, health:'r', rec:'nudge', prods:['Checking','Card'], trig:'$185K deposit · cash mgmt window narrowing · 48h no contact', rt:'2d ago', prop:72, rev:'$2.1M', emp:18, ind:'Food & Beverage', notes:'Long-term relationship. Referred 2 other clients. Seasonal revenue peaks in Q2 and Q4.' },
+    { id:1, ini:'MC', name:'Maria Chen', co:'Palo Verde Catering', tier:'Tier I', loc:'Charlotte, NC', since:'2021', lc:'2 days ago', lcd:2, health:'r', rec:'propensity', prods:['Checking','Card'], trig:'$185K deposit · 72% propensity for cash mgmt · Business Money Market opportunity', rt:'2d ago', prop:72, rev:'$2.1M', emp:18, ind:'Food & Beverage', notes:'Long-term relationship. Referred 2 other clients. Seasonal revenue peaks in Q2 and Q4.' },
     { id:2, ini:'RH', name:'Ridgeline HVAC', co:'Ridgeline Services', tier:'Tier II', loc:'Raleigh, NC', since:'2019', lc:'14 days ago', lcd:14, health:'r', rec:'nudge', prods:['Checking','LOC'], trig:'Proposal stalled · no follow-up in 14 days', rt:'14d ago', prop:58, rev:'$4.8M', emp:34, ind:'HVAC / Contracting', notes:'Active LOC. Equipment financing proposal was sent 14 days ago — needs follow-up urgently before the deal goes cold.' },
-    { id:3, ini:'BH', name:'Blue Heron Logistics', co:'Blue Heron LLC', tier:'Tier II', loc:'Atlanta, GA', since:'2022', lc:'6 days ago', lcd:6, health:'a', rec:'propensity', prods:['Checking','Payroll'], trig:'Payroll up 34% · growth conversation opportunity', rt:'Today', prop:65, rev:'$7.2M', emp:62, ind:'Logistics', notes:'Fast-growing company. Payroll volume increased significantly — strong potential for treasury and expanded banking relationship.' },
+    { id:3, ini:'BH', name:'Blue Heron Logistics', co:'Blue Heron LLC', tier:'Tier II', loc:'Atlanta, GA', since:'2022', lc:'6 days ago', lcd:6, health:'a', rec:'rules', prods:['Checking','Payroll'], trig:'Payroll up 34% · growth conversation opportunity', rt:'Today', prop:65, rev:'$7.2M', emp:62, ind:'Logistics', notes:'Fast-growing company. Payroll volume increased significantly — strong potential for treasury and expanded banking relationship.' },
     { id:4, ini:'HD', name:'Harmon & Diaz LLC', co:'Harmon Legal Group', tier:'Tier II', loc:'Charlotte, NC', since:'2020', lc:'12 days ago', lcd:12, health:'a', rec:'rules', prods:['Checking','CD'], trig:'CD maturity in 28 days · no renewal outreach logged', rt:'Today', prop:48, rev:'$3.4M', emp:21, ind:'Legal Services', notes:'CD maturing soon. Client is rate-sensitive — be prepared to discuss current options before they shop elsewhere.' },
     { id:5, ini:'PV', name:'Palo Verde Dental', co:'Palo Verde Health', tier:'Tier I', loc:'Phoenix, AZ', since:'2023', lc:'Today', lcd:0, health:'g', rec:'rt', prods:['Checking'], trig:'Searched "business loan" on truist.com', rt:'8:32a', prop:55, rev:'$1.8M', emp:12, ind:'Healthcare', notes:'Newer client. Recent web activity indicates lending interest. Good opportunity to deepen the relationship early.' },
     { id:6, ini:'BF', name:'Brightwell Foods', co:'Brightwell Inc.', tier:'Tier I', loc:'Tampa, FL', since:'2018', lc:'2 days ago', lcd:2, health:'g', rec:null, prods:['Checking','Treasury','Payroll','Card'], trig:null, rt:null, prop:82, rev:'$11M', emp:88, ind:'Food Manufacturing', notes:'Top client. Treasury management and Online Payroll fully established for 88 employees. Business Cash Rewards Card active. Next opportunity: Merchant Services or Business Line of Credit.' },
@@ -455,7 +455,7 @@ const D = {
     { id:8, ini:'ML', name:'Meza Landscaping', co:'Meza Group', tier:'Tier I', loc:'Dallas, TX', since:'2020', lc:'38 days ago', lcd:38, health:'x', rec:null, prods:['Checking'], trig:null, rt:null, prop:22, rev:'$900K', emp:9, ind:'Landscaping', notes:'No contact in 38 days. Single product. Potential churn risk — needs a check-in call this week.' },
     { id:601, ini:'JB', name:'Jason Burke', co:'Summit Roofing Co.', tier:'Tier II', loc:'Charlotte, NC', since:'2022', lc:'38 days ago', lcd:38, health:'g', rec:null, prods:['Checking','LOC'], trig:null, rt:null, prop:67, rev:'$3.2M', emp:22, ind:'Roofing', notes:'Healthy relationship. Premier referral completed with banker intro scheduled. Annual review done — no immediate product need. Follow up in 60 days for payroll conversation.' },
     { id:602, ini:'DH', name:'Derek Hale', co:'Eastbrook Mechanical', tier:'Tier II', loc:'Raleigh, NC', since:'2023', lc:'45 days ago', lcd:45, health:'a', rec:'nudge', prods:['Checking'], trig:'No contact in 45 days · client deferred outreach to Q3 · re-engagement window approaching', rt:'45d ago', prop:44, rev:'$1.9M', emp:14, ind:'HVAC / Contracting', notes:'Flagged for nurture after client pushed engagement to Q3. Single product — strong candidate for LOC and payroll when timing is right.' },
-    { id:603, ini:'PM', name:'Priya Menon', co:'Clarity Wellness Group', tier:'Tier II', loc:'Atlanta, GA', since:'2022', lc:'21 days ago', lcd:21, health:'a', rec:'propensity', prods:['Checking'], trig:'LOC offer under CFO review · response pending · second outreach queued', rt:'21d ago', prop:61, rev:'$2.8M', emp:19, ind:'Fitness', notes:'LOC offer presented and under internal CFO review. Growth-stage multi-location wellness brand. Second outreach attempt queued — strong propensity for credit.' },
+    { id:603, ini:'PM', name:'Priya Menon', co:'Clarity Wellness Group', tier:'Tier II', loc:'Atlanta, GA', since:'2022', lc:'21 days ago', lcd:21, health:'a', rec:'nudge', prods:['Checking'], trig:'LOC offer under CFO review · response pending · second outreach queued', rt:'21d ago', prop:61, rev:'$2.8M', emp:19, ind:'Fitness', notes:'LOC offer presented and under internal CFO review. Growth-stage multi-location wellness brand. Second outreach attempt queued — strong propensity for credit.' },
     { id:604, ini:'CT', name:'Camille Torres', co:'Vantage Print & Design', tier:'Tier II', loc:'Tampa, FL', since:'2021', lc:'12 days ago', lcd:12, health:'g', rec:null, prods:['Checking','BLOC'], trig:null, rt:null, prop:52, rev:'$1.4M', emp:11, ind:'Printing', notes:'Equipment loan referral recently closed and disbursed. Business Line of Credit active. Healthy account — check in within 30 days for card and payroll opportunity.' },
     { id:605, ini:'MW', name:'Marcus Webb', co:'Irongate Construction', tier:'Tier I', loc:'Nashville, TN', since:'2019', lc:'14 days ago', lcd:14, health:'a', rec:'propensity', prods:['Checking','LOC'], trig:'Treasury offer demo completed · decision expected by end of month · equipment financing referral pending', rt:'14d ago', prop:74, rev:'$8.5M', emp:58, ind:'Construction', notes:'Treasury offer demo completed — decision expected by end of month. Equipment financing referral also submitted awaiting signed docs. High-value Tier I relationship requiring close follow-up.' },
     { id:606, ini:'SR', name:'Steve Rafferty', co:'Keystone Auto Group', tier:'Tier II', loc:'Columbus, OH', since:'2023', lc:'9 days ago', lcd:9, health:'a', rec:'nudge', prods:['Checking','Card'], trig:'No answer on last outreach · voicemail left · follow-up pending next week', rt:'9d ago', prop:48, rev:'$5.1M', emp:33, ind:'Auto Services', notes:'No answer on last outreach. Voicemail left — follow up next week. Mid-size auto group with strong cross-sell potential for payroll and merchant services.' },
@@ -467,7 +467,7 @@ const D = {
     { id:612, ini:'AR', name:'Al Russo', co:'Harbor Freight Repair', tier:'Tier II', loc:'Baltimore, MD', since:'2026', lc:'28 days ago', lcd:28, health:'g', rec:'rt', prods:['Checking'], trig:'New client onboarding · advice acted on · checking opened · early relationship signals positive', rt:'28d ago', prop:41, rev:'$800K', emp:6, ind:'Auto Services', notes:'New client. Business checking opened following real-time advice signal. Onboarding complete. Early-stage relationship — check in to explore payroll and card as headcount grows.' },
     { id:613, ini:'AM', name:'Dr. Alicia Morse', co:'Redstone Veterinary', tier:'Tier II', loc:'Seattle, WA', since:'2021', lc:'29 days ago', lcd:29, health:'a', rec:'rules', prods:['Checking','LOC'], trig:'Rate increase concern raised · retention at risk · referral delivered · follow-up critical', rt:'29d ago', prop:49, rev:'$1.6M', emp:10, ind:'Veterinary', notes:'Client raised rate increase concern on last call. Retention referral delivered. Monitor closely — competitive offers likely in play. Follow up within the week to confirm status.' },
     { id:614, ini:'DC', name:'Denise Carroll', co:'Hilltop Youth Services', tier:'Tier II', loc:'Memphis, TN', since:'2020', lc:'30 days ago', lcd:30, health:'a', rec:'nudge', prods:['Checking'], trig:'Checking upgrade declined · budget constraints cited · re-engagement recommended', rt:'30d ago', prop:28, rev:'$600K', emp:7, ind:'Childcare', notes:'Nonprofit organization. Checking upgrade declined due to budget constraints. Relationship is tenuous — review nonprofit banking options that may be a better fit.' },
-    { id:615, ini:'RF', name:'Raymond Fitch', co:'Cascade Urgent Care', tier:'Tier II', loc:'Portland, OR', since:'2023', lc:'32 days ago', lcd:32, health:'a', rec:'propensity', prods:['Checking'], trig:'SBA loan application submitted · decision pending · proactive outreach recommended', rt:'32d ago', prop:66, rev:'$3.4M', emp:27, ind:'Healthcare', notes:'SBA loan application submitted and under review. Growing urgent care group with high lending propensity. Reach out proactively while decision is pending to maintain momentum.' },
+    { id:615, ini:'RF', name:'Raymond Fitch', co:'Cascade Urgent Care', tier:'Tier II', loc:'Portland, OR', since:'2023', lc:'32 days ago', lcd:32, health:'a', rec:'rules', prods:['Checking'], trig:'SBA loan application submitted · decision pending · proactive outreach recommended', rt:'32d ago', prop:66, rev:'$3.4M', emp:27, ind:'Healthcare', notes:'SBA loan application submitted and under review. Growing urgent care group with high lending propensity. Reach out proactively while decision is pending to maintain momentum.' },
     { id:616, ini:'GC', name:'Gary Collins', co:'Collins Pest Control', tier:'Tier II', loc:'Jacksonville, FL', since:'2022', lc:'40 days ago', lcd:40, health:'g', rec:'propensity', prods:['Checking','Card'], trig:'Payroll demo completed · 30-day trial evaluation window open · follow-up needed', rt:'40d ago', prop:58, rev:'$1.3M', emp:15, ind:'Pest Control', notes:'Payroll offer demo completed. Client evaluating with 30-day trial decision window. Strong opportunity to deepen relationship — payroll for 15 employees and merchant services both fit.' },
     { id:617, ini:'VO', name:'Victor Olsen', co:'Northgate Auto Repair', tier:'Tier II', loc:'Indianapolis, IN', since:'2020', lc:'44 days ago', lcd:44, health:'g', rec:'rules', prods:['Checking','LOC'], trig:'LOC limit increase approved and renewed · cross-sell window open', rt:'44d ago', prop:53, rev:'$2.2M', emp:18, ind:'Auto Services', notes:'LOC limit increase approved and renewed. Healthy utilization. Good candidate for payroll (18 employees) and business card. Annual review recommended within the next 30 days.' },
     ...genClients(),
@@ -1597,7 +1597,7 @@ function copilotReply(q) {
     return `<strong>Harmon Legal Group</strong> has a CD maturing in 28 days with no renewal outreach logged. They're rate-sensitive — reach out before they shop competing rates. Recommendation type: Rules-based. They're on today's outreach list.`;
 
   if (/nudge|overdue|stall/.test(q))
-    return `Two Nudges are currently active: <strong>Palo Verde Catering</strong> (cash mgmt signal, $185K deposit, 48h no contact, 72% propensity) and <strong>Ridgeline Services</strong> (equipment financing proposal stalled at 14 days — at risk of going cold). Both need contact today.`;
+    return `Two active recommendations require immediate outreach: <strong>Palo Verde Catering</strong> (Offer — $185K deposit, 72% propensity, Business Money Market opportunity) and <strong>Ridgeline Services</strong> (Nudge — equipment financing proposal stalled at 14 days, at risk of going cold). Both need contact today.`;
 
   if (/coverage|percent|rate/.test(q)) {
     const noContact = D.clients.filter(c => c.lcd >= 30).length;
@@ -1608,7 +1608,7 @@ function copilotReply(q) {
     return `Top propensity clients today: <strong>Brightwell Inc. (82%)</strong>, Palo Verde Catering (72%), Blue Heron LLC (65%), Palo Verde Health (55%). All four have open recommendations — Brightwell Inc. has the highest score but no active rec, making it an opportunistic call.`;
 
   if (/priority|who first|start|begin|today|call|morning|plan my/.test(q))
-    return `Priority outreach today: <strong>1. Palo Verde Catering</strong> — active Nudge, $185K signal, 72% propensity, 48h no contact. <strong>2. Ridgeline Services</strong> — proposal stalled 14 days, risk of losing deal. <strong>3. Harmon Legal Group</strong> — CD maturing in 28 days, Referral not yet actioned. <strong>4. Blue Heron LLC</strong> — Offer triggered, payroll up 34%.`;
+    return `Priority outreach today: <strong>1. Palo Verde Catering</strong> — active Offer, $185K deposit signal, 72% propensity, Business Money Market opportunity. <strong>2. Ridgeline Services</strong> — proposal stalled 14 days, risk of losing deal. <strong>3. Harmon Legal Group</strong> — CD maturing in 28 days, Referral not yet actioned. <strong>4. Blue Heron LLC</strong> — Offer triggered, payroll up 34%.`;
 
   if (/book|how many|total|all client/.test(q)) {
     const atRisk = D.clients.filter(c => c.health === 'r').length;
@@ -1619,7 +1619,7 @@ function copilotReply(q) {
   }
 
   if (/at.?risk|churn|danger/.test(q))
-    return `At-risk clients: <strong>Palo Verde Catering</strong> (nudge active, 48h no contact) and <strong>Ridgeline Services</strong> (proposal stalled, 14 days). Both need outreach today. Use the <em>Needs contact</em> filter in Clients view for the full at-risk list — ${D.clients.filter(c=>c.lcd>=28).length} clients have had no contact in 28+ days.`;
+    return `At-risk clients: <strong>Palo Verde Catering</strong> (Offer active — $185K deposit, cash mgmt opportunity) and <strong>Ridgeline Services</strong> (proposal stalled, 14 days). Both need outreach today. Use the <em>Needs contact</em> filter in Clients view for the full at-risk list — ${D.clients.filter(c=>c.lcd>=28).length} clients have had no contact in 28+ days.`;
 
   if (/tier i|tier 1|top|premium/.test(q))
     return `Your Tier I clients include Palo Verde Catering, Palo Verde Health, Brightwell Inc., and Meza Group. Tier I accounts should be contacted at least every 7 days. Of these, Meza Group is the most overdue at 38 days.`;
@@ -1632,14 +1632,14 @@ function copilotReply(q) {
   }
 
   if (/outreach|list|today|dashboard/.test(q))
-return `Today's outreach list has <strong>${D.clients.filter(c=>c.rec).slice(0,8).length} clients</strong>: Nudges for Palo Verde Catering and Ridgeline Services, an Offer for Blue Heron LLC, a Referral alert for Harmon Legal Group, and an Advice alert for Palo Verde Health.`;
+return `Today's outreach list has <strong>${D.clients.filter(c=>c.rec).slice(0,8).length} clients</strong>: an Offer for Palo Verde Catering and a Nudge for Ridgeline Services, an Offer for Blue Heron LLC, a Referral alert for Harmon Legal Group, and an Advice alert for Palo Verde Health.`;
 
   if (/summary|overview|brief|how am i|doing|snapshot|what's (going on|happening|my)|catch me up|morning|help/.test(q)) {
     const atRisk = D.clients.filter(c => c.health === 'r').length;
     const noContact = D.clients.filter(c => c.lcd >= 30).length;
     const openRecs = D.clients.filter(c => c.rec).length;
     const conv2 = D.activity.filter(a => a.out === 'c').length;
-    return `Here's your snapshot for today:<br><br><strong>Outreach list:</strong> ${openRecs} clients with open recommendations — top priority is <strong>Palo Verde Catering</strong> (nudge, $185K signal) and <strong>Ridgeline Services</strong> (proposal stalling).<br><br><strong>Book health:</strong> ${atRisk} at-risk, ${noContact} with no contact in 30+ days, 68% coverage rate.<br><br><strong>Activity:</strong> ${conv2} conversions logged this month. <strong>Palo Verde Health</strong> and <strong>Irongate Construction</strong> have pending outcomes awaiting follow-up.<br><br><strong>Highest propensity:</strong> Brightwell Inc. (82%), Palo Verde Catering (72%), Blue Heron LLC (65%).`;
+    return `Here's your snapshot for today:<br><br><strong>Outreach list:</strong> ${openRecs} clients with open recommendations — top priority is <strong>Palo Verde Catering</strong> (Offer, $185K deposit signal, 72% propensity) and <strong>Ridgeline Services</strong> (Nudge, proposal stalling).<br><br><strong>Book health:</strong> ${atRisk} at-risk, ${noContact} with no contact in 30+ days, 68% coverage rate.<br><br><strong>Activity:</strong> ${conv2} conversions logged this month. <strong>Palo Verde Health</strong> and <strong>Irongate Construction</strong> have pending outcomes awaiting follow-up.<br><br><strong>Highest propensity:</strong> Brightwell Inc. (82%), Palo Verde Catering (72%), Blue Heron LLC (65%).`;
   }
 
   if (/product|treasury|bloc|loc|cd|payroll|card|merchant|saving/.test(q)) {
@@ -1648,14 +1648,14 @@ return `Today's outreach list has <strong>${D.clients.filter(c=>c.rec).slice(0,8
   }
 
   if (/recommend|rec\b|suggestion|who (to|should) call|what (rec|action)/.test(q))
-    return `Open recommendations today: <strong>Palo Verde Catering</strong> (Nudge — cash mgmt), <strong>Ridgeline Services</strong> (Nudge — stalled proposal), <strong>Blue Heron LLC</strong> (Offer — payroll growth), <strong>Harmon Legal Group</strong> (Referral — CD maturing), <strong>Palo Verde Health</strong> (Advice — web intent). Click any client on the dashboard to see the full brief.`;
+    return `Open recommendations today: <strong>Palo Verde Catering</strong> (Offer — cash mgmt, $185K deposit), <strong>Ridgeline Services</strong> (Nudge — stalled proposal), <strong>Blue Heron LLC</strong> (Offer — payroll growth), <strong>Harmon Legal Group</strong> (Referral — CD maturing), <strong>Palo Verde Health</strong> (Advice — web intent). Click any client on the dashboard to see the full brief.`;
 
   // Smart general fallback — synthesize a useful book snapshot rather than a dead end
   {
     const atRisk = D.clients.filter(c => c.health === 'r').length;
     const openRecs = D.clients.filter(c => c.rec).length;
     const noContact = D.clients.filter(c => c.lcd >= 30).length;
-    return `I'm not sure I caught that — here's what's most relevant right now:<br><br>• <strong>${openRecs} open recommendations</strong> on today's outreach list<br>• <strong>${atRisk} at-risk clients</strong> needing immediate contact<br>• <strong>${noContact} clients</strong> with no contact in 30+ days<br>• Top priority: <strong>Palo Verde Catering</strong> (nudge, 72% propensity) → open their profile for the full brief<br><br>Try asking: "Who should I call first?", "What's my coverage rate?", or name a specific client.`;
+    return `I'm not sure I caught that — here's what's most relevant right now:<br><br>• <strong>${openRecs} open recommendations</strong> on today's outreach list<br>• <strong>${atRisk} at-risk clients</strong> needing immediate contact<br>• <strong>${noContact} clients</strong> with no contact in 30+ days<br>• Top priority: <strong>Palo Verde Catering</strong> (Offer, 72% propensity, $185K deposit) → open their profile for the full brief<br><br>Try asking: "Who should I call first?", "What's my coverage rate?", or name a specific client.`;
   }
 }
 
