@@ -732,6 +732,33 @@ const OPENER = {
   4: `"Your CD is coming up for maturity soon. I wanted to reach out before that date to make sure we find the right option."`,
   5: `"Hi, I noticed some activity on our site and wanted to reach out personally — happy to help with any financing needs."`,
 };
+const TPS_EMAIL_VARIANTS = {
+  1: [
+    'Your revenue has real momentum — and a Business Money Market could put that idle cash between events to work at 3.40% APY instead of sitting in checking.',
+    'Have you thought about what happens to your catering revenue in the downtime between events? A Business Money Market earns 3.40% APY on that balance — it\'s a simple move that adds up.',
+    'One thing that keeps coming to mind for Palo Verde Catering: a Business Money Market. It\'s designed for exactly this — capturing idle revenue between bookings and earning 3.40% APY while you focus on the next event.',
+  ],
+  2: [
+    'The equipment financing conversation we started is still very much on the table — a Commercial Vehicle & Equipment Loan up to $250K, with terms up to 84 months and 100% financing available.',
+    'I didn\'t want that equipment loan proposal to go cold. Up to $250K, 84-month terms, 100% financing — the door is still open whenever you\'re ready to revisit it.',
+    'Reaching back out on the equipment financing front — terms are still favorable (up to $250K, 84 months, 100% financing), and I\'d hate for the timing to slip away on you.',
+  ],
+  3: [
+    'With 62 employees and $7.2M in revenue, Blue Heron has grown to a point where Treasury Management starts making a real difference — think sweep accounts and payment automation that scale with you.',
+    'Your payroll growth tells a clear story — 62 employees, $7.2M revenue, and climbing. That\'s exactly when Treasury Management pays off: sweep accounts, payment automation, and a banking setup that keeps pace.',
+    'I\'ve been thinking about where Truist can do more for Blue Heron. At your current size — 62 employees, $7.2M — Treasury Management isn\'t just a nice-to-have. Sweep accounts and payment automation would save real time and cost.',
+  ],
+  4: [
+    'Your CD is coming up on maturity, and I want to make sure you have current rates in hand before you make a decision — I can hold a rate for you so there\'s no pressure to rush.',
+    'Before that CD matures, I\'d love to walk you through where rates stand right now. I can put a brief rate hold in place so you\'re not rushed — just want to make sure you have the full picture.',
+    'CD maturity dates have a way of sneaking up. Yours is approaching, and I\'d rather you hear current renewal rates from me than find yourself shopping around at the last minute. Happy to lock something in for you.',
+  ],
+  5: [
+    'Based on what I saw from your recent activity, it looks like lending might be on your mind — and for a practice at your stage, a Simple Business Loan (up to $50K, no collateral required) is often the fastest path to get there.',
+    'I noticed you were exploring financing options recently, and I wanted to reach out directly. For Palo Verde Health, a Simple Business Loan — up to $50K, no collateral — could be exactly what you\'re looking for.',
+    'When I saw the recent activity on your account, I thought: this is worth a conversation. A Simple Business Loan up to $50K — no collateral required — is one of the most straightforward options for a healthcare practice at your revenue level.',
+  ],
+};
 const TPS = {
   1: [
     'Open a Business Money Market to sweep idle catering revenue into a higher-yield account (3.40% APY) between events.',
@@ -1691,22 +1718,57 @@ function openModal(type, cid) {
         <button class="btn pri" onclick="showLogModal(${c.id})">Mark as called</button>
       </div>`;
   } else if (type==='email') {
-    const subj = {1:'Quick check-in — account activity and next steps',2:'Following up on equipment financing proposal',3:'Supporting your business growth — let\'s talk',4:'Your CD is maturing soon — options to consider',5:'Reaching out about your financing needs'};
-    const fn = c.name.split(' ')[0];
-    const body = `Hi ${fn},\n\nI hope you're doing well. I wanted to reach out personally — I noticed some recent activity and want to make sure we're supporting you in the best way possible.\n\n${(TPS[c.id]||['Review your current banking relationship.'])[0]}\n\nI'd love to schedule a quick call at your convenience. Just reply to this email or call me directly.\n\nBest,\nJordan Williams\nRelationship Manager, Truist Bank`;
+    window._emailDraftVariant = window._emailDraftVariant || {};
+    window._emailDraftVariant[c.id] = 0;
+    const draft = genEmailDraft(c, 0);
     modal.innerHTML = `
       <div class="mhd"><span class="mttl">✉️ Draft email — ${esc(c.name)}</span><button class="mx" onclick="closeModal()">✕</button></div>
       <div class="mbody">
         <div class="msec"><div class="mlbl">To</div><div class="mval">${esc(c.name)} · ${esc(c.co)}</div></div>
-        <div class="msec"><div class="mlbl">Subject</div><input class="ftextarea" id="email-subj" style="margin-top:4px;padding:7px 10px;resize:none;height:auto" value="${esc(subj[c.id]||'Checking in — how can we help?')}"></div>
-        <div class="msec"><div class="mlbl">Draft body (editable)</div><textarea class="ftextarea" id="email-body" rows="9" style="margin-top:4px">${body}</textarea></div>
+        <div class="msec"><div class="mlbl">Subject</div><input class="ftextarea" id="email-subj" style="margin-top:4px;padding:7px 10px;resize:none;height:auto" value="${esc(draft.subj)}"></div>
+        <div class="msec"><div class="mlbl">Draft body (editable)</div><textarea class="ftextarea" id="email-body" rows="9" style="margin-top:4px">${draft.body}</textarea></div>
       </div>
       <div class="mfooter">
         <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn" onclick="redraftEmail(${c.id})">↻ Re-draft</button>
         <button class="btn" onclick="closeModal();showToast('✉️ Email draft saved')">Save draft</button>
         <button class="btn pri" onclick="sendEmailAndLog(${c.id})">Send email</button>
       </div>`;
   }
+}
+function genEmailDraft(c, variant) {
+  const fn = c.name.split(' ')[0];
+  const tpVariants = TPS_EMAIL_VARIANTS[c.id];
+  const tp = tpVariants
+    ? tpVariants[variant % 3]
+    : (TPS[c.id] || ['Review your current banking relationship and explore ways we can add more value.'])[0];
+  const subjMap = {
+    1: ['Quick check-in — account activity and next steps', 'A note from your Truist RM — worth a quick read', 'Something caught my attention on your account'],
+    2: ['Following up on equipment financing proposal', 'Equipment financing — still on the table when you\'re ready', 'Circling back on the financing opportunity we discussed'],
+    3: ['Supporting your business growth — let\'s talk', 'Your growth is showing — I\'d love to connect', 'Let\'s talk about where Truist can support you next'],
+    4: ['Your CD is maturing soon — options to consider', 'CD renewal coming up — a few thoughts from your RM', 'Before your CD matures, let\'s talk options'],
+    5: ['Reaching out about your financing needs', 'You were searching — let\'s find the right fit', 'Helping you find the right path to funding'],
+  };
+  const subjOpts = subjMap[c.id] || ['Checking in — how can we help?', 'A quick note from your Truist RM', 'Staying connected — a few ideas for your business'];
+  const subj = subjOpts[variant % subjOpts.length];
+  let body;
+  if (variant % 3 === 0) {
+    body = `Hi ${fn},\n\nI hope you're doing well. I wanted to reach out personally — I noticed some recent activity and want to make sure we're supporting you in the best way possible.\n\n${tp}\n\nI'd love to schedule a quick call at your convenience. Just reply to this email or call me directly.\n\nBest,\nJordan Williams\nRelationship Manager, Truist Bank`;
+  } else if (variant % 3 === 1) {
+    body = `Hi ${fn},\n\nI'm reaching out because something on your account stood out to me, and I wanted to make sure you're aware of an opportunity that could be a great fit right now.\n\n${tp}\n\nIf you have 15 minutes this week, I'd love to walk you through it. Feel free to reply here or give me a call.\n\nWarm regards,\nJordan Williams\nRelationship Manager, Truist Bank`;
+  } else {
+    body = `Hi ${fn},\n\nThank you for your continued trust in Truist — it's a relationship I genuinely value. I wanted to follow up with something specific to your business that I think could make a real difference.\n\n${tp}\n\nWhenever works best for you, I'm happy to connect — whether by phone, email, or in person.\n\nThank you,\nJordan Williams\nRelationship Manager, Truist Bank`;
+  }
+  return { subj, body };
+}
+function redraftEmail(cid) {
+  const c = D.clients.find(x=>x.id===cid)||D.clients[0];
+  window._emailDraftVariant = window._emailDraftVariant || {};
+  window._emailDraftVariant[cid] = ((window._emailDraftVariant[cid] || 0) + 1) % 3;
+  const draft = genEmailDraft(c, window._emailDraftVariant[cid]);
+  document.getElementById('email-subj').value = draft.subj;
+  document.getElementById('email-body').value = draft.body;
+  showToast('✏️ Re-drafted');
 }
 function closeModal() { document.getElementById('overlay').classList.add('off'); }
 
