@@ -1,2 +1,6 @@
 .DS_Store
 *.mov
+
+0_brainstorming_no-copilot/
+0_brainstorming_with-copilot/
+*.docx
