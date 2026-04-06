@@ -1,3 +1,4 @@
 {
-  "root": "protogen"
+  "framework": null,
+  "outputDirectory": "protogen"
 }
