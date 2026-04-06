@@ -1,0 +1,21 @@
+/* ── TOKENS ──────────────────────────────────────────────── */
+:root {
+  --p950:#150428; --p900:#2D0A4E; --p800:#4B286D;
+  --p700:#5E3485; --p600:#7B4DB5; --p500:#9B6FCC;
+  --p400:#B898DC; --p300:#D4BEF0; --p200:#E8DCFA;
+  --p100:#F3EDFC; --p50:#F9F6FE;
+  --bg:#F2EEF9; --sur:#fff;
+  --bdr:#DDD3EF; --bdr-l:#EDE5F8;
+  --tx:#1A0B2E; --tx2:#503D6A; --tx3:#8B78A8;
+  --red:#D93025; --red-l:#FEE8E6; --red-s:#E74C3C;
+  --amb:#9A7A00; --amb-l:#FDFBE8; --amb-s:#D4A017;
+  --grn:#1A7A47; --grn-l:#EAFAF1; --grn-d:#27AE60;
+  --gray-d:#A09CB0;
+  --rmd:10px; --rlg:14px; --rfull:9999px;
+  --ssm:0 1px 3px rgba(75,40,109,.08),0 1px 2px rgba(75,40,109,.04);
+  --smd:0 4px 16px rgba(75,40,109,.10),0 2px 4px rgba(75,40,109,.06);
+  --spur:0 4px 14px rgba(75,40,109,.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;height:100vh;display:flex;flex-direction:column}
