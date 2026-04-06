@@ -1,6 +1,7 @@
 # Ignore everything at root by default
 /*
 
-# Only track protogen/ and this file
+# Only track protogen/ and config files
 !/protogen/
 !/.gitignore
+!/vercel.json
