@@ -1,6 +1,6 @@
-.DS_Store
-*.mov
+# Ignore everything at root by default
+/*
 
-0_brainstorming_no-copilot/
-0_brainstorming_with-copilot/
-*.docx
+# Only track protogen/ and this file
+!/protogen/
+!/.gitignore
