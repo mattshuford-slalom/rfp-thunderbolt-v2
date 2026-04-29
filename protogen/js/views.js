@@ -13,7 +13,7 @@ function render() {
 /* ── TOPBAR ─────────────────────────────────────────────── */
 function renderTopbar() {
   document.getElementById('topbar').innerHTML = `
-    <a class="tb-logo" href="#/dashboard"><img src="images.jpg" alt="ACME Financial" style="height:40px;width:auto;object-fit:contain;flex-shrink:0"/><div class="tb-logo-text"><span class="tb-brand">ACME Financial</span><span class="tb-sub">Small Business RM Portal</span></div></a>
+    <a class="tb-logo" href="#/dashboard"><img src="acme-logo.svg" alt="ACME Financial" style="height:28px;width:auto;flex-shrink:0"/><div class="tb-logo-text"><span class="tb-brand">ACME Financial</span><span class="tb-sub">Small Business RM Portal</span></div></a>
     <div class="tb-spacer"></div>
     <span class="tb-date">${D.day}</span>
     <button class="tb-cop ${S.copOpen ? 'on' : ''}" onclick="toggleCop()"><img src="microsoft_copilot-logo_brandlogos.net_zaqzr.png" style="width:16px;height:16px;vertical-align:middle;margin-right:2px">Copilot</button>
