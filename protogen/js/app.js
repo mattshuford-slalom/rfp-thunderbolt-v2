@@ -49,21 +49,21 @@ function genEmailDraft(c, variant) {
     ? tpVariants[variant % 3]
     : (TPS[c.id] || ['Review your current banking relationship and explore ways we can add more value.'])[0];
   const subjMap = {
-    1: ['Quick check-in — account activity and next steps', 'A note from your Truist RM — worth a quick read', 'Something caught my attention on your account'],
+    1: ['Quick check-in — account activity and next steps', 'A note from your ACME Financial RM — worth a quick read', 'Something caught my attention on your account'],
     2: ['Following up on equipment financing proposal', 'Equipment financing — still on the table when you\'re ready', 'Circling back on the financing opportunity we discussed'],
-    3: ['Supporting your business growth — let\'s talk', 'Your growth is showing — I\'d love to connect', 'Let\'s talk about where Truist can support you next'],
+    3: ['Supporting your business growth — let\'s talk', 'Your growth is showing — I\'d love to connect', 'Let\'s talk about where ACME Financial can support you next'],
     4: ['Your CD is maturing soon — options to consider', 'CD renewal coming up — a few thoughts from your RM', 'Before your CD matures, let\'s talk options'],
     5: ['Reaching out about your financing needs', 'You were searching — let\'s find the right fit', 'Helping you find the right path to funding'],
   };
-  const subjOpts = subjMap[c.id] || ['Checking in — how can we help?', 'A quick note from your Truist RM', 'Staying connected — a few ideas for your business'];
+  const subjOpts = subjMap[c.id] || ['Checking in — how can we help?', 'A quick note from your ACME Financial RM', 'Staying connected — a few ideas for your business'];
   const subj     = subjOpts[variant % subjOpts.length];
   let body;
   if (variant % 3 === 0) {
-    body = `Hi ${fn},\n\nI hope you're doing well. I wanted to reach out personally — I noticed some recent activity and want to make sure we're supporting you in the best way possible.\n\n${tp}\n\nI'd love to schedule a quick call at your convenience. Just reply to this email or call me directly.\n\nBest,\nJordan Williams\nRelationship Manager, Truist Bank`;
+    body = `Hi ${fn},\n\nI hope you're doing well. I wanted to reach out personally — I noticed some recent activity and want to make sure we're supporting you in the best way possible.\n\n${tp}\n\nI'd love to schedule a quick call at your convenience. Just reply to this email or call me directly.\n\nBest,\nJordan Williams\nRelationship Manager, ACME Financial Bank`;
   } else if (variant % 3 === 1) {
-    body = `Hi ${fn},\n\nI'm reaching out because something on your account stood out to me, and I wanted to make sure you're aware of an opportunity that could be a great fit right now.\n\n${tp}\n\nIf you have 15 minutes this week, I'd love to walk you through it. Feel free to reply here or give me a call.\n\nWarm regards,\nJordan Williams\nRelationship Manager, Truist Bank`;
+    body = `Hi ${fn},\n\nI'm reaching out because something on your account stood out to me, and I wanted to make sure you're aware of an opportunity that could be a great fit right now.\n\n${tp}\n\nIf you have 15 minutes this week, I'd love to walk you through it. Feel free to reply here or give me a call.\n\nWarm regards,\nJordan Williams\nRelationship Manager, ACME Financial Bank`;
   } else {
-    body = `Hi ${fn},\n\nThank you for your continued trust in Truist — it's a relationship I genuinely value. I wanted to follow up with something specific to your business that I think could make a real difference.\n\n${tp}\n\nWhenever works best for you, I'm happy to connect — whether by phone, email, or in person.\n\nThank you,\nJordan Williams\nRelationship Manager, Truist Bank`;
+    body = `Hi ${fn},\n\nThank you for your continued trust in ACME Financial — it's a relationship I genuinely value. I wanted to follow up with something specific to your business that I think could make a real difference.\n\n${tp}\n\nWhenever works best for you, I'm happy to connect — whether by phone, email, or in person.\n\nThank you,\nJordan Williams\nRelationship Manager, ACME Financial Bank`;
   }
   return { subj, body };
 }

@@ -372,13 +372,13 @@ function copilotReply(q) {
       const topPick  = top3Missing[0];
       const fitReason = {
         Treasury:          `a full cash management suite (sweep accounts, payment automation) is well-justified at ${c.rev} in revenue`,
-        BLOC:              `a revolving Business Line of Credit up to $250K provides flexible working capital for a ${c.emp}-person ${c.ind} operation`,
-        LOC:               `a Small Business Line of Credit up to $100K helps smooth seasonal or operational cash flow gaps common in ${c.ind}`,
-        CD:                `a Business Certificate of Deposit locks in a guaranteed fixed return on idle cash — terms from 7 days to 5 years`,
-        Payroll:           `Truist Online Payroll automates tax filing and direct deposit for ${c.emp} employees — run payroll in 3 clicks`,
-        Card:              `the Business Cash Rewards Card earns cash back on every purchase with no annual fee — ideal for everyday business spending`,
+        BLOC:              `a revolving Business FlexLine up to $250K provides flexible working capital for a ${c.emp}-person ${c.ind} operation`,
+        LOC:               `a Small Business FlexLine up to $100K helps smooth seasonal or operational cash flow gaps common in ${c.ind}`,
+        CD:                `a Business Growth CD locks in a guaranteed fixed return on idle cash — terms from 7 days to 5 years`,
+        Payroll:           `ACME PayHub automates tax filing and direct deposit for ${c.emp} employees — run payroll in 3 clicks`,
+        Card:              `the Business Rewards Card earns cash back on every purchase with no annual fee — ideal for everyday business spending`,
         'Merchant Services': `payment acceptance solutions help capture every transaction for a ${c.ind} business at ${c.rev} in revenue`,
-        'Business Savings':  `the Business Money Market earns a competitive APY with check-writing access — best for balances over $5K`,
+        'Business Savings':  `the Business Premier Savings earns a competitive APY with check-writing access — best for balances over $5K`,
       };
       const topPickName = PROD_NAMES[topPick] || topPick;
       const top3Names   = top3Missing.map(p => PROD_NAMES[p] || p).join(', ');
@@ -462,7 +462,7 @@ function copilotReply(q) {
 
     if (/industry|sector|space|type of business|what (kind|type) of/.test(q)) {
       const ind0 = PROD_NAMES[top3Missing[0]] || top3Missing[0];
-      const ind1 = PROD_NAMES[top3Missing[1]] || top3Missing[1] || 'Business Money Market';
+      const ind1 = PROD_NAMES[top3Missing[1]] || top3Missing[1] || 'Business Premier Savings';
       return `${c.co} operates in <strong>${c.ind}</strong> — ${c.loc}, ${c.emp} employees, ${c.rev} revenue. Typical product mix for ${c.ind} businesses at this revenue tier includes ${c.prods.length + 2} banking products. ${fn} currently holds ${c.prods.length}, with <strong>${ind0}</strong> and <strong>${ind1}</strong> as the strongest gaps for this industry profile.`;
     }
 
@@ -496,7 +496,7 @@ function copilotReply(q) {
     return `<strong>Harmon Legal Group</strong> has a CD maturing in 28 days with no renewal outreach logged. They're rate-sensitive — reach out before they shop competing rates. Recommendation type: Rules-based. They're on today's outreach list.`;
 
   if (/nudge|overdue|stall/.test(q))
-    return `Two active recommendations require immediate outreach: <strong>Palo Verde Catering</strong> (Offer — $185K deposit, 72% propensity, Business Money Market opportunity) and <strong>Ridgeline Services</strong> (Nudge — equipment financing proposal stalled at 14 days, at risk of going cold). Both need contact today.`;
+    return `Two active recommendations require immediate outreach: <strong>Palo Verde Catering</strong> (Offer — $185K deposit, 72% propensity, Business Premier Savings opportunity) and <strong>Ridgeline Services</strong> (Nudge — equipment financing proposal stalled at 14 days, at risk of going cold). Both need contact today.`;
 
   if (/coverage|percent|rate/.test(q)) {
     const noContact = D.clients.filter(c => c.lcd >= 30).length;
@@ -507,7 +507,7 @@ function copilotReply(q) {
     return `Top propensity clients today: <strong>Brightwell Inc. (82%)</strong>, Palo Verde Catering (72%), Blue Heron LLC (65%), Palo Verde Health (55%). All four have open recommendations — Brightwell Inc. has the highest score but no active rec, making it an opportunistic call.`;
 
   if (/priority|who first|start|begin|today|call|morning|plan my/.test(q))
-    return `Priority outreach today: <strong>1. Palo Verde Catering</strong> — active Offer, $185K deposit signal, 72% propensity, Business Money Market opportunity. <strong>2. Ridgeline Services</strong> — proposal stalled 14 days, risk of losing deal. <strong>3. Harmon Legal Group</strong> — CD maturing in 28 days, Referral not yet actioned. <strong>4. Blue Heron LLC</strong> — Offer triggered, payroll up 34%.`;
+    return `Priority outreach today: <strong>1. Palo Verde Catering</strong> — active Offer, $185K deposit signal, 72% propensity, Business Premier Savings opportunity. <strong>2. Ridgeline Services</strong> — proposal stalled 14 days, risk of losing deal. <strong>3. Harmon Legal Group</strong> — CD maturing in 28 days, Referral not yet actioned. <strong>4. Blue Heron LLC</strong> — Offer triggered, payroll up 34%.`;
 
   if (/book|how many|total|all client/.test(q)) {
     const atRisk    = D.clients.filter(c => c.health === 'r').length;
@@ -527,7 +527,7 @@ function copilotReply(q) {
     const conv2 = D.activity.filter(a => a.out === 'c').length;
     const pend  = D.activity.filter(a => a.out === 'p').length;
     const dism  = D.activity.filter(a => a.out === 'd').length;
-    return `Activity this period: <strong>${conv2} conversions</strong>, ${pend} pending, ${dism} dismissed. Most recent win: <strong>Brightwell Inc.</strong> — Treasury offer accepted (Offer recommendation). Last pending: <strong>Palo Verde Health</strong> — Advice acted on, terms sheet sent for loan inquiry.`;
+    return `Activity this period: <strong>${conv2} conversions</strong>, ${pend} pending, ${dism} dismissed. Most recent win: <strong>Brightwell Inc.</strong> — Business Treasury Services offer accepted (Offer recommendation). Last pending: <strong>Palo Verde Health</strong> — Advice acted on, terms sheet sent for loan inquiry.`;
   }
 
   if (/outreach|list|today|dashboard/.test(q))
@@ -542,7 +542,7 @@ function copilotReply(q) {
   }
 
   if (/product|treasury|bloc|loc|cd|payroll|card|merchant|saving/.test(q))
-    return `Across today's outreach list, the most common product opportunities are: <strong>Treasury</strong> (Brightwell Inc., Blue Heron), <strong>LOC / BLOC</strong> (Ridgeline Services, Palo Verde Health), and <strong>CD renewal</strong> (Harmon Legal Group). Navigate to a client profile to see their specific product gap and wallet share.`;
+    return `Across today's outreach list, the most common product opportunities are: <strong>Business Treasury Services</strong> (Brightwell Inc., Blue Heron), <strong>Business FlexLine</strong> (Ridgeline Services, Palo Verde Health), and <strong>Business Growth CD renewal</strong> (Harmon Legal Group). Navigate to a client profile to see their specific product gap and wallet share.`;
 
   if (/recommend|rec\b|suggestion|who (to|should) call|what (rec|action)/.test(q))
     return `Open recommendations today: <strong>Palo Verde Catering</strong> (Offer — cash mgmt, $185K deposit), <strong>Ridgeline Services</strong> (Nudge — stalled proposal), <strong>Blue Heron LLC</strong> (Offer — payroll growth), <strong>Harmon Legal Group</strong> (Referral — CD maturing), <strong>Palo Verde Health</strong> (Advice — web intent). Click any client on the dashboard to see the full brief.`;

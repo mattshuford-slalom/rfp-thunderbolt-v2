@@ -13,7 +13,7 @@ function render() {
 /* ── TOPBAR ─────────────────────────────────────────────── */
 function renderTopbar() {
   document.getElementById('topbar').innerHTML = `
-    <a class="tb-logo" href="#/dashboard"><img src="images.jpg" alt="Truist" style="height:40px;width:auto;object-fit:contain;flex-shrink:0"/><div class="tb-logo-text"><span class="tb-brand">THUNDERBOLT</span><span class="tb-sub">Small Business RM Portal</span></div></a>
+    <a class="tb-logo" href="#/dashboard"><img src="images.jpg" alt="ACME Financial" style="height:40px;width:auto;object-fit:contain;flex-shrink:0"/><div class="tb-logo-text"><span class="tb-brand">ACME Financial</span><span class="tb-sub">Small Business RM Portal</span></div></a>
     <div class="tb-spacer"></div>
     <span class="tb-date">${D.day}</span>
     <button class="tb-cop ${S.copOpen ? 'on' : ''}" onclick="toggleCop()"><img src="microsoft_copilot-logo_brandlogos.net_zaqzr.png" style="width:16px;height:16px;vertical-align:middle;margin-right:2px">Copilot</button>
@@ -211,9 +211,9 @@ function genWhy(c) {
       `<strong>BLOC utilization above 70%</strong> — may indicate need for a limit increase or supplemental credit line. Good time to check in.`,
     ],
     rt: [
-      `<strong>Browsed financing options on truist.com within the last 24 hours</strong> — high-intent signal. Best window to reach out is now.`,
+      `<strong>Browsed financing options on acmefinancial.com within the last 24 hours</strong> — high-intent signal. Best window to reach out is now.`,
       `<strong>Wire transfer above average velocity received this morning</strong> — possible liquidity event or contract close. Cash management conversation is timely.`,
-      `<strong>Application started but not completed on truist.com</strong> — active need indicated. ${c.prop}% propensity confirms product fit.`,
+      `<strong>Application started but not completed on acmefinancial.com</strong> — active need indicated. ${c.prop}% propensity confirms product fit.`,
       `<strong>Large ACH payment received today</strong> — possible contract close or capital infusion. Opportunity to introduce sweep or treasury tools.`,
     ],
   };
@@ -242,7 +242,7 @@ function genTPs(c) {
     `Introduce sweep account options to optimize idle cash between billing cycles.`,
     `Review CD or savings laddering strategy to improve liquidity without sacrificing yield.`,
     `Ask about upcoming capital needs — equipment, expansion, or hiring — to position lending products early.`,
-    `Highlight Merchant Services if retail/service volume is growing — fee savings opportunity.`,
+    `Highlight Business Payment Services if retail/service volume is growing — fee savings opportunity.`,
     `Discuss payroll integration if headcount is above 10 — simplify ops and deepen relationship.`,
     `Identify referral potential — clients in ${esc(c.ind)} often have strong professional networks.`,
     `Ask about personal banking relationship — Premier referral opportunity if deposits exceed threshold.`,
@@ -279,7 +279,7 @@ function tPort(c) {
   const prodMeta = {
     Treasury: 'cash management suite', Payroll: 'automated payroll', BLOC: 'revolving credit',
     LOC: 'revolving credit', CD: 'fixed-term deposit', Card: 'cash back rewards',
-    'Merchant Services': 'payment acceptance', 'Business Savings': 'money market', Checking: 'primary checking',
+    'Merchant Services': 'payment acceptance', 'Business Savings': 'premier savings', Checking: 'primary checking',
   };
   return `
     <div class="sblock">

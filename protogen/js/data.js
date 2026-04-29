@@ -70,15 +70,15 @@ function genClients() {
 }
 
 const PROD_NAMES = {
-  Checking:            'Dynamic Business Checking',
-  Treasury:            'Treasury Management',
-  BLOC:                'Business Line of Credit',
-  LOC:                 'Small Business Line of Credit',
-  CD:                  'Business Certificate of Deposit',
-  Payroll:             'Truist Online Payroll',
-  Card:                'Business Cash Rewards Card',
-  'Merchant Services': 'Merchant Services',
-  'Business Savings':  'Business Money Market',
+  Checking:            'Business Advantage Checking',
+  Treasury:            'Business Treasury Services',
+  BLOC:                'Business FlexLine',
+  LOC:                 'Small Business FlexLine',
+  CD:                  'Business Growth CD',
+  Payroll:             'ACME PayHub',
+  Card:                'Business Rewards Card',
+  'Merchant Services': 'Business Payment Services',
+  'Business Savings':  'Business Premier Savings',
 };
 
 const PROD_TAGLINE = {
@@ -90,7 +90,7 @@ const PROD_TAGLINE = {
   Payroll:             'Fully automated payroll, tax filing, and direct deposit for businesses with 1–100 employees.',
   Card:                'Cash back on every purchase — no annual fee, 0% intro APR for 9 months, $300 welcome bonus.',
   'Merchant Services': 'Point-of-sale and payment acceptance solutions to capture revenue at every transaction.',
-  'Business Savings':  'Business Money Market with competitive APY and check-writing access on balances over $5K.',
+  'Business Savings':  'Business Premier Savings with competitive APY and check-writing access on balances over $5K.',
 };
 
 function rankMissingProds(c) {
@@ -117,22 +117,22 @@ const D = {
   rm: { name: 'Jordan Williams', initials: 'JW' },
   day: 'Thursday, Mar 19',
   clients: [
-    { id:1,  ini:'MC', name:'Maria Chen',         co:'Palo Verde Catering',    tier:'Tier I',  loc:'Charlotte, NC',  since:'2021', lc:'2 days ago',  lcd:2,  health:'g', rec:'propensity', prods:['Checking','Card'],                         trig:'$185K deposit · 72% propensity for cash mgmt · Business Money Market opportunity',                                  rt:'2d ago',  prop:72, rev:'$2.1M', emp:18,  ind:'Food & Beverage',       notes:'Long-term relationship. Referred 2 other clients. Seasonal revenue peaks in Q2 and Q4.' },
+    { id:1,  ini:'MC', name:'Maria Chen',         co:'Palo Verde Catering',    tier:'Tier I',  loc:'Charlotte, NC',  since:'2021', lc:'2 days ago',  lcd:2,  health:'g', rec:'propensity', prods:['Checking','Card'],                         trig:'$185K deposit · 72% propensity for cash mgmt · Business Premier Savings opportunity',                                  rt:'2d ago',  prop:72, rev:'$2.1M', emp:18,  ind:'Food & Beverage',       notes:'Long-term relationship. Referred 2 other clients. Seasonal revenue peaks in Q2 and Q4.' },
     { id:2,  ini:'RH', name:'Ridgeline HVAC',      co:'Ridgeline Services',     tier:'Tier II', loc:'Raleigh, NC',    since:'2019', lc:'14 days ago', lcd:14, health:'g', rec:'nudge',      prods:['Checking','LOC'],                          trig:'Proposal stalled · no follow-up in 14 days',                                                                          rt:'14d ago', prop:58, rev:'$4.8M', emp:34,  ind:'HVAC / Contracting',    notes:'Active LOC. Equipment financing proposal was sent 14 days ago — needs follow-up urgently before the deal goes cold.' },
     { id:3,  ini:'BH', name:'Blue Heron Logistics', co:'Blue Heron LLC',        tier:'Tier II', loc:'Atlanta, GA',    since:'2022', lc:'6 days ago',  lcd:6,  health:'g', rec:'rules',      prods:['Checking','Payroll'],                      trig:'Payroll up 34% · growth conversation opportunity',                                                                     rt:'Today',   prop:65, rev:'$7.2M', emp:62,  ind:'Logistics',             notes:'Fast-growing company. Payroll volume increased significantly — strong potential for treasury and expanded banking relationship.' },
     { id:4,  ini:'HD', name:'Harmon & Diaz LLC',   co:'Harmon Legal Group',     tier:'Tier II', loc:'Charlotte, NC',  since:'2020', lc:'12 days ago', lcd:12, health:'g', rec:'rules',      prods:['Checking','CD'],                           trig:'CD maturity in 28 days · no renewal outreach logged',                                                                  rt:'Today',   prop:48, rev:'$3.4M', emp:21,  ind:'Legal Services',        notes:'CD maturing soon. Client is rate-sensitive — be prepared to discuss current options before they shop elsewhere.' },
-    { id:5,  ini:'PV', name:'Palo Verde Dental',   co:'Palo Verde Health',      tier:'Tier I',  loc:'Phoenix, AZ',    since:'2023', lc:'Today',       lcd:0,  health:'g', rec:'rt',         prods:['Checking'],                                trig:'Searched "business loan" on truist.com',                                                                               rt:'8:32a',   prop:55, rev:'$1.8M', emp:12,  ind:'Healthcare',            notes:'Newer client. Recent web activity indicates lending interest. Good opportunity to deepen the relationship early.' },
-    { id:6,  ini:'BF', name:'Brightwell Foods',    co:'Brightwell Inc.',        tier:'Tier I',  loc:'Tampa, FL',      since:'2018', lc:'2 days ago',  lcd:2,  health:'g', rec:null,         prods:['Checking','Treasury','Payroll','Card'],    trig:null, rt:null,   prop:82, rev:'$11M',  emp:88,  ind:'Food Manufacturing',    notes:'Top client. Treasury management and Online Payroll fully established for 88 employees. Business Cash Rewards Card active. Next opportunity: Merchant Services or Business Line of Credit.' },
-    { id:7,  ini:'AP', name:'Apex Plumbing',       co:'Apex Services Co.',      tier:'Tier II', loc:'Nashville, TN',  since:'2021', lc:'5 days ago',  lcd:5,  health:'g', rec:null,         prods:['Checking','BLOC','Card'],                  trig:null, rt:null,   prop:41, rev:'$2.9M', emp:24,  ind:'Plumbing / Contracting',notes:'Healthy relationship. Business Line of Credit recently accepted. Business Cash Rewards Card added for materials purchasing. Follow up in 30 days to explore Truist Online Payroll for 24 employees.' },
+    { id:5,  ini:'PV', name:'Palo Verde Dental',   co:'Palo Verde Health',      tier:'Tier I',  loc:'Phoenix, AZ',    since:'2023', lc:'Today',       lcd:0,  health:'g', rec:'rt',         prods:['Checking'],                                trig:'Searched "business loan" on acmefinancial.com',                                                                               rt:'8:32a',   prop:55, rev:'$1.8M', emp:12,  ind:'Healthcare',            notes:'Newer client. Recent web activity indicates lending interest. Good opportunity to deepen the relationship early.' },
+    { id:6,  ini:'BF', name:'Brightwell Foods',    co:'Brightwell Inc.',        tier:'Tier I',  loc:'Tampa, FL',      since:'2018', lc:'2 days ago',  lcd:2,  health:'g', rec:null,         prods:['Checking','Treasury','Payroll','Card'],    trig:null, rt:null,   prop:82, rev:'$11M',  emp:88,  ind:'Food Manufacturing',    notes:'Top client. Business Treasury Services and ACME PayHub fully established for 88 employees. Business Rewards Card active. Next opportunity: Business Payment Services or Business FlexLine.' },
+    { id:7,  ini:'AP', name:'Apex Plumbing',       co:'Apex Services Co.',      tier:'Tier II', loc:'Nashville, TN',  since:'2021', lc:'5 days ago',  lcd:5,  health:'g', rec:null,         prods:['Checking','BLOC','Card'],                  trig:null, rt:null,   prop:41, rev:'$2.9M', emp:24,  ind:'Plumbing / Contracting',notes:'Healthy relationship. Business FlexLine recently accepted. Business Rewards Card added for materials purchasing. Follow up in 30 days to explore ACME PayHub for 24 employees.' },
     { id:8,  ini:'ML', name:'Meza Landscaping',    co:'Meza Group',             tier:'Tier I',  loc:'Dallas, TX',     since:'2020', lc:'38 days ago', lcd:38, health:'r', rec:null,         prods:['Checking'],                                trig:null, rt:null,   prop:22, rev:'$900K', emp:9,   ind:'Landscaping',           notes:'No contact in 38 days. Single product. Potential churn risk — needs a check-in call this week.' },
     { id:601,ini:'JB', name:'Jason Burke',         co:'Summit Roofing Co.',     tier:'Tier II', loc:'Charlotte, NC',  since:'2022', lc:'38 days ago', lcd:38, health:'r', rec:null,         prods:['Checking','LOC'],                          trig:null, rt:null,   prop:67, rev:'$3.2M', emp:22,  ind:'Roofing',               notes:'Healthy relationship. Premier referral completed with banker intro scheduled. Annual review done — no immediate product need. Follow up in 60 days for payroll conversation.' },
     { id:602,ini:'DH', name:'Derek Hale',          co:'Eastbrook Mechanical',   tier:'Tier II', loc:'Raleigh, NC',    since:'2023', lc:'45 days ago', lcd:45, health:'r', rec:'nudge',      prods:['Checking'],                                trig:'No contact in 45 days · client deferred outreach to Q3 · re-engagement window approaching',                            rt:'45d ago', prop:44, rev:'$1.9M', emp:14,  ind:'HVAC / Contracting',    notes:'Flagged for nurture after client pushed engagement to Q3. Single product — strong candidate for LOC and payroll when timing is right.' },
     { id:603,ini:'PM', name:'Priya Menon',         co:'Clarity Wellness Group', tier:'Tier II', loc:'Atlanta, GA',    since:'2022', lc:'21 days ago', lcd:21, health:'a', rec:'nudge',      prods:['Checking'],                                trig:'LOC offer under CFO review · response pending · second outreach queued',                                               rt:'21d ago', prop:61, rev:'$2.8M', emp:19,  ind:'Fitness',               notes:'LOC offer presented and under internal CFO review. Growth-stage multi-location wellness brand. Second outreach attempt queued — strong propensity for credit.' },
-    { id:604,ini:'CT', name:'Camille Torres',      co:'Vantage Print & Design', tier:'Tier II', loc:'Tampa, FL',      since:'2021', lc:'12 days ago', lcd:12, health:'g', rec:null,         prods:['Checking','BLOC'],                         trig:null, rt:null,   prop:52, rev:'$1.4M', emp:11,  ind:'Printing',              notes:'Equipment loan referral recently closed and disbursed. Business Line of Credit active. Healthy account — check in within 30 days for card and payroll opportunity.' },
+    { id:604,ini:'CT', name:'Camille Torres',      co:'Vantage Print & Design', tier:'Tier II', loc:'Tampa, FL',      since:'2021', lc:'12 days ago', lcd:12, health:'g', rec:null,         prods:['Checking','BLOC'],                         trig:null, rt:null,   prop:52, rev:'$1.4M', emp:11,  ind:'Printing',              notes:'Equipment loan referral recently closed and disbursed. Business FlexLine active. Healthy account — check in within 30 days for card and payroll opportunity.' },
     { id:605,ini:'MW', name:'Marcus Webb',         co:'Irongate Construction',  tier:'Tier I',  loc:'Nashville, TN',  since:'2019', lc:'14 days ago', lcd:14, health:'g', rec:'propensity', prods:['Checking','LOC'],                          trig:'Treasury offer demo completed · decision expected by end of month · equipment financing referral pending',             rt:'14d ago', prop:74, rev:'$8.5M', emp:58,  ind:'Construction',          notes:'Treasury offer demo completed — decision expected by end of month. Equipment financing referral also submitted awaiting signed docs. High-value Tier I relationship requiring close follow-up.' },
     { id:606,ini:'SR', name:'Steve Rafferty',      co:'Keystone Auto Group',    tier:'Tier II', loc:'Columbus, OH',   since:'2023', lc:'9 days ago',  lcd:9,  health:'g', rec:'nudge',      prods:['Checking','Card'],                         trig:'No answer on last outreach · voicemail left · follow-up pending next week',                                            rt:'9d ago',  prop:48, rev:'$5.1M', emp:33,  ind:'Auto Services',         notes:'No answer on last outreach. Voicemail left — follow up next week. Mid-size auto group with strong cross-sell potential for payroll and merchant services.' },
-    { id:607,ini:'SH', name:'Sandra Holloway',     co:'Meridian Title Co.',     tier:'Tier II', loc:'Richmond, VA',   since:'2020', lc:'17 days ago', lcd:17, health:'a', rec:null,         prods:['Checking','CD','Business Savings'],        trig:null, rt:null,   prop:45, rev:'$2.3M', emp:16,  ind:'Real Estate',           notes:'CD ladder accepted — three-rung structure initiated. Business Money Market added alongside checking. Relationship deepening. Low churn risk — monitor for treasury fit.' },
-    { id:608,ini:'GN', name:'Greg Navarro',        co:'Sunstone Realty',        tier:'Tier II', loc:'Phoenix, AZ',    since:'2022', lc:'19 days ago', lcd:19, health:'a', rec:null,         prods:['Checking','Business Savings'],             trig:null, rt:null,   prop:38, rev:'$3.7M', emp:21,  ind:'Real Estate',           notes:'Business Money Market referral completed. Checking-to-money-market transition smooth. Solid relationship — revisit in 60 days for treasury fit as revenue continues to grow.' },
+    { id:607,ini:'SH', name:'Sandra Holloway',     co:'Meridian Title Co.',     tier:'Tier II', loc:'Richmond, VA',   since:'2020', lc:'17 days ago', lcd:17, health:'a', rec:null,         prods:['Checking','CD','Business Savings'],        trig:null, rt:null,   prop:45, rev:'$2.3M', emp:16,  ind:'Real Estate',           notes:'CD ladder accepted — three-rung structure initiated. Business Premier Savings added alongside checking. Relationship deepening. Low churn risk — monitor for treasury fit.' },
+    { id:608,ini:'GN', name:'Greg Navarro',        co:'Sunstone Realty',        tier:'Tier II', loc:'Phoenix, AZ',    since:'2022', lc:'19 days ago', lcd:19, health:'a', rec:null,         prods:['Checking','Business Savings'],             trig:null, rt:null,   prop:38, rev:'$3.7M', emp:21,  ind:'Real Estate',           notes:'Business Premier Savings referral completed. Checking-to-savings transition smooth. Solid relationship — revisit in 60 days for treasury fit as revenue continues to grow.' },
     { id:609,ini:'KP', name:'Dr. Kim Park',        co:'Lakewood Family Dental', tier:'Tier I',  loc:'Charlotte, NC',  since:'2021', lc:'20 days ago', lcd:20, health:'a', rec:null,         prods:['Checking','LOC'],                          trig:null, rt:null,   prop:62, rev:'$2.1M', emp:12,  ind:'Dental',                notes:'Premier Banker referral completed with warm handoff confirmed. High-revenue dental practice with strong personal banking potential. Tier I relationship — schedule annual review.' },
     { id:610,ini:'BS', name:'Ben Stroud',          co:'Crestview Flooring',     tier:'Tier II', loc:'Denver, CO',     since:'2022', lc:'21 days ago', lcd:21, health:'a', rec:null,         prods:['Checking'],                                trig:null, rt:null,   prop:18, rev:'$1.1M', emp:8,   ind:'Flooring',              notes:'Client relocating operations — relationship status uncertain. Single product. Reach out to confirm new location and assess whether the banking relationship will continue.' },
     { id:611,ini:'TM', name:'Tyler Mast',          co:'Parkside Brewing Co.',   tier:'Tier II', loc:'Austin, TX',     since:'2023', lc:'22 days ago', lcd:22, health:'a', rec:'rules',      prods:['Checking'],                                trig:'Seasonal LOC interest confirmed · spring drawdown anticipated · follow-up recommended',                                 rt:'22d ago', prop:55, rev:'$1.7M', emp:13,  ind:'Brewery',               notes:'Seasonal line of credit conversation active. Client interested in spring drawdown. Single product — strong upsell opportunity for payroll and merchant services.' },
@@ -182,11 +182,11 @@ const D = {
 
 /* ── RECOMMENDATION COPY ─────────────────────────────────── */
 const WHY = {
-  1: '<strong>$185K wire received Tue</strong> — 3.2× avg velocity. 72% propensity for Business Money Market and cash management. Premier threshold met.',
-  2: '<strong>Commercial Vehicle & Equipment Loan proposal sent 14 days ago</strong> (up to $250K, 84-mo terms) with no response logged. Risk of losing deal to a competitor.',
-  3: '<strong>Truist Online Payroll volume up 34%</strong> over 60 days. Growth trajectory indicates readiness for Treasury Management and expanded credit lines.',
-  4: '<strong>Business Certificate of Deposit matures in 28 days.</strong> No renewal outreach logged. Client is rate-sensitive — consider laddering into Business Money Market.',
-  5: '<strong>Website intent signal:</strong> searched "business loan" at 8:32am — high-intent trigger for a Simple Business Loan (up to $50K, no collateral) or Line of Credit conversation.',
+  1: '<strong>$185K wire received Tue</strong> — 3.2× avg velocity. 72% propensity for Business Premier Savings and cash management. Premier threshold met.',
+  2: '<strong>Business Equipment Finance proposal sent 14 days ago</strong> (up to $250K, 84-mo terms) with no response logged. Risk of losing deal to a competitor.',
+  3: '<strong>ACME PayHub volume up 34%</strong> over 60 days. Growth trajectory indicates readiness for Business Treasury Services and expanded credit lines.',
+  4: '<strong>Business Growth CD matures in 28 days.</strong> No renewal outreach logged. Client is rate-sensitive — consider laddering into Business Premier Savings.',
+  5: '<strong>Website intent signal:</strong> searched "business loan" at 8:32am — high-intent trigger for a Business Direct Loan (up to $50K, no collateral) or Line of Credit conversation.',
 };
 
 const OPENER = {
@@ -199,19 +199,19 @@ const OPENER = {
 
 const TPS_EMAIL_VARIANTS = {
   1: [
-    'Your revenue has real momentum — and a Business Money Market could put that idle cash between events to work at 3.40% APY instead of sitting in checking.',
-    'Have you thought about what happens to your catering revenue in the downtime between events? A Business Money Market earns 3.40% APY on that balance — it\'s a simple move that adds up.',
-    'One thing that keeps coming to mind for Palo Verde Catering: a Business Money Market. It\'s designed for exactly this — capturing idle revenue between bookings and earning 3.40% APY while you focus on the next event.',
+    'Your revenue has real momentum — and a Business Premier Savings could put that idle cash between events to work at 3.40% APY instead of sitting in checking.',
+    'Have you thought about what happens to your catering revenue in the downtime between events? A Business Premier Savings earns 3.40% APY on that balance — it\'s a simple move that adds up.',
+    'One thing that keeps coming to mind for Palo Verde Catering: a Business Premier Savings. It\'s designed for exactly this — capturing idle revenue between bookings and earning 3.40% APY while you focus on the next event.',
   ],
   2: [
-    'The equipment financing conversation we started is still very much on the table — a Commercial Vehicle & Equipment Loan up to $250K, with terms up to 84 months and 100% financing available.',
+    'The equipment financing conversation we started is still very much on the table — a Business Equipment Finance up to $250K, with terms up to 84 months and 100% financing available.',
     'I didn\'t want that equipment loan proposal to go cold. Up to $250K, 84-month terms, 100% financing — the door is still open whenever you\'re ready to revisit it.',
     'Reaching back out on the equipment financing front — terms are still favorable (up to $250K, 84 months, 100% financing), and I\'d hate for the timing to slip away on you.',
   ],
   3: [
-    'With 62 employees and $7.2M in revenue, Blue Heron has grown to a point where Treasury Management starts making a real difference — think sweep accounts and payment automation that scale with you.',
-    'Your payroll growth tells a clear story — 62 employees, $7.2M revenue, and climbing. That\'s exactly when Treasury Management pays off: sweep accounts, payment automation, and a banking setup that keeps pace.',
-    'I\'ve been thinking about where Truist can do more for Blue Heron. At your current size — 62 employees, $7.2M — Treasury Management isn\'t just a nice-to-have. Sweep accounts and payment automation would save real time and cost.',
+    'With 62 employees and $7.2M in revenue, Blue Heron has grown to a point where Business Treasury Services starts making a real difference — think sweep accounts and payment automation that scale with you.',
+    'Your payroll growth tells a clear story — 62 employees, $7.2M revenue, and climbing. That\'s exactly when Business Treasury Services pays off: sweep accounts, payment automation, and a banking setup that keeps pace.',
+    'I\'ve been thinking about where ACME Financial can do more for Blue Heron. At your current size — 62 employees, $7.2M — Business Treasury Services isn\'t just a nice-to-have. Sweep accounts and payment automation would save real time and cost.',
   ],
   4: [
     'Your CD is coming up on maturity, and I want to make sure you have current rates in hand before you make a decision — I can hold a rate for you so there\'s no pressure to rush.',
@@ -219,36 +219,36 @@ const TPS_EMAIL_VARIANTS = {
     'CD maturity dates have a way of sneaking up. Yours is approaching, and I\'d rather you hear current renewal rates from me than find yourself shopping around at the last minute. Happy to lock something in for you.',
   ],
   5: [
-    'Based on what I saw from your recent activity, it looks like lending might be on your mind — and for a practice at your stage, a Simple Business Loan (up to $50K, no collateral required) is often the fastest path to get there.',
-    'I noticed you were exploring financing options recently, and I wanted to reach out directly. For Palo Verde Health, a Simple Business Loan — up to $50K, no collateral — could be exactly what you\'re looking for.',
-    'When I saw the recent activity on your account, I thought: this is worth a conversation. A Simple Business Loan up to $50K — no collateral required — is one of the most straightforward options for a healthcare practice at your revenue level.',
+    'Based on what I saw from your recent activity, it looks like lending might be on your mind — and for a practice at your stage, a Business Direct Loan (up to $50K, no collateral required) is often the fastest path to get there.',
+    'I noticed you were exploring financing options recently, and I wanted to reach out directly. For Palo Verde Health, a Business Direct Loan — up to $50K, no collateral — could be exactly what you\'re looking for.',
+    'When I saw the recent activity on your account, I thought: this is worth a conversation. A Business Direct Loan up to $50K — no collateral required — is one of the most straightforward options for a healthcare practice at your revenue level.',
   ],
 };
 
 const TPS = {
   1: [
-    'Open a Business Money Market to sweep idle catering revenue into a higher-yield account (3.40% APY) between events.',
-    'Truist Online Payroll automates tax filing and direct deposit for 18 employees — save hours during Q2 and Q4 peak seasons.',
-    'A Small Business Line of Credit (up to $100K, revolving) covers cash flow gaps between event deposits and vendor payment terms.',
+    'Open a Business Premier Savings to sweep idle catering revenue into a higher-yield account (3.40% APY) between events.',
+    'ACME PayHub automates tax filing and direct deposit for 18 employees — save hours during Q2 and Q4 peak seasons.',
+    'A Small Business FlexLine (up to $100K, revolving) covers cash flow gaps between event deposits and vendor payment terms.',
   ],
   2: [
-    'Revisit the Commercial Vehicle & Equipment Loan — up to $250K, terms up to 84 months, with 100% financing available.',
-    'Highlight the Dynamic Business Checking relationship discount: up to 0.50% rate reduction on any loan.',
-    'If the deal stalls, offer a Business Line of Credit (up to $250K with collateral) as a flexible alternative to term financing.',
+    'Revisit the Business Equipment Finance — up to $250K, terms up to 84 months, with 100% financing available.',
+    'Highlight the Business Advantage Checking relationship discount: up to 0.50% rate reduction on any loan.',
+    'If the deal stalls, offer a Business FlexLine (up to $250K with collateral) as a flexible alternative to term financing.',
   ],
   3: [
-    'Introduce Treasury Management — payroll growth to 62 employees at $7.2M revenue signals the need for sweep accounts and payment automation.',
-    'A Business Line of Credit (up to $250K with collateral) supports hiring and operational expansion during this growth phase.',
-    'Confirm Truist Online Payroll is keeping pace with the 34% headcount increase — explore higher-tier plan if needed.',
+    'Introduce Business Treasury Services — payroll growth to 62 employees at $7.2M revenue signals the need for sweep accounts and payment automation.',
+    'A Business FlexLine (up to $250K with collateral) supports hiring and operational expansion during this growth phase.',
+    'Confirm ACME PayHub is keeping pace with the 34% headcount increase — explore higher-tier plan if needed.',
   ],
   4: [
-    'Present current Business Certificate of Deposit renewal rates — offer a brief rate hold to prevent rate shopping.',
+    'Present current Business Growth CD renewal rates — offer a brief rate hold to prevent rate shopping.',
     'Propose a CD laddering strategy across 3-month, 6-month, and 12-month terms for improved liquidity without sacrificing yield.',
-    'Introduce the Business Money Market as a flexible alternative if they want check-writing access on a portion of idle cash.',
+    'Introduce the Business Premier Savings as a flexible alternative if they want check-writing access on a portion of idle cash.',
   ],
   5: [
-    'For a healthcare practice at $1.8M revenue, a Simple Business Loan (up to $50K, no collateral required) is the fastest path to funding.',
-    'If the need is larger or ongoing, a Small Business Line of Credit (up to $100K, revolving) may be the better long-term fit.',
+    'For a healthcare practice at $1.8M revenue, a Business Direct Loan (up to $50K, no collateral required) is the fastest path to funding.',
+    'If the need is larger or ongoing, a Small Business FlexLine (up to $100K, revolving) may be the better long-term fit.',
     'Offer a 30-minute discovery call — reference the 8:32am site search directly as the conversation starter.',
   ],
 };
